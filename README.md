@@ -49,7 +49,8 @@ Graphitus dashboards are defined using JSON notation. These configuration files 
     		"data": [ <-- actual data for chart image
     			{
     				"title": "Slow Queries", <-- a title for the chart image
-    				"target": "groupByNode(machines.${dc}dc1.mysql*.Slow_queries,2,\"nonNegativeDerivative\")" <-- the graphite target/function which defines the chart content			 
+    				"target": "groupByNode(machines.${dc}dc1.mysql*.Slow_queries,2,\"nonNegativeDerivative\")", <-- the graphite target/function which defines the chart content
+                    "params": "areaMode=stacked&lineMode=staircase&colorList=blue,red,green" <-- specify additional parameters for this target
     			},{
     				"title": "Seconds Behind Master",
     				"target": "groupByNode(machines.${dc}dc1.mysql*.Seconds_Behind_Master,2,\"averageSeries\")"
