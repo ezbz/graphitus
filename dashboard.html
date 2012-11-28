@@ -11,7 +11,7 @@
 <script type="text/javascript" src="dashboard.js"></script>
 <script type="text/javascript" src="waitForImages.js"></script>
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/hot-sneaks/jquery-ui.css" type="text/css" />
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/dark-hive/jquery-ui.css" type="text/css" />
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-responsive.min.css" rel="stylesheet">
 <link href="graphite.css" rel="stylesheet">
@@ -48,8 +48,20 @@ $(document).ready(function() {
     <a class="brand" href="index.html">Graphitus</a>
     <ul class="nav">
         <li class="dropdown">  
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dashboards<b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= config.title %><b class="caret"></b></a>
             <ul id="dashboards" class="dropdown-menu">
+                <% for (group in dashboardGroups) { %>
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1" href="#"><%=group%></a>
+                        <ul class="dropdown-menu">
+                            <% for (idx in dashboardGroups[group]) { %>
+                                <li>
+                                    <a href="dashboard.html?id=<%=dashboardGroups[group][idx].id%>"><%=dashboardGroups[group][idx].id.replace(group+".", "")%></a>
+                                </li>
+                            <% } %>
+                        </ul>
+                    </li>
+                <% } %> 
             </ul>  
         </li>
         <li class="divider-vertical"></li>
@@ -110,35 +122,22 @@ $(document).ready(function() {
     </li>
     <li class="divider-vertical"></li>
 </script>
-<script id="tmpl-dashboards-menu" type="text/template"> 
-    <li class="dropdown-submenu">
-        <a tabindex="-1" href="#"><%=group%></a>
-        <ul class="dropdown-menu">
-            <% for (i in items) { %>
-                <li>
-                    <a href="dashboard.html?id=<%=items[i].id%>"><%=items[i].id.replace(group+".", "")%></a>
-                </li>
-            <% } %>
-        </ul>
-    </li>
-</script>
 </head
 <body lang="en">
-    <div>
-    <div class="navbar navbar-inverse">
+    <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <form  id="toolbar" class="navbar-form form-inline">
         </form>
       </div>
     </div>
-    <div class="navbar navbar-inverse">
+    <div style="margin-top: 52px;"></div>
+    <div id="parametersNavBar" class="navbar navbar-inverse">
       <div class="navbar-inner">
         <form class="navbar-form form-inline">
             <ul class="nav" id="parametersToolbar" >
             </ul>
         </form>
       </div>
-    </div>
     </div>
     <div id="dashboards-view" class="container" style="width: 100%">
     </div>            

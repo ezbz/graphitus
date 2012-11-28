@@ -1,20 +1,16 @@
 {
     "rows": [
         {
-            "id": "group1.dashboard1",
-            "key": "group1.dashboard1"
+            "id": "group1.dashboard1"
         },
         {
-            "id": "group1.dashboard2",
-            "key": "group1.dashboard2"
+            "id": "group1.dashboard2"
         },
         {
-            "id": "group1.dashboard3",
-            "key": "group1.dashboard3"
+            "id": "group1.dashboard3"
         },
         {
-            "id": "group2.dashboard1",
-            "key": "group2.dashboard1"
+            "id": "group2.dashboard1"
         }
     ]
 }

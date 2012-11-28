@@ -4,9 +4,9 @@ var autoRefershRef = null;
 var refreshIntervalRef = null;
 var config = null;
 var autoRefreshEnabled = false;
+var dashboards = new Array();
 
 function renderGraphitus(){
-	loadConfig();
 	loadDashboards();
 }
 
@@ -15,7 +15,8 @@ function renderView() {
 	var tmplToolbarMarkup = $('#tmpl-toolbar').html();
 	var tmplDashboardViewMarkup = $('#tmpl-dashboards-view').html();
 	$("#toolbar").append(_.template(tmplToolbarMarkup, {
-		config : config
+		config : config, 
+		dashboardGroups : dashboards
 	}));
 	console.log("rendered toolbar");
 	$("#dashboards-view").append(_.template(tmplDashboardViewMarkup, {
@@ -44,7 +45,7 @@ function loadView() {
 	});
 }
 
-function loadConfig() {
+function loadDashboard() {
 	var dashId = queryParam('id');
 	var dashboardUrl = applyParameter(graphitusConfig.dashboardUrlTemplate, "dashboardId", dashId);
 	$.ajax({
@@ -150,7 +151,7 @@ function renderParamToolbar(){
 			}));
 		});		
 	}else{
-		$('#parametersToolbar').hide();
+		$('#parametersNavBar').hide();
 	}
 }
 
@@ -210,7 +211,7 @@ function useHours() {
 }
 
 function useDateRange() {
-	$("#hoursBack").val("");
+	$("#timeBack").val("");
 	if ($("#start").val() != "" && $("#end").val() != "") {
 		updateGraphs();
 	}
@@ -319,7 +320,6 @@ function loadDashboards(){
         dataType:'json',
         success: function(json) {
             console.log("Loaded dashboards: " + JSON.stringify(json));
-            var dashboards = new Array();
             var data = json.rows;
             for(var i=0; i<data.length; i++){
                 var group = data[i].id.split('.')[0];
@@ -330,19 +330,10 @@ function loadDashboards(){
             }
             dashboards.sort();
             $("#loader").hide();
-
-            renderDashboards(dashboards);
+			loadDashboard();
         },
         error:function (xhr, ajaxOptions, thrownError){
             console.log(thrownError);
         }
     });
-}
-
-function renderDashboards(dashboards){
-    var tmplMarkup = $('#tmpl-dashboards-menu').html();
-    for(group in dashboards){
-        var compiledTmpl = _.template(tmplMarkup, { group : group, items: dashboards[group] });
-        $("#dashboards").append(compiledTmpl);
-    }
 }
