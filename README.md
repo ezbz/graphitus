@@ -11,7 +11,10 @@ Configuration
 
 Graphitus dashboards are defined using JSON notation. These configuration files can be stored in a document database like [couchdb](http://couchdb.apache.org/) or [mongo](http://www.mongodb.org/) and can also be placed on the file system where dashboards are served.
 
-* Below is an example of global configuration (a file named config.json) using static local JSON files (the dashboards ids are the file names with a .json extension):
+Graphitus Configuration
+-----------------------
+
+Below is an example of global configuration (a file named ```config.json```) using static local JSON files (the dashboards ids are the file names with a ```.json``` extension):
 
     	{
     		"graphiteUrl": "http://graphite.mysite.com",
@@ -19,7 +22,7 @@ Graphitus dashboards are defined using JSON notation. These configuration files 
     		"dashboardUrlTemplate": "${dashboardId}.json"
     	}
 
-* Below is an example of global configuration (a file named config.json) using couch db:
+Below is an example of global configuration (a file named ```config.json```) using couch db:
 
     	{
     		"graphiteUrl": "http://graphite.mysite.com",
@@ -28,8 +31,10 @@ Graphitus dashboards are defined using JSON notation. These configuration files 
     	}
 
 
+Dashboard Configuration
+-----------------------
 
-* Below is an example dashboard configuration:
+Below is an example dashboard configuration:
 
     	{
     		"title": "MySQL Production Cluster", <-- give a title to page	
@@ -82,13 +87,33 @@ Graphitus dashboards are defined using JSON notation. These configuration files 
 
 * Override configuration with URL parameters
 
-You can specify configuration properties in the dashboard URL to override 'default' settings:
+You can specify configuration properties in the dashboard URL to override default settings:
 
         dashboard.html?id=grp1.dash1&defaultLineWidth=25&timeBack=20m&width=350&height=400&columns=4&legend=false
         
 You can also specify parameter values in the URL:
 
         dashboard.html?id=grp1.dash1&datacenter=LA
+        
+Configuration attributes
+------------------------
+
+Parameter              | Required?       | Description
+---------------------- | --------------- | ---------------------------------
+title                   | Yes             | The title of the dashboard chart
+columns                 | Yes             | The number of images in a row
+user                    | No              | Owner
+timeBack                | No              | Specify timeframe back from current time to display (specify this or ```from``` and ```until```)
+from                    | No              | From date/time in ```yyyy-MM-dd HH:MM``` (specify this and ```until``` or ```timeBack```)
+until                   | No              | To date/time in ```yyyy-MM-dd HH:MM``` (specify this and ```from``` or ```timeBack```)
+theme                   | No              | Bootswatch theme from BootstrapCDN to use
+width                   | Yes             | Width of the chart from graphite (see ```columns```)
+height                  | Yes             | Height of the chart from graphite
+legend                  | No              | Show/Hide the legend in the chart (omitting leaves it up to graphite)
+refresh                 | No              | Auto-refresh the page (see ```refreshIntervalSeconds```)
+refreshIntervalSeconds  | No              | When ```refresh``` is true this will determine the refresh interval
+defaultLineWidth        | No              | The line width for the generated chart
+
         
 * Themes
 
