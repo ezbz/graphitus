@@ -76,6 +76,6 @@ Graphitus dashboards are defined using JSON notation. These configuration files 
     			}
     		}
 
-* This will generate the screen below:
+* This will generate the screen below (actual graph images are mocks):
 
 ![Screenshot](https://raw.github.com/erezmazor/graphitus/master/doc/screenshot.png)
