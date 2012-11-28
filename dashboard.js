@@ -29,9 +29,11 @@ function loadView() {
 	toggleAutoRefresh();
 	renderSource();
 	document.title = config.title + " Dashboard";
-	$('head').append(
-			'<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/' + config.theme
-					+ '/jquery-ui.css" type="text/css" />');
+	if(config.theme){
+		$('head').append(
+			'<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootswatch/2.1.1/' + config.theme
+					+ '/bootstrap.min.css" type="text/css" />');
+	}
 	$("#start").datetimepicker({
 		timeFormat : 'hh:mm',
 		dateFormat : 'yymmdd'
@@ -338,7 +340,7 @@ function loadDashboards(){
 }
 
 function renderDashboards(dashboards){
-    var tmplMarkup = $('#tmpl-group').html();
+    var tmplMarkup = $('#tmpl-dashboards-menu').html();
     for(group in dashboards){
         var compiledTmpl = _.template(tmplMarkup, { group : group, items: dashboards[group] });
         $("#dashboards").append(compiledTmpl);

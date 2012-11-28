@@ -11,6 +11,7 @@
 <script type="text/javascript" src="dashboard.js"></script>
 <script type="text/javascript" src="waitForImages.js"></script>
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/hot-sneaks/jquery-ui.css" type="text/css" />
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-responsive.min.css" rel="stylesheet">
 <link href="graphite.css" rel="stylesheet">
@@ -48,8 +49,7 @@ $(document).ready(function() {
     <ul class="nav">
         <li class="dropdown">  
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dashboards<b class="caret"></b></a>
-            <ul id="dashboards" class="dropdown-menu">  
-                
+            <ul id="dashboards" class="dropdown-menu">
             </ul>  
         </li>
         <li class="divider-vertical"></li>
@@ -110,12 +110,14 @@ $(document).ready(function() {
     </li>
     <li class="divider-vertical"></li>
 </script>
-<script id="tmpl-group" type="text/template"> 
+<script id="tmpl-dashboards-menu" type="text/template"> 
     <li class="dropdown-submenu">
         <a tabindex="-1" href="#"><%=group%></a>
         <ul class="dropdown-menu">
             <% for (i in items) { %>
-              <li><a href="dashboard.html?id=<%=items[i].id%>"><%=items[i].id.replace(group+".", "")%></a></li>
+                <li>
+                    <a href="dashboard.html?id=<%=items[i].id%>"><%=items[i].id.replace(group+".", "")%></a>
+                </li>
             <% } %>
         </ul>
     </li>
