@@ -4,12 +4,12 @@ A simple, client-side, JSON-based [Graphite](http://graphite.wikidot.com/) logic
 
 Installation
 ============
-Graphitus is pure client side, all you have to do to run it is put it under a web-server that can serve http requests.
+Graphitus is pure client side, all you have to do to run it is put it under a web-server that can serve HTTP requests.
 
 Configuration
 =============
 
-Graphitus dashboards are defined using JSON notation. These configuration files can be stored in a document database like [couchdb](http://couchdb.apache.org/) or [mongo](http://www.mongodb.org/) and can also be placed on the file system where dashboards are served.
+Graphitus dashboards are defined using JSON notation. These configuration snippets can be stored in a document database like [couchdb](http://couchdb.apache.org/) or [mongo](http://www.mongodb.org/) and can also be files on the server.
 
 Graphitus Configuration
 -----------------------
