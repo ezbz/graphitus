@@ -61,7 +61,10 @@ Below is an example dashboard configuration:
     				"target": "groupByNode(machines.${dc}dc1.mysql*.Seconds_Behind_Master,2,\"averageSeries\")"
     			},{
     				"title": "Queries Per Second",
-    				"target": "groupByNode(machines.${dc}dc1.mysql*.Qps,2,\"averageSeries\")"
+    				"target": [ <-- you can specify mutliple targets for a chart as a JSON array
+                        "groupByNode(machines.${dc}dc1.mysql*.Qps,2,\"averageSeries\")",
+                        "groupByNode(machines.${dc}dc1.mysql*.Qps,2,\"averageSeries\")"
+                    ]
     			}
     			],
     			"parameters": { <-- parameters to tokens expressed in targets with ${paramName} format	
