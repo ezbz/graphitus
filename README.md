@@ -23,8 +23,8 @@ Graphitus dashboards are defined using JSON notation. These configuration files 
 
     	{
     		"graphiteUrl": "http://graphite.mysite.com",
-    		"dashboardListUrl": "http://couch.mysite.com:5984/_utils/database.html?graphitus-dashboards", <-- must return a JSON with a "rows" element containing an array of rows with dashboard id ("id" attribute)
-    		"dashboardUrlTemplate": "http://couch.mysite.com:5984/_utils/document.html?graphitus-dashboards/${dashboardId}"
+    		"dashboardListUrl": "http://couch.mysite.com:5984/graphitus-dashboards/_all_docs", <-- must return a JSON with a "rows" element containing an array of rows with dashboard id ("id" attribute)
+    		"dashboardUrlTemplate": "http://couch.mysite.com:5984/graphitus-dashboards/${dashboardId}"
     	}
 
 
@@ -32,7 +32,6 @@ Graphitus dashboards are defined using JSON notation. These configuration files 
 * Below is an example dashboard configuration:
 
     	{
-    		"_id": "ops.MySQL", <-- the groupd.id of the document, provides an easy scheme for grouping dashboards
     		"title": "MySQL Production Cluster", <-- give a title to page	
     		"columns": 2, <-- the number of charts in a row side by side, mostly 2 or 4
     		"user": "erezmazor", <-- owner	 
