@@ -78,3 +78,13 @@ Graphitus dashboards are defined using JSON notation. These configuration files 
 * This will generate the screen below (actual graph images are mocks):
 
 ![Screenshot](https://raw.github.com/erezmazor/graphitus/master/doc/screenshot.png)
+
+* Override configuration with URL parameters
+
+You can specify configuration properties in the dashboard URL to override 'default' settings:
+
+        dashboard.html?id=grp1.dash1&defaultLineWidth=25&timeBack=20m&width=350&height=400&columns=4&legend=false
+        
+You can also specify parameter values in the URL:
+
+        dashboard.html?id=grp1.dash1&datacenter=LA
