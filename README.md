@@ -1,3 +1,5 @@
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/08ba48e177efe27b6bbde80b8a4d8a8a "githalytics.com")](http://githalytics.com/erezmazor/graphitus)
+
 Introduction
 ============
 A simple, client-side, JSON-based [Graphite](http://graphite.wikidot.com/) dashboard system build with [bootstrap](http://twitter.github.com/bootstrap/) and [underscore.js](http://underscorejs.org/)
