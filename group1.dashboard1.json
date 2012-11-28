@@ -1,0 +1,126 @@
+{
+    "_id": "data.MySQL",
+    "_rev": "79-0221d89fd1e2344f85360650ccdcb139",
+    "title": "MySQL Servers",
+    "columns": 2,
+    "user": "erez",
+    "hoursBack": 24,
+    "theme": "dark-hive",
+    "from": "",
+    "until": "",
+    "width": 700,
+    "height": 350,
+    "legend": true,
+    "refresh": true,
+    "refreshIntervalSeconds": 30,
+    "averageSeries": false,
+    "defaultLineWidth": 2,
+    "data": [
+        {
+            "title": "Slow Queries",
+            "target": "groupByNode(exclude(machines.${dc}dc1.${host}*.Slow_queries,\"${exclude}\"),2,\"nonNegativeDerivative\")"
+        },
+        {
+            "title": "Seconds Behind Master",
+            "target": "groupByNode(exclude(machines.${dc}dc1.${host}*.Seconds_Behind_Master,\"${exclude}\"),2,\"averageSeries\")"
+        },
+        {
+            "title": "Queries Per Second",
+            "target": "groupByNode(exclude(machines.${dc}dc1.${host}*.Qps,\"${exclude}\"),2,\"averageSeries\")"
+        },
+        {
+            "title": "Insert",
+            "target": "groupByNode(exclude(machines.${dc}dc1.${host}*.Com_insert,\"${exclude}\"),2,\"nonNegativeDerivative\")"
+        },
+        {
+            "title": "Select",
+            "target": "groupByNode(exclude(machines.${dc}dc1.${host}*.Com_select,\"${exclude}\"),2,\"nonNegativeDerivative\")"
+        },
+        {
+            "title": "Update",
+            "target": "groupByNode(exclude(machines.${dc}dc1.${host}*.Com_update,\"${exclude}\"),2,\"nonNegativeDerivative\")"
+        },
+        {
+            "title": "Delete",
+            "target": "groupByNode(exclude(machines.${dc}dc1.${host}*.Com_delete,\"${exclude}\"),2,\"nonNegativeDerivative\")"
+        },
+        {
+            "title": "Disk Utilization",
+            "target": "groupByNode(exclude(machines.${dc}dc1.${host}*.disk.sdb.util,\"${exclude}\"),2,\"averageSeries\")"
+        },
+        {
+            "title": "Threads Running",
+            "target": "groupByNode(exclude(machines.${dc}dc1.${host}*.Threads_running,\"${exclude}\"),2,\"averageSeries\")"
+        },
+        {
+            "title": "Procs Blocked",
+            "target": "groupByNode(exclude(machines.${dc}dc1.${host}*.procs_blocked,\"${exclude}\"),2,\"averageSeries\")"
+        },
+        {
+            "title": "CPU IOWait",
+            "target": "scale(groupByNode(exclude(machines.${dc}dc1.${host}*.cpu.iowait,\"${exclude}\"),2,\"derivative\"),0.001)"
+        },
+        {
+            "title": "CPU User",
+            "target": "scale(groupByNode(exclude(machines.${dc}dc1.${host}*.cpu.user,\"${exclude}\"),2,\"derivative\"),0.001)"
+        },
+        {
+            "title": "CPU System",
+            "target": "scale(groupByNode(exclude(machines.${dc}dc1.${host}*.cpu.system,\"${exclude}\"),2,\"derivative\"),0.001)"
+        },
+        {
+            "title": "CPU IRQ",
+            "target": "scale(groupByNode(exclude(machines.${dc}dc1.${host}*.cpu.irq,\"${exclude}\"),2,\"derivative\"),0.001)"
+        },
+        {
+            "title": "CPU Software IRQ",
+            "target": "scale(groupByNode(exclude(machines.${dc}dc1.${host}*.cpu.softirq,\"${exclude}\"),2,\"derivative\"),0.001)"
+        },
+        {
+            "title": "Disk Reads/Sec",
+            "target": "groupByNode(exclude(machines.${dc}dc1.${host}*.disk.sdb.rs,\"${exclude}\"),2,\"averageSeries\")"
+        },
+        {
+            "title": "Disk Writes/Sec",
+            "target": "groupByNode(exclude(machines.${dc}dc1.${host}*.disk.sdb.ws,\"${exclude}\"),2,\"averageSeries\")"
+        },
+        {
+            "title": "Disk Average Queue Size",
+            "target": "groupByNode(exclude(machines.${dc}dc1.${host}*.disk.sdb.avgqu,\"${exclude}\"),2,\"averageSeries\")"
+        }
+    ],
+    "parameters": {
+        "datacenter": {
+            "All": {
+                "dc": "*"
+            },
+            "New York": {
+                "dc": "ny"
+            },
+            "LA": {
+                "dc": "la"
+            },
+            "Chicago": {
+                "dc": "chi"
+            }
+        },
+        "cluster": {
+            "production": {
+                "host": "mysql",
+                "exclude": ".*mysqldwh"
+            },
+            "dwh": {
+                "host": "mysqldwh",
+                "exclude": "nothing"
+            },
+            "clicks": {
+                "host": "clicksdb",
+                "exclude": "nothing"
+            },
+            "jit": {
+                "host": "jitdb",
+                "exclude": "nothing"
+            }
+        }
+    }
+}

@@ -1,0 +1,5 @@
+{
+    "graphiteUrl": "http://graphite.outbrain.com/",
+    "dashboardListUrl": "sample-index.json",
+    "dashboardUrlTemplate": "${dashboardId}.json"
+}

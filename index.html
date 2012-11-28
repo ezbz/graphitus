@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Graphitus - Dashboard Index</title>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js"></script>
+<script type="text/javascript" src="common.js"></script>
+<script type="text/javascript" src="index.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+<link rel="stylesheet" href="graphite.css" type="text/css" media="all" />
+<script type="text/javascript">
+$(document).ready(function() {
+    loadGraphitusConfig(loadDashboards);
+});
+</script>
+<script id="tmpl-group" type="text/template">
+    <li class="nav-header"><%=group%>:</li>
+      <% for (i in items) { %>
+      <li><a href="dashboard.html?id=<%=items[i].id%>"><%=items[i].id.replace(group+".", "")%></a></li>
+      <% } %>
+</script>
+</head>
+<body>
+    <div class="well">
+        <div class="page-header">
+            <h1>graphitus <small>dashboards</small></h1>
+        </div>
+    </div>
+    <center>
+    	<div id="loader" class="progress progress-striped active" style="width: 50%">
+          <div class="bar" style="width: 100%;"></div>
+        </div>
+    </center>
+    <div class="container-fluid">
+        <div class="span3">
+            <div class="well sidebar-nav">
+                <div id="dashboards" class="nav nav-list"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

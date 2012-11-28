@@ -1,0 +1,326 @@
+var GRAPHITE_URL = "http://graphite.outbrain.com/";
+var DEFAULT_TIME_RANGE = 6;
+
+var lastUpdate = new Date();
+var lastExecution = 0;
+var autoRefershRef = null;
+var refreshIntervalRef = null;
+var config = null;
+var autoRefreshEnabled = false;
+
+function renderView() {
+	renderParamToolbar();
+	var tmplHeaderMarkup = $('#tmpl-header').html();
+	var tmplToolbarMarkup = $('#tmpl-toolbar').html();
+	var tmplDashboardViewMarkup = $('#tmpl-dashboards-view').html();
+	$("#header").append(_.template(tmplHeaderMarkup, {
+		config : config
+	}));
+	console.log("rendered header");
+	$("#toolbar").append(_.template(tmplToolbarMarkup, {
+		config : config
+	}));
+	console.log("rendered toolbar");
+	$("#dashboards-view").append(_.template(tmplDashboardViewMarkup, {
+		config : config
+	}));
+	console.log("rendered dashboard view");
+}
+
+function loadView() {
+	updateGraphs();
+	toggleAutoRefresh();
+	toggleSource();
+	renderSource();
+	document.title = "Graphitus - " + config.title + " Dashboard";
+	$('head').append(
+			'<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/' + config.theme
+					+ '/jquery-ui.css" type="text/css" />');
+	$("#start").datetimepicker({
+		timeFormat : 'hh:mm',
+		dateFormat : 'yymmdd'
+	});
+	$("#end").datetimepicker({
+		timeFormat : 'hh:mm',
+		dateFormat : 'yymmdd'
+	});
+	$('.column').sortable({
+		connectWith : '.column',
+		handle : 'h2',
+		cursor : 'move',
+		placeholder : 'placeholder',
+		forcePlaceholderSize : true,
+		opacity : 0.4,
+		stop : function(event, ui) {
+			$(ui.item).find('h2').click();
+		}
+	}).disableSelection();
+}
+
+function loadConfig() {
+	var dashId = queryParam('id');
+	var dashboardUrl = "/include/proxyJSON.cfm?uri=http://cruncher.outbrain.com:5984/ob-graphitedash/" + dashId;
+	$.ajax({
+		type : "get",
+		url : dashboardUrl,
+		dataType : 'json',
+		success : function(data) {
+			if(data.error){
+				alert("No dashboard information "+dashId);
+				return;
+			}
+			console.log("fetched [" + dashboardUrl + "]");
+			config = data;
+			//backward compatibility
+			if(!config.timeBack){
+				config.timeBack = config.hoursBack+'h';
+			}
+			if(!config.showSource){
+				config.showSource = false;
+			}
+			// end
+			mergeUrlParamsWithConfig(config);
+			console.log("effective config: " + JSON.stringify(config));
+			renderView();
+			console.log("rendered view");
+			loadView();
+			console.log("view loaded");
+		},
+		error : function(xhr, ajaxOptions, thrownError) {
+			console.log("error [" + dashboardUrl + "]");
+		}
+	});
+}
+
+function updateGraphs() {
+	console.log("Updating graphs, start time: " + lastUpdate);
+	showUpdatingImage();
+	for ( var i = 0; i < config.data.length; i++) {
+		$('#imgLoader' + i).show();
+	}
+	
+	for ( var i = 0; i < config.data.length; i++) {
+		var graph = config.data[i];
+		$('#link' + i).attr('href', buildUrl(graph, graph.title, config.width*2, config.height*2, "render"));
+		$('#sLink' + i).attr('href', buildUrl(graph, graph.title, config.width/2, config.height/2, "render"));
+		$('#mLink' + i).attr('href', buildUrl(graph, graph.title, config.width, config.height, "render"));
+		$('#lLink' + i).attr('href', buildUrl(graph, graph.title, config.width*2, config.height*2, "render"));
+		$('#gLink' + i).attr('href', buildUrl(graph, graph.title, 0, 0, "graphlot"));
+		$('#img' + i).attr('src', buildUrl(graph, "", config.width, config.height, "render"));
+		$('#source' + i).val(getGraphSource(graph));
+	}
+
+	$('#container').waitForImages(function() {
+		for ( var i = 0; i < config.data.length; i++) {
+			$('#imgLoader' + i).hide();
+		}
+		lastExecution = Math.floor((new Date() - lastUpdate)/1000);
+		lastUpdate = new Date();
+		hideUpdatingImage();
+	});
+	console.log("Update complete in: "+ (new Date() - lastUpdate) +"ms");
+}
+
+function buildUrl(graph, chartTitle, width, height, graphiteOperation) {
+	var params = "&_salt=1330616314.874&lineWidth=" + config.defaultLineWidth + "&title=" + encodeURIComponent(chartTitle);
+	params += (graph.params) ? "&" + graph.params : "";
+
+	var range = "";
+	var timeBack = $('#timeBack').val();
+	var start = $('#start').val();
+	var end = $('#end').val();
+	if (timeBack != "") {
+		range = "&from=-" + parseTimeBackValue(timeBack);
+	} else if (start != "" && end != "") {
+		var startParts = start.split(" ");
+		var endParts = end.split(" ");
+		range = "&from=" + startParts[1] + "_" + startParts[0] + "&until=" + endParts[1] + "_" + endParts[0];
+	}
+
+	var legend = "&hideLegend=" + !($("#legend").attr('checked'));
+	var size = "&width=" + width + "&height=" + height;
+
+	targetUri = "";
+	var targets = (typeof graph.target == 'string') ? new Array(graph.target) : graph.target;
+	for (i = 0; i < targets.length; i++) {
+		if ($("#average").attr('checked')) {
+			targetUri = targetUri + "target=averageSeries(" + encodeURIComponent(applyParameters(targets[i])) + ")";
+		} else {
+			targetUri = targetUri + "target=" + encodeURIComponent(applyParameters(targets[i]));
+		}
+		if (i < targets.length - 1) {
+			targetUri = targetUri + "&";
+		}
+	}
+
+	return GRAPHITE_URL + graphiteOperation + "/" + "?" + targetUri + range + legend + params + size;
+}
+
+function renderParamToolbar(){
+	if(config.parameters){
+		var tmplParamSel = $('#tmpl-parameter-sel').html();
+
+		$.each(config.parameters, function(paramGroupName, paramGroup) {
+			$("#parametersToolbar").append(_.template(tmplParamSel, {
+				group : paramGroupName,
+				params: paramGroup,
+				selected: queryParam(paramGroupName)
+			}));
+		});		
+	}else{
+		$('#parametersToolbar').hide();
+	}
+}
+
+function applyParameters(target){
+	if(config.parameters){
+		$.each(config.parameters, function(paramGroupName, paramGroup) {
+			var selectedParamValue = $('#'+paramGroupName).val();
+			$.each(paramGroup[selectedParamValue], function(tokenKey, tokenValue) {
+				target = target.replace("${"+tokenKey +"}", tokenValue);
+			});
+	    });	
+	}
+	return target;
+}
+
+function toggleAutoRefresh() {
+	if (config.refresh) {
+		enableAutoRefresh();
+	} else {
+		disableAutoRefresh();
+	}
+	config.refresh = !config.refresh;
+}
+
+function enableAutoRefresh() {
+	autoRefershRef = window.setInterval("updateGraphs()", config.refreshIntervalSeconds * 1000);
+	refreshIntervalRef = window.setInterval("updateRefreshCounter()", 1000);
+}
+function disableAutoRefresh() {
+	window.clearInterval(refreshIntervalRef);
+	window.clearInterval(autoRefershRef);
+}
+
+function updateRefreshCounter() {
+	var remaining = config.refreshIntervalSeconds - Math.floor(((new Date().getTime()) - lastUpdate.getTime()) / 1000);
+	$("#refreshCounter").html('graphs will update in ' + remaining + ' seconds' + ((lastExecution>0) ? ", last update took " + lastExecution + "s" : ""));
+}
+
+function showUpdatingImage() {
+	$("#refreshCounter").hide();
+	$("#loadingImages").show();
+}
+function hideUpdatingImage() {
+	$("#refreshCounter").show();
+	$("#loadingImages").hide();
+}
+
+function useHours() {
+	$("#start,#end").val("");
+	if ($("#timeBack").val() != "") {
+		updateGraphs();
+	}
+}
+
+function useDateRange() {
+	$("#hoursBack").val("");
+	if ($("#start").val() != "" && $("#end").val() != "") {
+		updateGraphs();
+	}
+}
+
+function parseTimeBackValue(timeBack){
+	var delimiterIdx = timeBack.length - 1;
+	if(timeBack.lastIndexOf('w') == delimiterIdx) {
+		return timeBack.replace('w', 'weeks');
+	} else if(timeBack.lastIndexOf('d') == delimiterIdx) {
+		return timeBack.replace('d', 'days');
+	} else if(timeBack.lastIndexOf('h') == delimiterIdx) {
+		return timeBack.replace('h', 'hours');
+	} else if(timeBack.lastIndexOf('m') == delimiterIdx) {
+		return timeBack.replace('m', 'minutes');
+	} else {
+		return timeBack + 'hours';
+	}
+}
+
+function queryParam(name){
+  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+  var regexS = "[\\?&]" + name + "=([^&#]*)";
+  var regex = new RegExp(regexS);
+  var results = regex.exec(window.location.search);
+  if(results == null){
+    return null;
+  }else{
+    return decodeURIComponent(results[1].replace(/\+/g, " "));
+  }
+}
+
+function mergeUrlParamsWithConfig(config){
+	if(queryParam('hoursBack') != null){
+		config.hoursBack = queryParam('hoursBack');
+	}
+	if(queryParam('timeBack') != null){
+		config.timeBack = queryParam('timeBack');
+	}	
+	if(queryParam('from') != null && queryParam('until') != null){
+		config.from = queryParam('from');
+		config.until = queryParam('until');
+		config.hoursBack = null;
+		config.timeBack = null;
+	}
+	if(queryParam('columns') != null){
+		config.columns = queryParam('columns');
+	}
+	if(queryParam('theme') != null){
+		config.theme = queryParam('theme');
+	}
+	if(queryParam('width') != null){
+		config.width = queryParam('width');
+	}
+	if(queryParam('height') != null){
+		config.height = queryParam('height');
+	}
+	if(queryParam('legend') != null){
+		config.legend = queryParam('legend');
+	}
+	if(queryParam('averageSeries') != null){
+		config.averageSeries = queryParam('averageSeries');
+	}
+	if(queryParam('defaultLineWidth') != null){
+		config.defaultLineWidth = queryParam('defaultLineWidth');
+	}
+}
+
+function getGraphSource(graph){
+	var result = new Array();
+	if((typeof graph.target) === 'string') { 
+		result.push(applyParameters(graph.target));
+	}else{
+		for(idx in graph.target){
+			result.push(applyParameters(graph.target[idx]));
+		}
+	}
+	return result.join("\n");
+}
+
+function renderSource(){
+	$('.source').width(config.width);
+	$('.source').height(30);
+	$('.source').addClass("ui-widget-content");
+}
+
+function toggleSource(){	
+	if(config.showSource){
+		$('.source').show();
+	}else{
+		$('.source').hide();
+	}
+	config.showSource = !config.showSource;
+}
+
+function updateSource(index){
+	config.data[index].target = $('#source'+index).val();
+	updateGraphs();
+}

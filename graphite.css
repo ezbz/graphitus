@@ -1,0 +1,29 @@
+.lnk{
+    font-size: 0.6em;
+    padding: 3px 3px;
+    float: right;
+    border: solid 1px white;
+    text-decoration: none;
+    color: black;
+}
+
+.hdrSpace {
+    width: 200;
+}
+
+.loaderImg{
+    display: none;
+    width: 20px;
+}
+
+.source{
+    text-align: center;
+}
+
+.hspacer{
+    margin: 1px;
+}
+
+.initial-hide{
+    display: none;
+}
