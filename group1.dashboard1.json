@@ -1,9 +1,8 @@
 {
-    "_id": "data.MySQL",
     "title": "MySQL Servers",
     "columns": 2,
     "user": "erez",
-    "timeBack": "6H",
+    "timeBack": "6h",
     "theme": "cerulean",
     "from": "",
     "until": "",
