@@ -17,10 +17,12 @@ $(document).ready(function() {
 });
 </script>
 <script id="tmpl-group" type="text/template">
+<div class="well span3">
     <li class="nav-header"><%=group%>:</li>
-      <% for (i in items) { %>
-      <li><a href="dashboard.html?id=<%=items[i].id%>"><%=items[i].id.replace(group+".", "")%></a></li>
-      <% } %>
+    <% for (i in items) { %>
+        <li><a href="dashboard.html?id=<%=items[i].id%>"><%=items[i].id.replace(group+".", "")%></a></li>
+    <% } %>
+</div>
 </script>
 </head>
 <body>
@@ -34,12 +36,7 @@ $(document).ready(function() {
           <div class="bar" style="width: 100%;"></div>
         </div>
     </center>
-    <div class="container-fluid">
-        <div class="span3">
-            <div class="well sidebar-nav">
-                <div id="dashboards" class="nav nav-list"></div>
-            </div>
-        </div>
+    <div id="dashboards" class="container-fluid">
     </div>
 </body>
 </html>

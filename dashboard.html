@@ -9,7 +9,7 @@
 <script type="text/javascript" src="/resources/jquery-ui-timepicker-addon.js"></script>
 <script type="text/javascript" src="common.js"></script>
 <script type="text/javascript" src="dashboard.js"></script>
-<script type="text/javascript" src="waitForImages.js"></script>
+<script type="text/javascript" src="jquery.waitforimages.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/dark-hive/jquery-ui.css" type="text/css" />
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
@@ -26,17 +26,20 @@ $(document).ready(function() {
 <% for (idx in config.data) { %>
     <% for(col=0; col<config.columns; col++) { %>
 		<% if( (idx % config.columns) == col) { %>
-        <div id="item<%=idx%>" class="well span<%=12/config.columns%>"  style="width:<%=config.width%>px">
+        <div id="item<%=idx%>" class="well span<%=12/config.columns%>" style="width:<%=config.width%>px">
 			<h4 class="pull-left" style="margin: 0px;"><%=config.data[idx].title%></h4>
+            <div class="pull-right">
             <button class="btn btn-small btn-primary pull-right hspacer" onclick="toggleSource(<%=idx%>);">Source</button>
             <a id="lLink<%=idx%>" href="#"><button class="btn btn-small btn-success pull-right hspacer">L</button></a>
             <a id="mLink<%=idx%>" href="#"><button class="btn btn-small btn-warning pull-right hspacer">M</button></a>
             <a id="sLink<%=idx%>" href="#"><button class="btn btn-small btn-danger pull-right hspacer">S</button></a>
             <a id="gLink<%=idx%>" href="#"><button class="btn btn-small btn-info pull-right hspacer">Graphlot</button></a>
+            </div>
             <br/>
             <a id="link<%=idx%>" href=""><img id="img<%=idx%>" class="img-rounded"/></a>
-            <div id="sourceContainer<%=idx%>" class="initial-hide">
-                <textarea id="source<%=idx%>" class="source"></textarea>
+            <br/>
+            <div id="sourceContainer<%=idx%>"class="initial-hide">
+                <textarea id="source<%=idx%>" style="width:<%=config.width-10%>px" class="source"></textarea><br/>
                 <button class="btn btn-small" onclick="updateSource(<%=idx%>);">Update</button>
             </div>
         </div>

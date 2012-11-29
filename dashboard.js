@@ -136,7 +136,7 @@ function buildUrl(graph, chartTitle, width, height, graphiteOperation) {
 		}
 	}
 
-	return graphitusConfig.graphiteUrl + graphiteOperation + "/" + "?" + targetUri + range + legend + params + size;
+	return graphitusConfig.graphiteUrl + "/" + graphiteOperation + "/" + "?" + targetUri + range + legend + params + size;
 }
 
 function renderParamToolbar(){
