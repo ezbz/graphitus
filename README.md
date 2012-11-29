@@ -62,8 +62,8 @@ Below is an example dashboard configuration:
     			},{
     				"title": "Queries Per Second",
     				"target": [ <-- you can specify mutliple targets for a chart as a JSON array
-                        "groupByNode(machines.${dc}dc1.mysql*.Qps,2,\"averageSeries\")",
-                        "groupByNode(machines.${dc}dc1.mysql*.Qps,2,\"averageSeries\")"
+                        "derivative(machines.${dc}dc1.mysql*.Qps1)",
+                        "derivative(machines.${dc}dc1.mysql*.Qps2)"
                     ]
     			}
     			],
