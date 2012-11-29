@@ -51,7 +51,7 @@ Below is an example dashboard configuration:
     		"refreshIntervalSeconds": 90, <-- auto refresh interval in seconds
     		"averageSeries": false, <-- for targets that aggregate a lot of metrics prefer setting this to true as it will average many lines into one
     		"defaultLineWidth": 2, <-- line width for chart lines
-    		"data": [ <-- actual data for chart image
+    		"data": [ <-- charts list
     			{
     				"title": "Slow Queries", <-- a title for the chart image
     				"target": "groupByNode(machines.${dc}dc1.mysql*.Slow_queries,2,\"nonNegativeDerivative\")", <-- the graphite target/function which defines the chart content
@@ -113,8 +113,8 @@ theme                   | No              | Bootswatch theme from BootstrapCDN t
 width                   | Yes             | Width of the chart from graphite (see ```columns```)
 height                  | Yes             | Height of the chart from graphite
 legend                  | No              | Show/Hide the legend in the chart (omitting leaves it up to graphite)
-refresh                 | No              | Auto-refresh the page (see ```refreshIntervalSeconds```)
-refreshIntervalSeconds  | No              | When ```refresh``` is true this will determine the refresh interval
+refresh                 | No              | Auto-refresh the charts (see ```refreshIntervalSeconds```)
+refreshIntervalSeconds  | No              | When ```refresh``` is ```true``` this will determine the refresh interval
 defaultLineWidth        | No              | The line width for the generated chart
 
         
