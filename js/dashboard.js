@@ -5,6 +5,7 @@ var refreshIntervalRef = null;
 var config = null;
 var autoRefreshEnabled = false;
 var dashboards = new Array();
+var searchIndex = new Array();
 
 function renderGraphitus(){
 	loadDashboards();
@@ -18,6 +19,7 @@ function renderView() {
 		config : config, 
 		dashboardGroups : dashboards
 	}));
+	initializeSearch();
 	console.log("rendered toolbar");
 	$("#dashboards-view").append(_.template(tmplDashboardViewMarkup, {
 		config : config
@@ -330,10 +332,23 @@ function loadDashboards(){
             }
             dashboards.sort();
             $("#loader").hide();
+			for(i in json.rows){
+				searchIndex.push(json.rows[i].id);
+			}
 			loadDashboard();
         },
         error:function (xhr, ajaxOptions, thrownError){
             console.log(thrownError);
         }
     });
+}
+
+function initializeSearch(){
+	console.log("initialize search: " + JSON.stringify(searchIndex));
+	$('#search').typeahead({
+		source: searchIndex,
+		updater: function (selection) {
+			document.location.href = "dashboard.html?id=" + selection;
+		}
+	});
 }
