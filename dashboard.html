@@ -131,7 +131,16 @@ $(document).ready(function() {
     </li>
     <li class="divider-vertical"></li>
 </script>
-</head
+
+<script type="text/template" id="tmpl-warning-dashboard">
+<div class="alert alert-block">
+  <button type="button" class="close" data-dismiss="alert">×</button>
+  <h4>Warning!</h4>
+  Could not load dashboard <%= dashboardId %>, check the dashboard index and configuration file.<br/>
+  Go back to <a href="index.html">Graphitus Homepage</a> 
+</div>
+</script>
+</head>
 <body lang="en">
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
@@ -148,6 +157,12 @@ $(document).ready(function() {
         </form>
       </div>
     </div>
+    <div id="message" class="initial-hide"></div>
+    <center>
+        <div id="loader" class="progress progress-striped active" style="width: 30%;">
+          <div class="bar" style="width: 100%;"></div>
+        </div>
+    </center>
     <div id="dashboards-view" class="container" style="width: 100%">
     </div>            
 </body>

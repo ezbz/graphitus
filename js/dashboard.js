@@ -75,6 +75,11 @@ function loadDashboard() {
 		},
 		error : function(xhr, ajaxOptions, thrownError) {
 			console.log("error [" + dashboardUrl + "]");
+			var tmplError = $('#tmpl-warning-dashboard').html();
+			$('#message').html(_.template(tmplError, {
+				dashboardId : dashId
+			}));
+			$('#message').show();
 		}
 	});
 }
