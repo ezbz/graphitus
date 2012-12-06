@@ -174,8 +174,15 @@ function applyParameters(target){
 	return target;
 }
 
+function multiReplace(str, match, repl) {
+    do {
+        str = str.replace(match, repl);
+    } while(str.indexOf(match) !== -1);
+    return str;
+}
+
 function applyParameter(originalString, paramName, paramValue){
-	return originalString.replace("${"+paramName +"}", paramValue);
+	return multiReplace(originalString,"${"+paramName +"}", paramValue);
 }
 
 function toggleAutoRefresh() {

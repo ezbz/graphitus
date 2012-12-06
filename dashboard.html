@@ -3,18 +3,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js"></script>
-<script type="text/javascript" src="js/jquery-ui-timepicker-addon.js"></script>
-<script type="text/javascript" src="js/common.js"></script>
-<script type="text/javascript" src="js/dashboard.js"></script>
-<script type="text/javascript" src="js/jquery.waitforimages.min.js"></script>
-<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/dark-hive/jquery-ui.css" type="text/css" />
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-responsive.min.css" rel="stylesheet">
 <link href="css/graphite.css" rel="stylesheet">
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-timepicker-addon.min.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/dashboard.js"></script>
+<script type="text/javascript" src="js/jquery.waitforimages.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
 
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
@@ -36,7 +36,7 @@ $(document).ready(function() {
             <a id="gLink<%=idx%>" href="#"><button class="btn btn-small btn-info pull-right hspacer">Graphlot</button></a>
             </div>
             <br/>
-            <a id="link<%=idx%>" href=""><img id="img<%=idx%>" class="img-rounded"/></a>
+            <a id="link<%=idx%>" href=""><img id="img<%=idx%>" class="img-rounded" width="<%=config.width%>" height="<%=config.height%>"/></a>
             <br/>
             <div id="sourceContainer<%=idx%>"class="initial-hide">
                 <textarea id="source<%=idx%>" style="width:<%=config.width-10%>px" class="source"></textarea><br/>
@@ -48,7 +48,7 @@ $(document).ready(function() {
 <% } %>
 </script>
 <script type="text/template" id="tmpl-toolbar">
-    <a class="brand" href="index.html">Graphitus</a>
+    <a class="brand" href="index.html">graphitus</a>
     <ul class="nav">
         <li class="dropdown">  
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= config.title %><b class="caret"></b></a>
@@ -70,7 +70,7 @@ $(document).ready(function() {
         <li class="divider-vertical"></li>
         <li>
             <form class="navbar-search form-inline pull-right">
-              <input id="search" type="text" style="margin-top: 0px;" class="search-query input-small" placeholder="Search">
+              <input id="search" type="text" style="margin-top: 0px;" class="search-query input-mini" placeholder="Search">
             </form>
         </li>
         <li class="divider-vertical"></li>
@@ -131,7 +131,6 @@ $(document).ready(function() {
     </li>
     <li class="divider-vertical"></li>
 </script>
-
 <script type="text/template" id="tmpl-warning-dashboard">
 <div class="alert alert-block">
   <button type="button" class="close" data-dismiss="alert">×</button>
