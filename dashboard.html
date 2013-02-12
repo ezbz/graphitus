@@ -71,7 +71,7 @@ $(document).ready(function() {
             </div>
             </div>
             <br/>            
-            <a href="#" onclick="applyLightboxImage(<%=idx%>);"><img id="img<%=idx%>" class="img-rounded" width="<%=config.width%>" height="<%=config.height%>"/></a>
+            <a href="#" onclick="applyLightboxImage(<%=idx%>); return false;"><img id="img<%=idx%>" class="img-rounded" width="<%=config.width%>" height="<%=config.height%>"/></a>
             <br/>
             <div id="sourceContainer<%=idx%>"class="initial-hide">
                 <textarea id="source<%=idx%>" style="width:<%=config.width-10%>px" class="source"></textarea><br/>
@@ -166,8 +166,8 @@ $(document).ready(function() {
                             <option value="US/Eastern" selected="selected">US/Eastern</option>
                             <option value="US/Central">US/Central</option>
                             <option value="US/Pacific">US/Pacific</option>
-                            <option value="Europe/London">Europe/London</option>
                             <option value="Israel">Israel</option>
+                            <option value="Europe/London">Europe/London</option>
                         </select>
                     </div>
                     </li>
