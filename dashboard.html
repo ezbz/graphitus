@@ -3,18 +3,23 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/dark-hive/jquery-ui.css" type="text/css" />
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-responsive.min.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/black-tie/jquery-ui.css" type="text/css" />
+<link href="//cdnjs.cloudflare.com/ajax/libs/select2/3.2/select2.css" rel="stylesheet">
+<link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-lightbox/0.5/bootstrap-lightbox.min.css" rel="stylesheet">
 <link href="css/graphite.css" rel="stylesheet">
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/select2/3.2/select2.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui-timepicker-addon.min.js"></script>
 <script type="text/javascript" src="js/common.js"></script>
 <script type="text/javascript" src="js/dashboard.js"></script>
 <script type="text/javascript" src="js/jquery.waitforimages.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-lightbox/0.5/bootstrap-lightbox.min.js"></script>
 
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
@@ -29,18 +34,60 @@ $(document).ready(function() {
         <div id="item<%=idx%>" class="well span<%=12/config.columns%>" style="width:<%=config.width%>px">
 			<h4 class="pull-left" style="margin: 0px;"><%=config.data[idx].title%></h4>
             <div class="pull-right">
-            <button class="btn btn-small btn-primary pull-right hspacer" onclick="toggleSource(<%=idx%>);">Source</button>
-            <a id="lLink<%=idx%>" href="#"><button class="btn btn-small btn-success pull-right hspacer">L</button></a>
-            <a id="mLink<%=idx%>" href="#"><button class="btn btn-small btn-warning pull-right hspacer">M</button></a>
-            <a id="sLink<%=idx%>" href="#"><button class="btn btn-small btn-danger pull-right hspacer">S</button></a>
-            <a id="gLink<%=idx%>" href="#"><button class="btn btn-small btn-info pull-right hspacer">Graphlot</button></a>
+            <div class="pull-left btn-group">
+                <a class="btn btn-small btn-success dropdown-toggle hspacer" data-toggle="dropdown" href="#"> Functions...<span class="caret"></span></a>
+                <ul class="dropdown-menu">      
+                    <li>
+                        <input id="yMin<%=idx%>" type="text" class="input-mini hspacer" placeholder="yMin">
+                        <label class="pull-right hspacer">
+                           <a target="_blank" class="label label-info pull-left" href="http://graphite.readthedocs.org/en/1.0/url-api.html"><i class="icon-question-sign"></i> Help</a>
+                        </label>
+                    </li>
+                    <li>
+                        <input id="yMax<%=idx%>" type="text" class="input-mini hspacer" placeholder="yMax">
+                    </li>
+                    <li>
+                        <input id="otherUrlParamName<%=idx%>" type="text" class="input-mini hspacer" placeholder="name">
+                        
+                        <input id="otherUrlParamValue<%=idx%>" type="text" class="input-mini hspacer" placeholder="value">
+                    </li>                    <li>
+                         <label>
+                            <button class="btn btn-small btn-primary pull-right hspacer" onclick="updateGraph(<%=idx%>);">Update</button>
+                         </label>
+                    </li>
+                </ul>
             </div>
-            <br/>
-            <a id="link<%=idx%>" href=""><img id="img<%=idx%>" class="img-rounded" width="<%=config.width%>" height="<%=config.height%>"/></a>
+            <div class="pull-left btn-group">
+                <a class="btn btn-small btn-warning dropdown-toggle hspacer" data-toggle="dropdown" href="#"> Images...<span class="caret"></span></a>
+                <ul class="dropdown-menu">      
+                    <li class="navbar-text"><a id="lLink<%=idx%>" href="#">Large</a></li>
+                    <li class="navbar-text"><a id="mLink<%=idx%>" href="#">Medium</a></li>
+                    <li class="navbar-text"><a id="sLink<%=idx%>" href="#">Small</a></li>
+                </ul>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-small btn-primary pull-right hspacer" onclick="toggleSource(<%=idx%>);">Source</button>
+                <a id="gLink<%=idx%>" href="#"><button class="btn btn-small btn-info pull-right hspacer">Graphlot</button></a>
+            </div>
+            </div>
+            <br/>            
+            <a href="#" onclick="applyLightboxImage(<%=idx%>);"><img id="img<%=idx%>" class="img-rounded" width="<%=config.width%>" height="<%=config.height%>"/></a>
             <br/>
             <div id="sourceContainer<%=idx%>"class="initial-hide">
                 <textarea id="source<%=idx%>" style="width:<%=config.width-10%>px" class="source"></textarea><br/>
                 <button class="btn btn-small" onclick="updateSource(<%=idx%>);">Update</button>
+            </div>
+            <br/>
+            <div id="lightbox<%=idx%>" class="lightbox hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class='lightbox-header'>
+                    <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
+                </div>
+                <div class='lightbox-content' style="width:<%=config.width*1.5%>px;height:<%=config.height*1.5%>px;">
+                    <div id="lightboxProgress<%=idx%>" class="progress progress-striped active">
+                        <div class="bar" style="width: 100%;"></div>
+                    </div>
+                    <a id="lightboxLink<%=idx%>" href="#"><img id="lightboxImg<%=idx%>" class="img-rounded" width="<%=config.width*1.5%>" height="<%=config.height*1.5%>"/></a>
+                </div>
             </div>
         </div>
 	    <% } %>
@@ -48,10 +95,10 @@ $(document).ready(function() {
 <% } %>
 </script>
 <script type="text/template" id="tmpl-toolbar">
-    <a class="brand" href="index.html">graphitus</a>
+    <a class="brand" href="index.html">&nbsp; graphitus</a>
     <ul class="nav">
-        <li class="dropdown">  
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= config.title %><b class="caret"></b></a>
+        <li class="dropdown"> 
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= title %><b class="caret"></b></a>
             <ul id="dashboards" class="dropdown-menu">
                 <% for (group in dashboardGroups) { %>
                     <li class="dropdown-submenu">
@@ -67,69 +114,93 @@ $(document).ready(function() {
                 <% } %> 
             </ul>  
         </li>
+        <li class="navbar-text"><div><a href="#" id="permalink"><i class="icon-link"></i> </a></div></li>
         <li class="divider-vertical"></li>
         <li>
             <form class="navbar-search form-inline pull-right">
-              <input id="search" type="text" style="margin-top: 0px;" class="search-query input-mini" placeholder="Search">
+                <input id="search" type="text" style="margin-top: 0px;" class="search-query input-small" placeholder="Search" />
             </form>
         </li>
         <li class="divider-vertical"></li>
-        <li class="navbar-text">Back</li>
+        <li class="navbar-text"><i class="icon-time"></i> Back</li>
         <li class="divider-vertical"></li>
-        <li><input placeholder="go back" type="text" class="input-mini" id="timeBack" name="timeBack" value="<%=config.timeBack%>" onchange="useHours()" /></li>
+        <li><input placeholder="back" type="text" class="input-mini" style="width: 30px;" id="timeBack" name="timeBack" value="<%= (config.timeBack) ? config.timeBack : "" %>" onchange="useHours()" /></li>
         <li class="divider-vertical"></li>
         <li class="navbar-text"> <strong>OR</strong> </li>
         <li class="divider-vertical"></li>
-        <li class="navbar-text"> Date Range </li>
+        <li class="navbar-text"><i class="icon-calendar"></i> Dates </li>
         <li class="divider-vertical"></li>
-        <li><input type="text" class="input-small" placeholder="start date" id="start" name="start" value="<%=config.from%>" onchange="useDateRange()" /></li>
+        <li><input type="text" class="input-small" placeholder="start date" id="start" name="start" value="<%= (config.from) ? config.from : ""%>" onchange="useDateRange()" /></li>
         <li class="divider-vertical"></li>
-        <li><input type="text" class="input-small" placeholder="end date" id="end" name="end" value="<%=config.until%>" onchange="useDateRange()" /></li>
+        <li><input type="text" class="input-small" placeholder="end date" id="end" name="end" value="<%=(config.until) ? config.until : ""%>" onchange="useDateRange()" /></li>
         <li class="divider-vertical"></li>
-        <li> 
-        <label class="checkbox" style="margin-top: 10px">
-            <input type="checkbox" id="legend" name="legend" <% if(config.legend) {%> checked="checked" <% } %> onchange="updateGraphs()" /> Legend
-        </label>
+        <li class="dropdown">
+           <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> Options<b class="caret"></b></a>
+           <ul id="options" class="dropdown-menu" style="width: 200px;">
+                    <li>
+                    <label class="checkbox" style="margin: 10px">
+                        <input type="checkbox" id="average" name="average" <% if(config.averageSeries) { %>checked="checked"<% } %> onchange="updateGraphs()" />Average Series
+                    </label>
+                    </li>
+                    <li>
+                    <label class="checkbox" style="margin: 10px">
+                        <input type="checkbox" id="sum" name="sum" <% if(config.sumSeries) { %>checked="checked"<% } %> onchange="updateGraphs()" />Sum Series
+                    </label>
+                    </li>
+                    <li class="divider"></li>
+                    <li> 
+                    <label class="checkbox" style="margin: 10px">
+                        <input type="checkbox" id="legend" name="legend" <% if(config.legend) {%> checked="checked" <% } %> onchange="updateGraphs()" /> Show Legend
+                    </label>
+                    </li>
+                    <li>
+                    <label class="checkbox" style="margin: 10px">
+                        <input type="checkbox" id="refresh" name="refresh" <% if(config.refresh) { %>checked="checked"<% } %> onchange="toggleAutoRefresh();" />Auto Refresh
+                    </label>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                    <label class="select" style="margin-left: 10px;"> Time Zone: </label>
+                    <div class="pull-right" style="margin-right: 10px;margin-bottom: 10px;">
+                        <select id="tz" name="tz" class="input input-medium" style="margin-top: 0px;">
+                            <option value="US/Eastern" selected="selected">US/Eastern</option>
+                            <option value="US/Central">US/Central</option>
+                            <option value="US/Pacific">US/Pacific</option>
+                            <option value="Europe/London">Europe/London</option>
+                            <option value="Israel">Israel</option>
+                        </select>
+                    </div>
+                    </li>
+            </ul>  
         </li>
         <li class="divider-vertical"></li>
         <li>
-            <label class="checkbox" style="margin-top: 10px">
-                <input type="checkbox" id="average" name="average" <% if(config.averageSeries) { %>checked="checked"<% } %> onchange="updateGraphs()" /> Average Series
-            </label>
-        </li>
-        <li class="divider-vertical"></li>
-        <li>
-            <label class="checkbox" style="margin-top: 10px">
-                <input type="checkbox" id="refresh" name="refresh" <% if(config.refresh) { %>checked="checked"<% } %> onchange="toggleAutoRefresh();" /> Auto Refresh
-            </label>
-        </li>
-        <li class="divider-vertical"></li>
-        <li>
-            <button class="btn btn-small btn-primary pull-right hspacer" style="margin-top:8px" onclick="updateGraphs();return false;">Update</button>
+            <button class="btn btn-small btn-primary pull-right hspacer" style="margin-top:8px" onclick="updateGraphs();return false;"><i class="icon-circle-arrow-right"></i> Update</button>
         </li>
         <li class="divider-vertical"></li>
         <li>
             <div id="loadingProgress" class="progress progress-striped active" style="width: 100px;margin: 10px">
-                <div class="bar" style="width: 100%;">Updating... </div>
+                <div class="bar" style="width: 100%;"><i class="icon-refresh icon-spin"></i> Updating... </div>
             </div>
+            <div id="refreshCounter" class="navbar-text"></div>
         </li>
-        <li class="divider-vertical"></li>
-        <li id="refreshCounter" class="navbar-text"></li>
     </ul>
 </script>
 <script type="text/template" id="tmpl-parameter-sel">
-    <li class="navbar-text"><%= group %>: </li>
-    <li class="divider-vertical"></li>
+    <li class="navbar-text"><%= group %> <i class="icon-chevron-right"></i> </li>
     <li>
-    <select id="<%= group %>" name="<%= group %>" onchange="updateGraphs(); return false;" class="input-medium">
-        <% $.each(params, function(paramName, param) { %>
-            <% var value = ((typeof param) === 'object') ? paramName : param %>
-            <% var selectedHtml = (selected && selected != "" && selected === value) ? "selected='selected'" : "" %>
-            <option value="<%= value %>" <%= selectedHtml %>><%= value %></option>
-        <% }); %>
-    </select>
+        <div style="margin-top:5px;">
+            &nbsp; <select id="<%= group %>" name="<%= group %>" class="input input-large"></select>
+        </div>
     </li>
     <li class="divider-vertical"></li>
+</script>
+<script type="text/template" id="tmpl-parameter-sel-item">
+    <% for(paramName in params){ %>
+        <% var value = ( typeof params[paramName][group] === "undefined") ? paramName : params[paramName][group]; %>
+        <% var selectedHtml = (selected && selected != "" && selected === value) ? "selected='selected'" : "" %>
+        <option value="<%= value %>" <%= selectedHtml %>><%= paramName %></option>
+    <% } %>
 </script>
 <script type="text/template" id="tmpl-warning-dashboard">
 <div class="alert alert-block">
@@ -147,22 +218,22 @@ $(document).ready(function() {
         </form>
       </div>
     </div>
-    <div style="margin-top: 52px;"></div>
-    <div id="parametersNavBar" class="navbar navbar-inverse">
+    <div style="margin-top: 48px;"></div>
+    <div id="parameters-toolbar" class="navbar navbar-inverse">
       <div class="navbar-inner">
         <form class="navbar-form form-inline">
             <ul class="nav" id="parametersToolbar" >
-            </ul>
+            </ul> 
         </form>
       </div>
     </div>
     <div id="message" class="initial-hide"></div>
     <center>
         <div id="loader" class="progress progress-striped active" style="width: 30%;">
-          <div class="bar" style="width: 100%;"></div>
+          <div id="progressBar" class="bar" style="width: 100%;">Loading Dashboard...</div>
         </div>
-    </center>
+    </center>          
     <div id="dashboards-view" class="container" style="width: 100%">
-    </div>            
+    </div>
 </body>
 </html>

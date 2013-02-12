@@ -4,6 +4,7 @@ function loadDashboards(){
         type: "get",
         url: graphitusConfig.dashboardListUrl,
         dataType:'json',
+        cache: false,
         success: function(json) {
             console.log("Loaded dashboards: " + JSON.stringify(json));
             var dashboards = new Array();
@@ -32,4 +33,13 @@ function renderDashboards(dashboards){
         var compiledTmpl = _.template(tmplMarkup, { group : group, items: dashboards[group] });
         $("#dashboards").append(compiledTmpl);
     }
+
+
+    $("#dashboards").masonry({
+        itemSelector: '.box',
+        isAnimated: true,
+        columnWidth: function( containerWidth ) {
+            return containerWidth/4;
+        }
+    });
 }
