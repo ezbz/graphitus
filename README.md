@@ -146,6 +146,7 @@ Consider the following configuration for the ```parameters``` section of the con
         
 You can then use a target like ```services.prod.${service}.${host}_${datacenter}.someAttribute```. When graphitus loads it will generate select boxes based on the actual values returned from the graphite metric API based on the provided queries. Note that the queries themselves can be parameterized, creating a series of select boxes depending on each other in-order.
 
+Graphitus will also consider generating the list of values from a partial path, the index and regex determine which portion and substring (regex) of the resulting path will be used to generate the values for selection. The ```showAll``` property is used to determine if graphitus will prepend a default All (translated to ```*``` in the graphite query) option to the selection
 
 * Themes
 
