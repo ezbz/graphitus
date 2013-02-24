@@ -108,7 +108,6 @@ user                    | No              | Owner
 timeBack                | No              | Specify timeframe back from current time to display (specify this or ```from``` and ```until```)
 from                    | No              | From date/time in ```yyyy-MM-dd HH:MM``` (specify this and ```until``` or ```timeBack```)
 until                   | No              | To date/time in ```yyyy-MM-dd HH:MM``` (specify this and ```from``` or ```timeBack```)
-theme                   | No              | Bootswatch theme from BootstrapCDN to use
 width                   | Yes             | Width of the chart from graphite (see ```columns```)
 height                  | Yes             | Height of the chart from graphite
 legend                  | No              | Show/Hide the legend in the chart (omitting leaves it up to graphite)
