@@ -148,6 +148,3 @@ You can then use a target like ```services.prod.${service}.${host}_${datacenter}
 
 Graphitus will also consider generating the list of values from a partial path, the index and regex determine which portion and substring (regex) of the resulting path will be used to generate the values for selection. The ```showAll``` property is used to determine if graphitus will prepend a default All (translated to ```*``` in the graphite query) option to the selection
 
-* Themes
-
-[Bootswatch](http://bootswatch.com/) themes are provided via [BootstrapCDN](http://www.bootstrapcdn.com/) 
