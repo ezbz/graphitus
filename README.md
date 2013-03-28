@@ -87,7 +87,7 @@ Below is an example dashboard configuration:
 
 ![Screenshot](https://raw.github.com/erezmazor/graphitus/master/doc/screenshot.png)
 
-* Clicking on a graph image will generate a nice [Rickshaw](http://code.shutterstock.com/rickshaw/)-based graph with hover-values a legend.
+* Clicking on a graph image will generate a nice [Rickshaw](http://code.shutterstock.com/rickshaw/)-based graph with hover-values and a toggle-legend
 
 ![Extended](https://raw.github.com/erezmazor/graphitus/master/doc/extended.png)
 
