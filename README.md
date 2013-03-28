@@ -41,7 +41,6 @@ Below is an example dashboard configuration:
     		"columns": 2, <-- the number of charts in a row side by side, mostly 2 or 4
     		"user": "erezmazor", <-- owner	 
     		"timeBack": 12h, <-- time range back from current time (can be expressed in minutes/hours/days/weeks e.g., 30m/12h/1d/2w)	 
-    		"theme": "cerulean",	<-- themeing and colors based on Bootswatch themes		
     		"from": "", <-- start date for the date range, prefer timeBack as any date you choose will become stale	 
     		"until": "", <-- end date for the date range, prefer timeBack as any date you choose will become stale	 
     		"width": 700, <-- width of each chart image, should correlate with # columns defined
@@ -109,7 +108,6 @@ user                    | No              | Owner
 timeBack                | No              | Specify timeframe back from current time to display (specify this or ```from``` and ```until```)
 from                    | No              | From date/time in ```yyyy-MM-dd HH:MM``` (specify this and ```until``` or ```timeBack```)
 until                   | No              | To date/time in ```yyyy-MM-dd HH:MM``` (specify this and ```from``` or ```timeBack```)
-theme                   | No              | Bootswatch theme from BootstrapCDN to use
 width                   | Yes             | Width of the chart from graphite (see ```columns```)
 height                  | Yes             | Height of the chart from graphite
 legend                  | No              | Show/Hide the legend in the chart (omitting leaves it up to graphite)
@@ -148,6 +146,3 @@ You can then use a target like ```services.prod.${service}.${host}_${datacenter}
 
 Graphitus will also consider generating the list of values from a partial path, the index and regex determine which portion and substring (regex) of the resulting path will be used to generate the values for selection. The ```showAll``` property is used to determine if graphitus will prepend a default All (translated to ```*``` in the graphite query) option to the selection
 
-* Themes
-
-[Bootswatch](http://bootswatch.com/) themes are provided via [BootstrapCDN](http://www.bootstrapcdn.com/) 
