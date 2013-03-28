@@ -6,20 +6,33 @@
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-responsive.min.css" rel="stylesheet">
 <link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
-<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/black-tie/jquery-ui.css" type="text/css" />
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/base/jquery-ui.css" type="text/css" />
 <link href="//cdnjs.cloudflare.com/ajax/libs/select2/3.2/select2.css" rel="stylesheet">
 <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-lightbox/0.5/bootstrap-lightbox.min.css" rel="stylesheet">
-<link href="css/graphite.css" rel="stylesheet">
+<link href="//cdnjs.cloudflare.com/ajax/libs/rickshaw/1.2.1/rickshaw.min.css" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="css/graphitus.css">
+<link type="text/css" rel="stylesheet" href="css/graph.css">
+<link type="text/css" rel="stylesheet" href="css/detail.css">
+<link type="text/css" rel="stylesheet" href="css/legend.css">
+<link type="text/css" rel="stylesheet" href="css/extensions.css">
+
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/select2/3.2/select2.min.js"></script>
-<script type="text/javascript" src="js/jquery-ui-timepicker-addon.min.js"></script>
-<script type="text/javascript" src="js/common.js"></script>
-<script type="text/javascript" src="js/dashboard.js"></script>
-<script type="text/javascript" src="js/jquery.waitforimages.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.3.1/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.0.1/d3.v3.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/rickshaw/1.2.1/rickshaw.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-lightbox/0.5/bootstrap-lightbox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min.js "></script>
+
+<script type="text/javascript" src="js/jquery-ui-timepicker-addon.min.js"></script>
+<script type="text/javascript" src="js/jquery.waitforimages.min.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/dashboard.js"></script>
+<script type="text/javascript" src="js/extensions.js"></script>
+<script type="text/javascript" src="js/extended-graph.js"></script>
 
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
@@ -32,7 +45,7 @@ $(document).ready(function() {
     <% for(col=0; col<config.columns; col++) { %>
 		<% if( (idx % config.columns) == col) { %>
         <div id="item<%=idx%>" class="well span<%=12/config.columns%>" style="width:<%=config.width%>px">
-			<h4 class="pull-left" style="margin: 0px;"><%=config.data[idx].title%></h4>
+			<h5 class="pull-left" style="margin: 0px;"><%=config.data[idx].title%></h5>
             <div class="pull-right">
             <div class="pull-left btn-group">
                 <a class="btn btn-small btn-success dropdown-toggle hspacer" data-toggle="dropdown" href="#"> Functions...<span class="caret"></span></a>
@@ -71,28 +84,32 @@ $(document).ready(function() {
             </div>
             </div>
             <br/>            
-            <a href="#" onclick="applyLightboxImage(<%=idx%>); return false;"><img id="img<%=idx%>" class="img-rounded" width="<%=config.width%>" height="<%=config.height%>"/></a>
+            <a href="#" onclick="showExtendedGraph(<%=idx%>); return false;"><img id="img<%=idx%>" class="img-rounded" width="<%=config.width%>" height="<%=config.height%>"/></a>
             <br/>
-            <div id="sourceContainer<%=idx%>"class="initial-hide">
+            <div id="sourceContainer<%=idx%>"class="hide">
                 <textarea id="source<%=idx%>" style="width:<%=config.width-10%>px" class="source"></textarea><br/>
                 <button class="btn btn-small" onclick="updateSource(<%=idx%>);">Update</button>
-            </div>
-            <br/>
-            <div id="lightbox<%=idx%>" class="lightbox hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class='lightbox-header'>
-                    <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
-                </div>
-                <div class='lightbox-content' style="width:<%=config.width*1.5%>px;height:<%=config.height*1.5%>px;">
-                    <div id="lightboxProgress<%=idx%>" class="progress progress-striped active">
-                        <div class="bar" style="width: 100%;"></div>
-                    </div>
-                    <a id="lightboxLink<%=idx%>" href="#"><img id="lightboxImg<%=idx%>" class="img-rounded" width="<%=config.width*1.5%>" height="<%=config.height*1.5%>"/></a>
-                </div>
             </div>
         </div>
 	    <% } %>
 	<% } %>
 <% } %>
+</script>
+<script type="text/template" id="tmpl-dashboards-menu">
+<% if(_.isEmpty(dashboardsRoot)){ %>
+    <li>
+        <a href="dashboard.html?id=<%= path %>"><%= name %></a>
+    </li>
+<% }else{ %>
+    <li class="dropdown-submenu">
+        <a tabindex="-1" href="#"><%= name %></a>
+        <ul class="dropdown-menu">
+            <% for (node in dashboardsRoot) { %>
+                <%= generateDashboardsMenu(node, path + "." + node, dashboardsRoot[node]) %>
+            <% } %>
+        </ul>
+    </li>
+<% } %> 
 </script>
 <script type="text/template" id="tmpl-toolbar">
     <a class="brand" href="index.html">&nbsp; graphitus</a>
@@ -100,18 +117,7 @@ $(document).ready(function() {
         <li class="dropdown"> 
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= title %><b class="caret"></b></a>
             <ul id="dashboards" class="dropdown-menu">
-                <% for (group in dashboardGroups) { %>
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1" href="#"><%=group%></a>
-                        <ul class="dropdown-menu">
-                            <% for (idx in dashboardGroups[group]) { %>
-                                <li>
-                                    <a href="dashboard.html?id=<%=dashboardGroups[group][idx].id%>"><%=dashboardGroups[group][idx].id.replace(group+".", "")%></a>
-                                </li>
-                            <% } %>
-                        </ul>
-                    </li>
-                <% } %> 
+                <%= dashboardsMenu %>
             </ul>  
         </li>
         <li class="navbar-text"><div><a href="#" id="permalink"><i class="icon-link"></i> </a></div></li>
@@ -162,7 +168,7 @@ $(document).ready(function() {
                     <li>
                     <label class="select" style="margin-left: 10px;"> Time Zone: </label>
                     <div class="pull-right" style="margin-right: 10px;margin-bottom: 10px;">
-                        <select id="tz" name="tz" class="input input-medium" style="margin-top: 0px;">
+                        <select id="tz" onchange="setTimezone();" name="tz" class="input input-medium" style="margin-top: 0px;">
                             <option value="US/Eastern" selected="selected">US/Eastern</option>
                             <option value="US/Central">US/Central</option>
                             <option value="US/Pacific">US/Pacific</option>
@@ -198,7 +204,7 @@ $(document).ready(function() {
 <script type="text/template" id="tmpl-parameter-sel-item">
     <% for(paramName in params){ %>
         <% var value = ( typeof params[paramName][group] === "undefined") ? paramName : params[paramName][group]; %>
-        <% var selectedHtml = (selected && selected != "" && selected === value) ? "selected='selected'" : "" %>
+        <% var selectedHtml = (selected && selected != "" && (selected === value || selected === paramName) ) ? "selected='selected'" : "" %>
         <option value="<%= value %>" <%= selectedHtml %>><%= paramName %></option>
     <% } %>
 </script>
@@ -227,7 +233,7 @@ $(document).ready(function() {
         </form>
       </div>
     </div>
-    <div id="message" class="initial-hide"></div>
+    <div id="message" class="hide"></div>
     <center>
         <div id="loader" class="progress progress-striped active" style="width: 30%;">
           <div id="progressBar" class="bar" style="width: 100%;">Loading Dashboard...</div>
@@ -235,5 +241,99 @@ $(document).ready(function() {
     </center>          
     <div id="dashboards-view" class="container" style="width: 100%">
     </div>
+    
+	<div id="extendedGraph" class="lightbox hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+	    <div class='lightbox-header'>
+	        <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
+	    </div>
+		<div class='lightbox-content'>
+			<div class="navbar navbar-inverse">
+				<div class="navbar-inner">
+						<ul class="nav">
+							<li><label class="navbar-text" id="extendedGraphTitle"></label></li>
+							<li class="divider-vertical"></li>
+							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-bar-chart"></i> Options<b class="caret"></b></a>
+								<ul class="dropdown-menu" style="width: 400px;text-align: left;">
+								    <div style="margin-left: 10px;">
+									   <form id="extendedChartOptionsForm" style="width: 400px;padding-bottom: 0px;">
+									        <h1>Chart Options</h1>
+									        <section>
+									            <div id="renderer_form" class="toggler">
+									                <input type="radio" name="renderer" id="area" value="area" checked>
+									                <label for="area">area</label>
+									                <input type="radio" name="renderer" id="bar" value="bar">
+									                <label for="bar">bar</label>
+									                <input type="radio" name="renderer" id="line" value="line">
+									                <label for="line">line</label>
+									                <input type="radio" name="renderer" id="scatter" value="scatterplot">
+									                <label for="scatter">scatter</label>
+									            </div>
+									        </section>
+									        <section>
+									            <div id="offset_form">
+									                <label for="stack">
+									                    <input type="radio" name="offset" id="stack" value="zero" checked>
+									                    <span>stack</span>
+									                </label>
+									                <label for="stream">
+									                    <input type="radio" name="offset" id="stream" value="wiggle">
+									                    <span>stream</span>
+									                </label>
+									                <label for="pct">
+									                    <input type="radio" name="offset" id="pct" value="expand">
+									                    <span>pct</span>
+									                </label>
+									                <label for="value">
+									                    <input type="radio" name="offset" id="value" value="value">
+									                    <span>value</span>
+									                </label>
+									            </div>
+									            <div id="interpolation_form">
+									                <label for="cardinal">
+									                    <input type="radio" name="interpolation" id="cardinal" value="cardinal" checked>
+									                    <span>cardinal</span>
+									                </label>
+									                <label for="linear">
+									                    <input type="radio" name="interpolation" id="linear" value="linear">
+									                    <span>linear</span>
+									                </label>
+									                <label for="step">
+									                    <input type="radio" name="interpolation" id="step" value="step-after">
+									                    <span>step</span>
+									                </label>
+									            </div>
+									        </section>
+									        <section>
+									            <h6>Smoothing</h6>
+                                                    <div id="smoother" style="width: 80%; padding-left: 5px;"></div>
+									        </section>
+									        <section><span class="trademark">powered by <a href="http://code.shutterstock.com/rickshaw/" target="_blank">rickshaw</a></span></section>
+									    </form>
+									  </div>
+								</ul>
+							</li>
+                            <li style="width: 400px;">
+                                <div id="lightboxProgress" class="progress progress-striped active" style="margin-top: 10px;">
+                                    <div class="bar" id="lightboxProgressText" style="width: 100%;"></div>
+                                </div>
+                            </li>
+                            <li>
+                                <label class="hide label label-warning" style="margin-top: 10px;" id="lightboxProgressWarningWarning"></label>
+                            </li>
+						</ul>
+				</div>
+			</div>
+			<div style="padding: 20px;">
+				<div class="pull-left">
+					<div id="extendedChart"></div>
+					<div id="timeline"></div>
+					<div id="slider" style="margin-top: 30px;"></div>
+				</div>
+				<div class="pull-right">
+					<div style="padding-right: 3px; width: 170px;" id="extendedLegend"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

@@ -4,13 +4,10 @@
             "id": "group1.dashboard1"
         },
         {
+            "id": "group1.subgroup1.dashboard1"
+        },
+        {
             "id": "group1.dashboard2"
-        },
-        {
-            "id": "group1.dashboard3"
-        },
-        {
-            "id": "group2.dashboard1"
         }
     ]
 }

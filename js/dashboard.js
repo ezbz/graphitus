@@ -8,6 +8,7 @@ var dashboards = new Array();
 var searchIndex = new Array();
 var parameterDependencies = new Array();
 var dynamicParams = new Array();
+var rawTargets = new Array();
 
 function renderGraphitus(){
 	$('#dashboards-view').hide();
@@ -15,16 +16,35 @@ function renderGraphitus(){
 	loadDashboards();
 }
 
+function generateDashboardsMenu(name, path, dashboardsRoot){
+	var tmplDashboardsMenu = $('#tmpl-dashboards-menu').html();
+	return _.template(tmplDashboardsMenu, {
+		dashboardsRoot : dashboardsRoot,
+		name: name,
+		path: path
+	});
+}
+
+function generateDashboardsMenus(){
+	var result = "";
+	for(idx in dashboards){
+		result += generateDashboardsMenu(idx, idx, dashboards[idx]);
+	}
+	return result;
+}
+
 function renderView() {
 	renderParamToolbar();
 	var tmplToolbarMarkup = $('#tmpl-toolbar').html();
 	var tmplDashboardViewMarkup = $('#tmpl-dashboards-view').html();
+	var dashboardsMenu = generateDashboardsMenus();
 	var title = (config.title.length < 15) ? config.title : config.title.substring(0,15) + "...";
 	$("#toolbar").append(_.template(tmplToolbarMarkup, {
 		config : config, 
 		title: title,
-		dashboardGroups : dashboards
+		dashboardsMenu : dashboardsMenu
 	}));
+	loadTimezone();
 	initializeSearch();
 	console.log("rendered toolbar");
 	$("#dashboards-view").append(_.template(tmplDashboardViewMarkup, {
@@ -121,7 +141,7 @@ function updateGraph(idx){
 	$('#lLink' + idx).attr('href', buildUrl(idx, graph, graph.title, config.width*2, config.height*2, "render"));
 	$('#gLink' + idx).attr('href', buildUrl(idx, graph, graph.title, 0, 0, "graphlot"));
 	$('#img' + idx).attr('src', buildUrl(idx, graph, "", config.width, config.height, "render"));
-	$('#lightboxImg' + idx).attr('_src', buildUrl(idx, graph, graph.title, config.width*1.5, config.height*1.5, "render"));
+	rawTargets[idx] = buildUrl(idx, graph, graph.title, config.width, config.height, "render");
 	$('#source' + idx).val(getGraphSource(graph));
 }
 
@@ -392,7 +412,7 @@ function disableAutoRefresh() {
 
 function updateRefreshCounter() {
 	var remaining = config.refreshIntervalSeconds - Math.floor(((new Date().getTime()) - lastUpdate.getTime()) / 1000);
-	$("#refreshCounter").html('<label class="badge badge-success">update in ' + remaining + ' seconds<br/>' +"</label>");
+	$("#refreshCounter").html('<label class="badge badge-success">update in ' + remaining + 's<br/>' +"</label>");
 }
 
 function showProgress() {
@@ -525,14 +545,12 @@ function loadDashboards(){
         success: function(json) {
             console.log("Loaded "+json.rows.length+" dashboards");
             var data = json.rows;
+
+            var tree = new Graphitus.Tree();
             for(var i=0; i<data.length; i++){
-                var group = data[i].id.split('.')[0];
-                if(!dashboards[group]){
-                    dashboards[group] = new Array();
-                }
-                dashboards[group].push( data[i] );
+            	tree.add(data[i].id);
             }
-            dashboards.sort();
+            dashboards = tree.getRoot();
 			for(i in json.rows){
 				searchIndex.push(json.rows[i].id);
 			}
@@ -553,14 +571,24 @@ function initializeSearch(){
 	});
 }
 
-
-function applyLightboxImage(idx){
-	$('#img'+idx).css('cursor','wait');
-	$('#lightboxImg'+idx).attr('src', $('#lightboxImg'+idx).attr('_src'));
-	$('#lightboxLink'+idx).attr('href', $('#lightboxImg'+idx).attr('_src'));
-	$('#lightbox'+idx).lightbox({resizeToFit:false});
-	$('#lightbox'+idx).waitForImages(function() {
-		$('#lightboxProgress'+idx).hide();
-		$('#img'+idx).css('cursor','default');
-	});	
+function setTimezone(){
+	console.log("timezone set: " + $("#tz").val());
+	$.cookie('graphitus.timezone', $("#tz").val());
 }
+
+function loadTimezone(){
+	var tz = $.cookie('graphitus.timezone');
+	if(tz && tz !== ""){
+		console.log("timezone loaded: " + tz);
+		$("#tz").val($.cookie('graphitus.timezone'));		
+	}
+}
+
+function showExtendedGraph(idx){
+	$(".lightbox-content").css("width",$(window).width()-100);
+	$(".lightbox-content").css("height", $(window).height()-100);
+	$('#extendedGraph').lightbox({resizeToFit:false});
+	loadExtendedGraph(rawTargets[idx]);
+	$("#extendedGraphTitle").text(config.title + " - " + config.data[idx].title);
+}
+

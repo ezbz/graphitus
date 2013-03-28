@@ -24,10 +24,6 @@
 	margin: 3px;
 }
 
-.initial-hide {
-	display: none;
-}
-
 .navbar-search .search-query {
 	padding-left: 29px !important;
 	background-image:
@@ -40,4 +36,21 @@
 	{
 	padding-left: 30px;
 	background-position: 13px 9px;
+}
+
+.y-hover-label-name {
+    text-align: right;
+}
+.y-hover-label-value {
+	text-align: left;
+    font-weight: bold;
+    padding: 2px;
+    margin: 2px;
+ 	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.timeline-label[href]{
+	color: black;
 }
