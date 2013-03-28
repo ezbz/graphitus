@@ -87,6 +87,25 @@ Below is an example dashboard configuration:
 
 ![Screenshot](https://raw.github.com/erezmazor/graphitus/master/doc/screenshot.png)
 
+* Clicking on a graph image will generate a nice [Rickshaw](http://code.shutterstock.com/rickshaw/)-based graph with hover-values a legend.
+
+![Extended](https://raw.github.com/erezmazor/graphitus/master/doc/extended.png)
+
+supplying an ```eventsUrl``` attribute in config.json will allow you to draw an events overlay on the rickshaw graph, events must be in the following JSON format:
+
+    [
+		{
+    		"message": "this is an event message",
+			"start": "15:31:35 28/03/2013",
+			"end": "15:33:47 28/03/2013"
+		},
+        {
+    		"message": "this is an event message",
+			"start": "15:31:35 28/03/2013",
+			"end": "15:33:47 28/03/2013"
+		}
+	]
+
 * Override configuration with URL parameters
 
 You can specify configuration properties in the dashboard URL to override default settings:
