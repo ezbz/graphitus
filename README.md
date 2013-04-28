@@ -50,7 +50,7 @@ Below is an example dashboard configuration:
     		"refreshIntervalSeconds": 90, <-- auto refresh interval in seconds
     		"averageSeries": false, <-- for targets that aggregate a lot of metrics prefer setting this to true as it will average many lines into one
     		"defaultLineWidth": 2, <-- line width for chart lines
-            "tz" : "US/Eastern" <-- timezone for the rendered graph
+            "tz" : "US/Eastern", <-- timezone for the rendered graph
     		"data": [ <-- charts list
     			{
     				"title": "Slow Queries", <-- a title for the chart image
