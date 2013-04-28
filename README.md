@@ -50,6 +50,7 @@ Below is an example dashboard configuration:
     		"refreshIntervalSeconds": 90, <-- auto refresh interval in seconds
     		"averageSeries": false, <-- for targets that aggregate a lot of metrics prefer setting this to true as it will average many lines into one
     		"defaultLineWidth": 2, <-- line width for chart lines
+            "tz" : "US/Eastern" <-- timezone for the rendered graph
     		"data": [ <-- charts list
     			{
     				"title": "Slow Queries", <-- a title for the chart image
@@ -63,7 +64,8 @@ Below is an example dashboard configuration:
     				"target": [ <-- you can specify mutliple targets for a chart as a JSON array
                         "derivative(machines.${dc}dc1.mysql*.Qps1)",
                         "derivative(machines.${dc}dc1.mysql*.Qps2)"
-                    ]
+                    ],
+                    "description" : "The number of queries per second executed by the server" <-- show a description tooltip next to the title
     			}
     			],
     			"parameters": { <-- parameters to tokens expressed in targets with ${paramName} format	
@@ -133,6 +135,7 @@ legend                  | No              | Show/Hide the legend in the chart (o
 refresh                 | No              | Auto-refresh the charts (see ```refreshIntervalSeconds```)
 refreshIntervalSeconds  | No              | When ```refresh``` is ```true``` this will determine the refresh interval
 defaultLineWidth        | No              | The line width for the generated chart
+tz                      | No              | The timezone for the rendered graphite images (see [Timezone list](http://en.wikipedia.org/wiki/List_of_tz_database_time_zones))
 
 * Dynamic Parameters
 
