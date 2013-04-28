@@ -53,6 +53,8 @@ function renderView() {
 	$('.dropdown-menu input, .dropdown-menu label, .dropdown-menu select').click(function(e) {
 	    e.stopPropagation();
 	});
+	
+	$("[rel='tooltip']").tooltip();
 	console.log("rendered dashboard view");
 }
 
@@ -201,7 +203,7 @@ function renderParamToolbar(){
 	if(config.parameters){
 		$.each(config.parameters, function(paramGroupName, paramGroup) {
 			var tmplParamSel = $('#tmpl-parameter-sel').html();
-			$("#parametersToolbar").append(_.template(tmplParamSel, {
+			$("#parametersToolbarContent").append(_.template(tmplParamSel, {
 				group : paramGroupName
 			}));
 			$("#"+paramGroupName).select2({
@@ -577,10 +579,19 @@ function setTimezone(){
 }
 
 function loadTimezone(){
-	var tz = $.cookie('graphitus.timezone');
+	var tz="";
+	if( queryParam("tz")){
+		tz = queryParam("tz");
+		console.log("timezone loaded from url param: [" + tz + "]");
+	}else if(config.tz){
+		tz = config.tz;
+		console.log("timezone loaded from dashboard config: [" + tz + "]");
+	}else{
+		tz = $.cookie('graphitus.timezone');	
+		console.log("timezone loaded from cookie: [" + tz + "]");
+	}
 	if(tz && tz !== ""){
-		console.log("timezone loaded: " + tz);
-		$("#tz").val($.cookie('graphitus.timezone'));		
+		$("#tz").val(tz);
 	}
 }
 
@@ -592,3 +603,15 @@ function showExtendedGraph(idx){
 	$("#extendedGraphTitle").text(config.title + " - " + config.data[idx].title);
 }
 
+function togglePinnedParametersToolbar(){
+	if($("#parametersToolbarPin i").hasClass("icon-lock")){
+		$("#parametersToolbarPin").html("<i class='icon-unlock'/>");
+		$("#parameters-toolbar").css("position", "fixed");
+		$("#parameters-toolbar").css("width", "100%");
+		$("#parameters-toolbar").css("opacity", ".85");
+	}else{
+		$("#parametersToolbarPin").html("<i class='icon-lock'/>");
+		$("#parameters-toolbar").css("position", "relative");
+		$("#parameters-toolbar").css("opacity", "1");
+	}
+}

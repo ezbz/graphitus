@@ -63,6 +63,7 @@
         position: absolute;
         top: 0;
         bottom: -6px;
+        z-index: 0;
 }
 .rickshaw_graph .annotation_range.active {
         display: block;

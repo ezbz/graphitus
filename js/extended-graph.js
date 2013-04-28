@@ -64,25 +64,26 @@ function loadExtendedGraph(target){
 function loadExtendedEvents(annotator){
 	showExtendedGrapProgresshMessge("Accessing events API");
 	$.ajax({
-        type: "get",
-        url: graphitusConfig.eventsUrl,
-        dataType:'json',
-        success: function(json) {
+		type: "get",
+		url: graphitusConfig.eventsUrl,
+		dataType:'json',
+		success: function(json) {
 			showExtendedGrapProgresshMessge("Processing events");
-        	$.each(json, function(i, event) {
-        		var start = moment(event.start, "HH:mm:ss DD/MM/YYYY");
-        		var end = moment(event.end, "HH:mm:ss DD/MM/YYYY");
-        		//console.log(event.message+":"+ moment(event.timestamp, "HH:mm:ss DD/MM/YYYY").toString());
-        		var message = "<span label='timeline-label'>" + event.message + "</span>";
-    			annotator.add(start.add('hours', 2).unix(), "["+start.add('hours', -2).format("HH:mm") +"-"+ end.format("HH:mm") + "] - "+ message, end.add('hours', 2).unix());
-	    	});
-        	extendedChart.update();
-        	showExtendedGrapProgresshMessge("");
-        },
-        error:function (xhr, ajaxOptions, thrownError){
-            console.log(thrownError);
-        }
-    });
+			$.each(json, function(i, event) {
+				var start = moment(event.start, "HH:mm:ss DD/MM/YYYY");
+				var end = moment(event.end, "HH:mm:ss DD/MM/YYYY");
+				//console.log(event.message+":"+ moment(event.timestamp, "HH:mm:ss DD/MM/YYYY").toString());
+				var message = "<span label='timeline-label'>" + event.message + "</span>";
+				var annotationContent = "["+start.format("HH:mm") +((end) ? "-" + end.format("HH:mm") : "") + "] - "+ message;
+				annotator.add(start.add('hours', 3).unix(), annotationContent, (end) ?  end.add('hours', 3).unix() : null);
+			});
+			extendedChart.update();
+			showExtendedGrapProgresshMessge("");
+		},
+		error:function (xhr, ajaxOptions, thrownError){
+			console.log(thrownError);
+		}
+	});
 }
 
 function calculateTimeZoneOffset(){

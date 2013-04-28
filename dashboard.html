@@ -45,7 +45,12 @@ $(document).ready(function() {
     <% for(col=0; col<config.columns; col++) { %>
 		<% if( (idx % config.columns) == col) { %>
         <div id="item<%=idx%>" class="well span<%=12/config.columns%>" style="width:<%=config.width%>px">
-			<h5 class="pull-left" style="margin: 0px;"><%=config.data[idx].title%></h5>
+			<h5 class="pull-left" style="margin: 0px;">
+                <%=config.data[idx].title%>
+                <% if(config.data[idx].description){ %>
+                    <a href="#" rel="tooltip" data-toggle="tooltip" title="<%=config.data[idx].description%>"><i class=" icon-question-sign"/></a>
+                <% } %>
+            </h5>
             <div class="pull-right">
             <div class="pull-left btn-group">
                 <a class="btn btn-small btn-success dropdown-toggle hspacer" data-toggle="dropdown" href="#"> Functions...<span class="caret"></span></a>
@@ -120,7 +125,7 @@ $(document).ready(function() {
                 <%= dashboardsMenu %>
             </ul>  
         </li>
-        <li class="navbar-text"><div><a href="#" id="permalink"><i class="icon-link"></i> </a></div></li>
+        <li class="navbar-text"><div><a href="#" title="permalink" id="permalink"><i class="icon-link"></i> </a></div></li>
         <li class="divider-vertical"></li>
         <li>
             <form class="navbar-search form-inline pull-right">
@@ -156,7 +161,7 @@ $(document).ready(function() {
                     <li class="divider"></li>
                     <li> 
                     <label class="checkbox" style="margin: 10px">
-                        <input type="checkbox" id="legend" name="legend" <% if(config.legend) {%> checked="checked" <% } %> onchange="updateGraphs()" /> Show Legend
+                        <input type="checkbox" id="legend" name="legend" <% if(config.legend && config.legend!=="false") {%> checked="checked" <% } %> onchange="updateGraphs()" /> Show Legend
                     </label>
                     </li>
                     <li>
@@ -193,10 +198,10 @@ $(document).ready(function() {
     </ul>
 </script>
 <script type="text/template" id="tmpl-parameter-sel">
-    <li class="navbar-text"><%= group %> <i class="icon-chevron-right"></i> </li>
     <li>
-        <div style="margin-top:5px;">
-            &nbsp; <select id="<%= group %>" name="<%= group %>" class="input input-large"></select>
+        <div style="margin-top:5px; margin-right: 10px;line-height: 30px">
+            <%= group %> <i class="icon-chevron-right"></i> 
+            <select id="<%= group %>" name="<%= group %>" class="input input-large"></select>
         </div>
     </li>
     <li class="divider-vertical"></li>
@@ -225,13 +230,15 @@ $(document).ready(function() {
       </div>
     </div>
     <div style="margin-top: 48px;"></div>
-    <div id="parameters-toolbar" class="navbar navbar-inverse">
+    <div id="parameters-toolbar" class="navbar navbar-inverse" style="z-index: 999;">
       <div class="navbar-inner">
         <form class="navbar-form form-inline">
-            <ul class="nav" id="parametersToolbar" >
-            </ul> 
+            <span class="pull-left" style="width: 95%">
+            <ul class="nav" id="parametersToolbarContent" ></ul>
+            </span>
+            <span class="pull-right" style="margin-top: 3px"><a href='#' class="btn btn-mini btn-inverse" id="parametersToolbarPin" onclick="togglePinnedParametersToolbar();"><i class="icon-lock"></i></a></span>
         </form>
-      </div>
+      </div>    
     </div>
     <div id="message" class="hide"></div>
     <center>
