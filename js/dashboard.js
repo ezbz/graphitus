@@ -149,6 +149,7 @@ function updateGraph(idx){
 
 function buildUrl(idx, graph, chartTitle, width, height, graphiteOperation) {
 	var params = "&lineWidth=" + config.defaultLineWidth + "&title=" + encodeURIComponent(chartTitle) + "&tz=" + $("#tz").val();
+        if (config.defaultColorList) params += "&colorList=" + config.defaultColorList;
 	params += (graph.params) ? "&" + graph.params : "";
 
 	var range = "";
@@ -182,6 +183,11 @@ function buildUrl(idx, graph, chartTitle, width, height, graphiteOperation) {
 			targetUri = targetUri + "&";
 		}
 	}
+        if ($("#events").prop('checked') && config.events) {
+            for (i = 0; i < config.events.length; i++) {
+                targetUri = targetUri + "&target=drawAsInfinite(" + config.events[i] + ")";
+            }
+        }
 	var userUrlParams = getUserUrlParams(idx);
 
 	return graphitusConfig.graphiteUrl + "/" + graphiteOperation + "/?" + targetUri + range + legend + params + userUrlParams + size;
@@ -226,6 +232,7 @@ function generatePermalink(){
 	href = href + "&legend=" + $("#legend").prop('checked');
 	href = href + "&average=" + $("#average").prop('checked');
 	href = href + "&sum=" + $("#sum").prop('checked');
+	href = href + "&showEvents=" + $("#events").prop('checked');
 	var timeBack = $('#timeBack').val();
 	var start = $('#start').val();
 	var end = $('#end').val();
@@ -494,6 +501,9 @@ function mergeUrlParamsWithConfig(config){
 	}
 	if(queryParam('legend') != null){
 		config.legend = queryParam('legend');
+	}
+	if(queryParam('showEvents') != null){
+		config.showEvents = queryParam('showEvents');
 	}
 	if(queryParam('averageSeries') != null){
 		config.averageSeries = queryParam('averageSeries');
