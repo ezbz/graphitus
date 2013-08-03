@@ -166,6 +166,11 @@ $(document).ready(function() {
                     </li>
                     <li>
                     <label class="checkbox" style="margin: 10px">
+                         <input type="checkbox" id="events" name="events" <% if(config.showEvents && config.showEvents!=="false") {%> checked="checked" <% } %> onchange="updateGraphs()" /> Show Events
+                    </label>
+                    </li>
+                    <li>
+                    <label class="checkbox" style="margin: 10px">
                         <input type="checkbox" id="refresh" name="refresh" <% if(config.refresh) { %>checked="checked"<% } %> onchange="toggleAutoRefresh();" />Auto Refresh
                     </label>
                     </li>
