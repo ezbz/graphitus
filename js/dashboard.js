@@ -245,7 +245,7 @@ function generatePermalink() {
 
 	if (config.parameters) {
 		$.each(config.parameters, function(paramGroupName, paramGroup) {
-			var selectedParamText = $('#' + paramGroupName + " option[value='" + $('#' + paramGroupName).val() + "']").text();
+			var selectedParamText = $('#' + paramGroupName + " option:selected").text();
 			var group = $(this).attr("id");
 			href = href + "&" + paramGroupName + "=" + encodeURIComponent(selectedParamText);
 		});
@@ -396,7 +396,7 @@ function applyRegexToName(paramGroup, metric) {
 function applyParameters(target) {
 	if (config.parameters) {
 		$.each(config.parameters, function(paramGroupName, paramGroup) {
-			var selectedParamText = $('#' + paramGroupName + " option[value='" + $('#' + paramGroupName).val() + "']").text();
+			var selectedParamText = $('#' + paramGroupName + " option:selected").text();
 			for (tokenKey in paramGroup[paramGroupName]) {
 				var tokenValue = paramGroup[paramGroupName][tokenKey];
 				target = applyParameter(target, tokenKey, tokenValue);
