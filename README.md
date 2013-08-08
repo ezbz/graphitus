@@ -126,7 +126,7 @@ Parameter              | Required?       | Description
 title                   | Yes             | The title of the dashboard chart
 columns                 | Yes             | The number of images in a row
 user                    | No              | Owner
-timeBack                | No              | Specify timeframe back from current time to display (specify this or ```from``` and ```until```), shorthand format e.g., ```15m```, ````24h```, ```7d```, ```1w```
+timeBack                | No              | Specify timeframe back from current time to display (specify this or ```from``` and ```until```), shorthand format e.g., ```15m```, ```24h```, ```7d```, ```1w```
 from                    | No              | From date/time in ```yyyy-MM-dd HH:MM``` (specify this and ```until``` or ```timeBack```)
 until                   | No              | To date/time in ```yyyy-MM-dd HH:MM``` (specify this and ```from``` or ```timeBack```)
 width                   | Yes             | Width of the chart from graphite (see ```columns```)
