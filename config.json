@@ -1,5 +1,6 @@
 {
     "graphiteUrl": "sample.png?",
     "dashboardListUrl": "sample-index.json",
-    "dashboardUrlTemplate": "${dashboardId}.json"
+    "dashboardUrlTemplate": "${dashboardId}.json",
+    "minimumRefresh": 60
 }
