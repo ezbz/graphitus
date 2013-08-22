@@ -246,7 +246,7 @@ function generatePermalink() {
 	if (config.parameters) {
 		$.each(config.parameters, function(paramGroupName, paramGroup) {
 			var selectedParamText = $('#' + paramGroupName + " option:selected").text();
-			var group = $(this).attr("id");
+			var selectedParamText = $('#'+paramGroupName +" option[value='"+$('#'+paramGroupName).val()+"']").text();
 			href = href + "&" + paramGroupName + "=" + encodeURIComponent(selectedParamText);
 		});
 	}
