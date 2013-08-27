@@ -170,16 +170,13 @@ Graphitus will also consider generating the list of values from a partial path, 
 
 * More info and examples
 
-[Blog post](http://techo-ecco.com/blog/monitoring-apache-hadoop-cassandra-and-zookeeper-using-graphite-and-jmxtrans)
-
-[Cassandra Servers Dashboard](https://gist.github.com/erezmazor/5019989#file-cassandra-servers)
-[Cassandra Server Internals Dashboard](https://gist.github.com/erezmazor/5019989#file-cassandra-servers-internals)
-[Cassandra Per-Column Family Dashboard](https://gist.github.com/erezmazor/5019989#file-cassandra-column-families)
-
-[Hadoop NameNode Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-namenode)
-[Hadoop Jobtracker Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-jobtracker)
-[Hadoop TaskTracker Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-tasktracker)
-[Hadoop DataNode Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-datanode)
-
-[Zookeeper Dashbaord](https://gist.github.com/erezmazor/5020016#file-zookeeper-servers)
+- [Blog post](http://techo-ecco.com/blog/monitoring-apache-hadoop-cassandra-and-zookeeper-using-graphite-and-jmxtrans)
+- [Cassandra Servers Dashboard](https://gist.github.com/erezmazor/5019989#file-cassandra-servers)
+- [Cassandra Server Internals Dashboard](https://gist.github.com/erezmazor/5019989#file-cassandra-servers-internals)
+- [Cassandra Per-Column Family Dashboard](https://gist.github.com/erezmazor/5019989#file-cassandra-column-families)
+- [Hadoop NameNode Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-namenode)
+- [Hadoop Jobtracker Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-jobtracker)
+- [Hadoop TaskTracker Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-tasktracker)
+- [Hadoop DataNode Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-datanode)
+- [Zookeeper Dashbaord](https://gist.github.com/erezmazor/5020016#file-zookeeper-servers)
 
