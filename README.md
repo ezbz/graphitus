@@ -168,3 +168,18 @@ You can then use a target like ```services.prod.${service}.${host}_${datacenter}
 
 Graphitus will also consider generating the list of values from a partial path, the index and regex determine which portion and substring (regex) of the resulting path will be used to generate the values for selection. The ```showAll``` property is used to determine if graphitus will prepend a default All (translated to ```*``` in the graphite query) option to the selection
 
+* More info and examples
+
+[Blog post](http://techo-ecco.com/blog/monitoring-apache-hadoop-cassandra-and-zookeeper-using-graphite-and-jmxtrans)
+
+[Cassandra Servers Dashboard](https://gist.github.com/erezmazor/5019989#file-cassandra-servers)
+[Cassandra Server Internals Dashboard](https://gist.github.com/erezmazor/5019989#file-cassandra-servers-internals)
+[Cassandra Per-Column Family Dashboard](https://gist.github.com/erezmazor/5019989#file-cassandra-column-families)
+
+[Hadoop NameNode Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-namenode)
+[Hadoop Jobtracker Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-jobtracker)
+[Hadoop TaskTracker Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-tasktracker)
+[Hadoop DataNode Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-datanode)
+
+[Zookeeper Dashbaord](https://gist.github.com/erezmazor/5020016#file-zookeeper-servers)
+
