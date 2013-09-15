@@ -262,7 +262,8 @@ function renderValueParamGroup(paramGroupName, paramGroup) {
 		selected: getDefaultValue(paramGroupName)
 	}));
 	$("#" + paramGroupName).select2({
-		placeholder: "Select a " + paramGroupName
+		placeholder: "Select a " + paramGroupName,
+		dropdownAutoWidth: true
 	});
 	$("#" + paramGroupName).on("change", function(e) {
 		updateDependantParameters(paramGroupName);
