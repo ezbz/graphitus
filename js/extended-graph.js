@@ -208,7 +208,7 @@ function graphiteToRickshawModel(datapoints){
 		lastX = point[0] !== null ? point[0] : lastX
 		return {
 		  'x': point[1]-calculateTimeZoneOffset(),
-		  'y':  point[0] !== null ? point[0] : lastX
+		  'y':  point[0] 
 		};
 	});
 	return ret;

@@ -1,45 +1,13 @@
-
-function loadDashboards(){
-    $.ajax({
-        type: "get",
-        url: graphitusConfig.dashboardListUrl,
-        dataType:'json',
-        cache: false,
-        success: function(json) {
-            console.log("Loaded dashboards: " + JSON.stringify(json));
-            var dashboards = new Array();
-            var data = json.rows;
-            for(var i=0; i<data.length; i++){
-                var group = data[i].id.split('.')[0];
-                if(!dashboards[group]){
-                    dashboards[group] = new Array();
-                }
-                dashboards[group].push( data[i] );
-            }
-            dashboards.sort();
-            $("#loader").hide();
-
-            renderDashboards(dashboards);
-        },
-        error:function (xhr, ajaxOptions, thrownError){
-            console.log(thrownError);
-        }
-    });
+function loadDashboard() {
+    renderDashboards();
+    $("#loader").hide();
 }
 
-function renderDashboards(dashboards){
-    var tmplMarkup = $('#tmpl-group').html();
-    for(group in dashboards){
-        var compiledTmpl = _.template(tmplMarkup, { group : group, items: dashboards[group] });
-        $("#dashboards").append(compiledTmpl);
-    }
-
-
+function renderDashboards(){
+    var dashboardsMenu = generateDashboardsMenus();
+    $("#dashboards").append(dashboardsMenu);
     $("#dashboards").masonry({
         itemSelector: '.box',
-        isAnimated: true,
-        columnWidth: function( containerWidth ) {
-            return containerWidth/4;
-        }
+        isAnimated: true
     });
 }

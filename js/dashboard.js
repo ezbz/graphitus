@@ -4,8 +4,6 @@ var autoRefershRef = null;
 var refreshIntervalRef = null;
 var config = null;
 var autoRefreshEnabled = false;
-var dashboards = new Array();
-var searchIndex = new Array();
 var parameterDependencies = new Array();
 var dynamicParams = new Array();
 var rawTargets = new Array();
@@ -15,24 +13,6 @@ function renderGraphitus() {
 	$('#parameters-toolbar').hide();
 	loadDashboards();
 }
-
-function generateDashboardsMenu(name, path, dashboardsRoot) {
-	var tmplDashboardsMenu = $('#tmpl-dashboards-menu').html();
-	return _.template(tmplDashboardsMenu, {
-		dashboardsRoot: dashboardsRoot,
-		name: name,
-		path: path
-	});
-}
-
-function generateDashboardsMenus() {
-	var result = "";
-	for (idx in dashboards) {
-		result += generateDashboardsMenu(idx, idx, dashboards[idx]);
-	}
-	return result;
-}
-
 function renderView() {
 	renderParamToolbar();
 	var tmplToolbarMarkup = $('#tmpl-toolbar').html();
@@ -55,6 +35,9 @@ function renderView() {
 	});
 
 	$("[rel='tooltip']").tooltip();
+
+	initializeGraphParams();
+
 	console.log("rendered dashboard view");
 }
 
@@ -75,6 +58,7 @@ function loadView() {
 		hourGrid: 4,
 		minuteGrid: 10
 	});
+
 }
 
 function loadDashboard() {
@@ -149,7 +133,9 @@ function updateGraph(idx) {
 
 function buildUrl(idx, graph, chartTitle, width, height, graphiteOperation) {
 	var params = "&lineWidth=" + config.defaultLineWidth + "&title=" + encodeURIComponent(chartTitle) + "&tz=" + $("#tz").val();
-	params += (graph.params) ? "&" + graph.params : "";
+	if($('#graphParams' + idx).val()){
+		params += "&" + $('#graphParams' + idx).val();
+	}
 	if (config.defaultColorList) {
 		params += "&colorList=" + config.defaultColorList;
 	}
@@ -191,7 +177,11 @@ function buildUrl(idx, graph, chartTitle, width, height, graphiteOperation) {
 	}
 	var userUrlParams = getUserUrlParams(idx);
 
-	return graphitusConfig.graphiteUrl + "/" + graphiteOperation + "/?" + targetUri + range + legend + params + userUrlParams + size;
+	return getGraphiteServer() + "/" + graphiteOperation + "/?" + targetUri + range + legend + params + userUrlParams + size;
+}
+
+function getGraphiteServer(){
+	return graphitusConfig.graphiteUrl;
 }
 
 function getUserUrlParams(idx) {
@@ -245,9 +235,10 @@ function generatePermalink() {
 
 	if (config.parameters) {
 		$.each(config.parameters, function(paramGroupName, paramGroup) {
-			var selectedParamText = $('#' + paramGroupName + " option:selected").text();
-			var selectedParamText = $('#'+paramGroupName +" option[value='"+$('#'+paramGroupName).val()+"']").text();
-			href = href + "&" + paramGroupName + "=" + encodeURIComponent(selectedParamText);
+			if($('#' + paramGroupName)){
+				var selectedParamText = $('#' + paramGroupName + " option:selected").text();
+				href = href + "&" + paramGroupName + "=" + encodeURIComponent(selectedParamText);
+			}
 		});
 	}
 	return href;
@@ -265,6 +256,7 @@ function renderValueParamGroup(paramGroupName, paramGroup) {
 		placeholder: "Select a " + paramGroupName,
 		dropdownAutoWidth: true
 	});
+	$("#" + paramGroupName).off("change");
 	$("#" + paramGroupName).on("change", function(e) {
 		updateDependantParameters(paramGroupName);
 		updateGraphs();
@@ -297,9 +289,7 @@ function updateDependantParameters(paramGroupName) {
 function loadParameterDependencies(paramGroupName, path) {
 	var dependencies = getDependenciesFromPath(path);
 	for (idx in dependencies) {
-		if (!parameterDependencies[dependencies[idx]]) {
-			parameterDependencies[dependencies[idx]] = new Array();
-		}
+		parameterDependencies[dependencies[idx]] = new Array();
 		parameterDependencies[dependencies[idx]].push(paramGroupName);
 	}
 }
@@ -327,7 +317,7 @@ function generateDynamicQuery(paramGroupName) {
 }
 
 function renderDynamicParamGroup(paramGroupName, paramGroup) {
-	var url = graphitusConfig.graphiteUrl + "/metrics/find?format=completer&query=";
+	var url = getGraphiteServer() + "/metrics/find?format=completer&query=";
 	var query = generateDynamicQuery(paramGroupName);
 	if (!endsWith(query, ".*")) {
 		query = query + ".*";
@@ -342,7 +332,7 @@ function renderDynamicParamGroup(paramGroupName, paramGroup) {
 			if (paramGroup.showAll) {
 				parameters["All"] = new Array();
 				parameters["All"][paramGroupName] = new Array();
-				parameters["All"][paramGroupName] = "*";
+				parameters["All"][paramGroupName] = (paramGroup.showAllValue) ? applyParameters(paramGroup.showAllValue) : "*";
 			}
 			$.each(data.metrics, function(i, metric) {
 				var paramValue = getParamValueFromPath(paramGroup, metric);
@@ -397,11 +387,12 @@ function applyRegexToName(paramGroup, metric) {
 function applyParameters(target) {
 	if (config.parameters) {
 		$.each(config.parameters, function(paramGroupName, paramGroup) {
-			var selectedParamText = $('#' + paramGroupName + " option:selected").text();
+			
 			for (tokenKey in paramGroup[paramGroupName]) {
 				var tokenValue = paramGroup[paramGroupName][tokenKey];
 				target = applyParameter(target, tokenKey, tokenValue);
 			}
+			var selectedParamText = $('#' + paramGroupName + " option:selected").text();
 			for (tokenKey in paramGroup[selectedParamText]) {
 				var tokenValue = paramGroup[selectedParamText][tokenKey];
 				target = applyParameter(target, tokenKey, tokenValue);
@@ -506,9 +497,9 @@ function mergeUrlParamsWithConfig(config) {
 	if (queryParam('timeBack') != null) {
 		config.timeBack = queryParam('timeBack');
 	}
-	if (queryParam('from') != null && queryParam('until') != null) {
-		config.from = queryParam('from');
-		config.until = queryParam('until');
+	if (queryParam('start') != null && queryParam('end') != null) {
+		config.from = queryParam('start');
+		config.until = queryParam('end');
 		config.hoursBack = null;
 		config.timeBack = null;
 	}
@@ -574,31 +565,6 @@ function updateSource(idx) {
 	return false;
 }
 
-function loadDashboards() {
-	$.ajax({
-		type: "get",
-		url: graphitusConfig.dashboardListUrl,
-		dataType: 'json',
-		success: function(json) {
-			console.log("Loaded " + json.rows.length + " dashboards");
-			var data = json.rows;
-
-			var tree = new Graphitus.Tree();
-			for (var i = 0; i < data.length; i++) {
-				tree.add(data[i].id);
-			}
-			dashboards = tree.getRoot();
-			for (i in json.rows) {
-				searchIndex.push(json.rows[i].id);
-			}
-			loadDashboard();
-		},
-		error: function(xhr, ajaxOptions, thrownError) {
-			console.log(thrownError);
-		}
-	});
-}
-
 function initializeSearch() {
 	$('#search').typeahead({
 		source: searchIndex,
@@ -606,6 +572,12 @@ function initializeSearch() {
 			document.location.href = "dashboard.html?id=" + selection;
 		}
 	});
+}
+
+function initializeGraphParams(){
+	for (var i = 0; i < config.data.length; i++) {
+		$('#graphParams' + i).val(config.data[i].params);	
+	}
 }
 
 function setTimezone() {

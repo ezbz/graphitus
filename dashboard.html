@@ -92,7 +92,8 @@ $(document).ready(function() {
             <a href="#" onclick="showExtendedGraph(<%=idx%>); return false;"><img id="img<%=idx%>" class="img-rounded" width="<%=config.width%>" height="<%=config.height%>"/></a>
             <br/>
             <div id="sourceContainer<%=idx%>"class="hide">
-                <textarea id="source<%=idx%>" style="width:<%=config.width-10%>px" class="source"></textarea><br/>
+                <div><textarea id="source<%=idx%>" style="width:<%=config.width-10%>px" class="source" placeholder="Target Source"></textarea></div>
+                <div><input type="text" id="graphParams<%=idx%>" style="width:<%=config.width-10%>px" placeholder="Additional URL Parameters" class="source"/></div>
                 <button class="btn btn-small" onclick="updateSource(<%=idx%>);">Update</button>
             </div>
         </div>
@@ -101,7 +102,7 @@ $(document).ready(function() {
 <% } %>
 </script>
 <script type="text/template" id="tmpl-dashboards-menu">
-<% if(_.isEmpty(dashboardsRoot)){ %>
+<% if(isLeaf){ %>
     <li>
         <a href="dashboard.html?id=<%= path %>"><%= name %></a>
     </li>
@@ -110,7 +111,7 @@ $(document).ready(function() {
         <a tabindex="-1" href="#"><%= name %></a>
         <ul class="dropdown-menu">
             <% for (node in dashboardsRoot) { %>
-                <%= generateDashboardsMenu(node, path + "." + node, dashboardsRoot[node]) %>
+                <%= generateDashboardsMenu(node, path + "." + node, dashboardsRoot[node], depth++) %>
             <% } %>
         </ul>
     </li>
@@ -166,7 +167,7 @@ $(document).ready(function() {
                     </li>
                     <li>
                     <label class="checkbox" style="margin: 10px">
-                         <input type="checkbox" id="events" name="events" <% if(config.showEvents && config.showEvents!=="false") {%> checked="checked" <% } %> onchange="updateGraphs()" /> Show Events
+                        <input type="checkbox" id="events" name="events" <% if(config.showEvents && config.showEvents!=="false") {%> checked="checked" <% } %> onchange="updateGraphs()" /> Show Events
                     </label>
                     </li>
                     <li>
