@@ -180,11 +180,9 @@ $(document).ready(function() {
                     <label class="select" style="margin-left: 10px;"> Time Zone: </label>
                     <div class="pull-right" style="margin-right: 10px;margin-bottom: 10px;">
                         <select id="tz" onchange="setTimezone();" name="tz" class="input input-medium" style="margin-top: 0px;">
-                            <option value="US/Eastern" selected="selected">US/Eastern</option>
-                            <option value="US/Central">US/Central</option>
-                            <option value="US/Pacific">US/Pacific</option>
-                            <option value="Israel">Israel</option>
-                            <option value="Europe/London">Europe/London</option>
+                             <% for(timezone in graphitusConfig.timezones){ %>
+                            <option value="<%=graphitusConfig.timezones[timezone]%>"><%=graphitusConfig.timezones[timezone]%></option>
+                            <% } %>
                         </select>
                     </div>
                     </li>
