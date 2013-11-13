@@ -118,7 +118,7 @@ $(document).ready(function() {
 <% } %> 
 </script>
 <script type="text/template" id="tmpl-toolbar">
-    <a class="brand" href="index.html">&nbsp; graphitus</a>
+    <a class="brand hidden-zoom1" href="index.html">&nbsp; graphitus</a>
     <ul class="nav">
         <li class="dropdown"> 
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= title %><b class="caret"></b></a>
@@ -128,7 +128,7 @@ $(document).ready(function() {
         </li>
         <li class="navbar-text"><div><i class="icon-link"></i> <a href="#" title="permalink" id="permalink">permalink </a></div></li>
         <li class="divider-vertical"></li>
-        <li>
+        <li class="hidden-zoom2">
             <form class="navbar-search form-inline pull-right">
                 <input id="search" type="text" style="margin-top: 0px;" class="search-query input-small" placeholder="Search" />
             </form>
@@ -146,7 +146,7 @@ $(document).ready(function() {
         <li class="divider-vertical"></li>
         <li><input type="text" class="input-small" placeholder="end date" id="end" name="end" value="<%=(config.until) ? config.until : ""%>" onchange="useDateRange()" /></li>
         <li class="divider-vertical"></li>
-        <li class="dropdown">
+        <li class="dropdown hidden-zoom4">
            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> Options<b class="caret"></b></a>
            <ul id="options" class="dropdown-menu" style="width: 200px;">
                     <li>
@@ -193,7 +193,7 @@ $(document).ready(function() {
             <button class="btn btn-small btn-primary pull-right hspacer" style="margin-top:8px" onclick="updateGraphs();return false;"><i class="icon-circle-arrow-right"></i> Update</button>
         </li>
         <li class="divider-vertical"></li>
-        <li>
+        <li class="hidden-zoom3">
             <div id="loadingProgress" class="progress progress-striped active" style="width: 100px;margin: 10px">
                 <div class="bar" style="width: 100%;"><i class="icon-refresh icon-spin"></i> Updating... </div>
             </div>
