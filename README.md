@@ -87,7 +87,7 @@ Below is an example dashboard configuration:
     			}
     		}
 
-* This will generate the screen below (actual graph images are mocks):
+* Below is a screenshot of a sample dashboard:
 
 ![Screenshot](https://raw.github.com/erezmazor/graphitus/master/doc/screenshot.png)
 
