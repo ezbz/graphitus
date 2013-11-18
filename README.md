@@ -19,7 +19,8 @@ Below is an example of global configuration (a file named ```config.json```) usi
     	{
     		"graphiteUrl": "http://graphite.mysite.com",
     		"dashboardListUrl": "dashboard-index.json",
-    		"dashboardUrlTemplate": "${dashboardId}.json"
+    		"dashboardUrlTemplate": "${dashboardId}.json",
+            "timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
     	}
 
 Below is an example of global configuration (a file named ```config.json```) using couch db:
@@ -27,7 +28,8 @@ Below is an example of global configuration (a file named ```config.json```) usi
     	{
     		"graphiteUrl": "http://graphite.mysite.com",
     		"dashboardListUrl": "http://couch.mysite.com:5984/graphitus-dashboards/_all_docs", <-- must return a JSON with a "rows" element containing an array of rows with dashboard id ("id" attribute)
-    		"dashboardUrlTemplate": "http://couch.mysite.com:5984/graphitus-dashboards/${dashboardId}"
+    		"dashboardUrlTemplate": "http://couch.mysite.com:5984/graphitus-dashboards/${dashboardId}",
+            "timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
     	}
 
 
