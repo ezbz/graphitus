@@ -22,42 +22,26 @@ $(document).ready(function() {
 
 
 Rickshaw.Fixtures.Number.formatBase1024KMGTPShort = function(y) {
-    abs_y = Math.abs(y);
-    if (abs_y >= 1125899906842624)  { return parseFloat(y / 1125899906842624).toFixed(2) + "P" }
-    else if (abs_y >= 1099511627776){ return parseFloat(y / 1099511627776).toFixed(2) + "T" }
-    else if (abs_y >= 1073741824)   { return parseFloat(y / 1073741824).toFixed(2) + "G" }
-    else if (abs_y >= 1048576)      { return parseFloat(y / 1048576).toFixed(2) + "M" }
-    else if (abs_y >= 1024)         { return parseFloat(y / 1024).toFixed(2) + "K" }
-    else if (abs_y < 1 && y > 0)    { return parseFloat(y).toFixed(2) }
-    else if (abs_y === 0)           { return '' }
-    else                        	{ return y.toFixed(2) }
+    return formatBase1024KMGTPShort(y);
 };
-
 
 var palette = new Rickshaw.Color.Palette({
 	scheme: 'colorwheel'
 });
 
-function loadExtendedGraph(target){
+function loadExtendedGraph(target, dashboardTitle, graphTitle){
+	$("#extendedGraphTitle").text( dashboardTitle+ " - " + graphTitle);
 	showExtendedGrapProgresshMessge("Accessing Graphite metrics API");
 	$('#extendedChart').empty();
 	$('#extendedLegend').empty();
 	$('#timeline').empty();
-	$.ajax({
-		type: "get",
-		url: target + "&format=json&jsonp=?",
-		dataType:'json',
-		success: function(json) {
-			showExtendedGrapProgresshMessge("Rendering metrics to graph");
-			var data = transformGraphiteData(json);
-			//console.profile("render extended graph");
-			renderExtendedGraph(target, data);
-			//console.profileEnd();
-			showExtendedGrapProgresshMessge("");
-		},
-		error:function (xhr, ajaxOptions, thrownError){
-			console.log(thrownError);
-		}
+	loadGraphiteData(target, function(json){
+		showExtendedGrapProgresshMessge("Rendering metrics to graph");
+		var data = transformGraphiteData(json);
+		//console.profile("render extended graph");
+		renderExtendedGraph(target, data);
+		//console.profileEnd();
+		showExtendedGrapProgresshMessge("");
 	});
 }
 
@@ -248,4 +232,3 @@ function showExtendedGrapProgresshWarning(msg){
 	$("#lightboxProgressWarningWarning").text(msg);
 	$("#lightboxProgressWarningWarning").show();
 }
-	
