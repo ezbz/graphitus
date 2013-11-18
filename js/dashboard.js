@@ -608,8 +608,17 @@ function showExtendedGraph(idx) {
 	$('#extendedGraph').lightbox({
 		resizeToFit: false
 	});
-	loadExtendedGraph(rawTargets[idx]);
-	$("#extendedGraphTitle").text(config.title + " - " + config.data[idx].title);
+	loadExtendedGraph(rawTargets[idx], config.title, config.data[idx].title);
+	$(".rickshaw_legend").css("height", $(window).height() - 220);
+}
+
+function showHistogram(idx) {
+	$(".lightbox-content").css("width", $(window).width() - 200);
+	$(".lightbox-content").css("height", $(window).height() - 200);
+	$('#hitogramLightbox').lightbox({
+		resizeToFit: false
+	});
+	loadHistogram(rawTargets[idx], config.title,  config.data[idx].title);
 }
 
 function togglePinnedParametersToolbar() {

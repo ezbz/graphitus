@@ -1,5 +1,6 @@
 var dashboards = new Array();
 var searchIndex = new Array();
+var graphiteData = {};
 
 var Graphitus = {
 	namespace: function(namespace, obj) {
@@ -115,4 +116,37 @@ function generateDashboardsMenus() {
 		result += generateDashboardsMenu(idx, idx, dashboards[idx], 0);
 	}
 	return result;
+}
+
+
+function formatBase1024KMGTPShort(y){
+	abs_y = Math.abs(y);
+    if (abs_y >= 1125899906842624)  { return parseFloat(y / 1125899906842624).toFixed(2) + "P" }
+    else if (abs_y >= 1099511627776){ return parseFloat(y / 1099511627776).toFixed(2) + "T" }
+    else if (abs_y >= 1073741824)   { return parseFloat(y / 1073741824).toFixed(2) + "G" }
+    else if (abs_y >= 1048576)      { return parseFloat(y / 1048576).toFixed(2) + "M" }
+    else if (abs_y >= 1024)         { return parseFloat(y / 1024).toFixed(2) + "K" }
+    else if (abs_y < 1 && y > 0)    { return parseFloat(y).toFixed(2) }
+    else if (abs_y === 0)           { return '' }
+    else                        	{ return y.toFixed(2) }
+}
+
+
+function loadGraphiteData(target, callback){
+	if(graphiteData[target]){
+		callback(graphiteData[target]);
+		return;
+	}
+	$.ajax({
+		type: "get",
+		url: target + "&format=json&jsonp=?",
+		dataType:'json',
+		success: function(json) {
+			graphiteData[target] = json;
+			callback(json);
+		},
+		error:function (xhr, ajaxOptions, thrownError){
+			console.log(thrownError);
+		}
+	});
 }

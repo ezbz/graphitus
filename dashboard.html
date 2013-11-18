@@ -24,7 +24,7 @@
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/rickshaw/1.3.0/rickshaw.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-lightbox/0.5/bootstrap-lightbox.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min.js "></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min.js"></script>
 
 <script type="text/javascript" src="js/jquery-ui-timepicker-addon.min.js"></script>
 <script type="text/javascript" src="js/jquery.waitforimages.min.js"></script>
@@ -32,6 +32,7 @@
 <script type="text/javascript" src="js/dashboard.js"></script>
 <script type="text/javascript" src="js/extensions.js"></script>
 <script type="text/javascript" src="js/extended-graph.js"></script>
+<script type="text/javascript" src="js/histogram.js"></script>
 
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
@@ -52,7 +53,7 @@ $(document).ready(function() {
             </h5>
             <div class="pull-right">
             <div class="pull-left btn-group">
-                <a class="btn btn-small btn-success dropdown-toggle hspacer" data-toggle="dropdown" href="#"> Functions...<span class="caret"></span></a>
+                <a class="btn btn-small btn-success dropdown-toggle hspacer" data-toggle="dropdown" href="#" title="Functions..."><i class="icon-cogs"></i><span class="caret"></span></a>
                 <ul class="dropdown-menu">      
                     <li>
                         <input id="yMin<%=idx%>" type="text" class="input-mini hspacer" placeholder="yMin">
@@ -76,16 +77,17 @@ $(document).ready(function() {
                 </ul>
             </div>
             <div class="pull-left btn-group">
-                <a class="btn btn-small btn-warning dropdown-toggle hspacer" data-toggle="dropdown" href="#"> Images...<span class="caret"></span></a>
+                <a class="btn btn-small btn-warning dropdown-toggle hspacer" data-toggle="dropdown" href="#" title="Images..."><i class="icon-picture"></i><span class="caret"></span></a>
                 <ul class="dropdown-menu">      
-                    <li class="navbar-text"><a id="lLink<%=idx%>" href="#">Large</a></li>
-                    <li class="navbar-text"><a id="mLink<%=idx%>" href="#">Medium</a></li>
-                    <li class="navbar-text"><a id="sLink<%=idx%>" href="#">Small</a></li>
+                    <li class="navbar-text"><a id="lLink<%=idx%>" href="#" target="_blank"><i class="icon-picture"></i> large</a></li>
+                    <li class="navbar-text"><a id="mLink<%=idx%>" href="#" target="_blank"><i class="icon-picture"></i> medium</a></li>
+                    <li class="navbar-text"><a id="sLink<%=idx%>" href="#" target="_blank"><i class="icon-picture"></i> small</a></li>
                 </ul>
             </div>
             <div class="pull-right">
-                <button class="btn btn-small btn-primary pull-right hspacer" onclick="toggleSource(<%=idx%>);">Source</button>
-                <a id="gLink<%=idx%>" href="#"><button class="btn btn-small btn-info pull-right hspacer">Graphlot</button></a>
+                <a href="#" class="btn btn-small btn-primary pull-right hspacer" onclick="toggleSource(<%=idx%>); return false;" title="Source"><i class="icon-list"></i></a>
+                <a id="gLink<%=idx%>" href="#" title="Graphlot"><button class="btn btn-small btn-info pull-right hspacer"><i class="icon-star"></i></button></a>
+                <a href="#" class="btn btn-small pull-right hspacer" onclick="showHistogram(<%=idx%>); return false;" title="Histogram"><i class="icon-bar-chart"></i></a>
             </div>
             </div>
             <br/>            
@@ -118,9 +120,9 @@ $(document).ready(function() {
 <% } %> 
 </script>
 <script type="text/template" id="tmpl-toolbar">
-    <a class="brand" href="index.html">&nbsp; graphitus</a>
+    <a class="brand hidden-zoom1" href="index.html">&nbsp; graphitus</a>
     <ul class="nav">
-        <li class="dropdown"> 
+        <li class="dropdown hidden-zoom3"> 
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= title %><b class="caret"></b></a>
             <ul id="dashboards" class="dropdown-menu">
                 <%= dashboardsMenu %>
@@ -128,7 +130,7 @@ $(document).ready(function() {
         </li>
         <li class="navbar-text"><div><i class="icon-link"></i> <a href="#" title="permalink" id="permalink">permalink </a></div></li>
         <li class="divider-vertical"></li>
-        <li>
+        <li class="hidden-zoom2">
             <form class="navbar-search form-inline pull-right">
                 <input id="search" type="text" style="margin-top: 0px;" class="search-query input-small" placeholder="Search" />
             </form>
@@ -146,7 +148,7 @@ $(document).ready(function() {
         <li class="divider-vertical"></li>
         <li><input type="text" class="input-small" placeholder="end date" id="end" name="end" value="<%=(config.until) ? config.until : ""%>" onchange="useDateRange()" /></li>
         <li class="divider-vertical"></li>
-        <li class="dropdown">
+        <li class="dropdown hidden-zoom4">
            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> Options<b class="caret"></b></a>
            <ul id="options" class="dropdown-menu" style="width: 200px;">
                     <li>
@@ -180,11 +182,9 @@ $(document).ready(function() {
                     <label class="select" style="margin-left: 10px;"> Time Zone: </label>
                     <div class="pull-right" style="margin-right: 10px;margin-bottom: 10px;">
                         <select id="tz" onchange="setTimezone();" name="tz" class="input input-medium" style="margin-top: 0px;">
-                            <option value="US/Eastern" selected="selected">US/Eastern</option>
-                            <option value="US/Central">US/Central</option>
-                            <option value="US/Pacific">US/Pacific</option>
-                            <option value="Israel">Israel</option>
-                            <option value="Europe/London">Europe/London</option>
+                             <% for(timezone in graphitusConfig.timezones){ %>
+                            <option value="<%=graphitusConfig.timezones[timezone]%>"><%=graphitusConfig.timezones[timezone]%></option>
+                            <% } %>
                         </select>
                     </div>
                     </li>
@@ -195,7 +195,7 @@ $(document).ready(function() {
             <button class="btn btn-small btn-primary pull-right hspacer" style="margin-top:8px" onclick="updateGraphs();return false;"><i class="icon-circle-arrow-right"></i> Update</button>
         </li>
         <li class="divider-vertical"></li>
-        <li>
+        <li class="hidden-zoom3">
             <div id="loadingProgress" class="progress progress-striped active" style="width: 100px;margin: 10px">
                 <div class="bar" style="width: 100%;"><i class="icon-refresh icon-spin"></i> Updating... </div>
             </div>
@@ -356,5 +356,33 @@ $(document).ready(function() {
 			</div>
 		</div>
 	</div>
+    <div id="hitogramLightbox" class="lightbox hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class='lightbox-header'>
+            <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
+        </div>
+        <div class='lightbox-content'>
+            <div class="navbar navbar-inverse">
+                <div class="navbar-inner">
+                        <ul class="nav">
+                            <li><label class="navbar-text" id="histogramTitle"></label></li>
+                            <li class="divider-vertical"></li>
+                            <li style="width: 400px;">
+                                <div id="histogramProgress" class="progress progress-striped active" style="margin-top: 10px;">
+                                    <div class="bar" id="histogramProgressText" style="width: 100%;"></div>
+                                </div>
+                            </li>
+                            <li>
+                                <label class="hide label label-warning" style="margin-top: 10px;" id="histogramMultipleSeriesWarning">histogram shows average of multiple series</label>
+                            </li>
+                        </ul>
+                </div>
+            </div>
+            <div style="padding: 20px;">
+                <div class="pull-left">
+                    <div id="histogram"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
