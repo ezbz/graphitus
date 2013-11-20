@@ -95,6 +95,25 @@ Below is an example dashboard configuration:
 
 ![Extended](https://raw.github.com/erezmazor/graphitus/master/doc/extended.png)
 
+* Clicking on a the ```histogram``` button (![Histogram](https://raw.github.com/erezmazor/graphitus/master/doc/histogram.png)) will generate a [D3 Histogram](https://github.com/mbostock/d3/wiki/Histogram-Layout)
+
+![Histogram](https://raw.github.com/erezmazor/graphitus/master/doc/histogram-lightbox.png)
+
+* Clicking on a the ```source``` button (![Source](https://raw.github.com/erezmazor/graphitus/master/doc/source.png)) will show the target source and allow you to edit it in place
+
+![Source Editor](https://raw.github.com/erezmazor/graphitus/master/doc/source-editor.png)
+
+* Clicking on a the ```functions``` button (![Functions](https://raw.github.com/erezmazor/graphitus/master/doc/functions.png)) will show some options for manipulating the graph using the [Graphite URL API](http://graphite.readthedocs.org/en/1.0/url-api.html)
+
+![Function Options](https://raw.github.com/erezmazor/graphitus/master/doc/functions-drop.png)
+
+* Clicking on a the ```images``` button (![Images](https://raw.github.com/erezmazor/graphitus/master/doc/images.png)) will show a drop down with permalinks to the image in small, medium and large sizes (useful for sending links or copying images into email)
+
+![Images](https://raw.github.com/erezmazor/graphitus/master/doc/images-drop.png)
+
+* Clicking on a the ```graphlot``` button (![Graphlot](https://raw.github.com/erezmazor/graphitus/master/doc/graphlot.png)) will redirect you to the graph's ```Graphlot``` page in your graphite server.
+
+
 supplying an ```eventsUrl``` attribute in config.json will allow you to draw an events overlay on the rickshaw graph, events must be in the following JSON format:
 
     [
