@@ -2,5 +2,6 @@
     "graphiteUrl": "sample.png?",
     "dashboardListUrl": "sample-index.json",
     "dashboardUrlTemplate": "${dashboardId}.json",
-    "minimumRefresh": 60
+    "minimumRefresh": 60,
+    "timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
 }

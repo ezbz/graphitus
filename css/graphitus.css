@@ -54,3 +54,25 @@
 .timeline-label[href]{
 	color: black;
 }
+
+
+@media (max-width: 1379px) {
+    .hidden-zoom1 {
+        display:none !important;
+    }
+}
+@media (max-width: 1144px) {
+    .hidden-zoom2 {
+        display:none !important;
+    }
+}
+@media (max-width: 955px) {
+    .hidden-zoom3 {
+        display:none !important;
+    }
+}
+@media (max-width: 817px) {
+    .hidden-zoom4 {
+        display:none !important;
+    }
+}

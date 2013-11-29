@@ -610,18 +610,27 @@ function showExtendedGraph(idx) {
 	$('#extendedGraph').lightbox({
 		resizeToFit: false
 	});
-	loadExtendedGraph(rawTargets[idx]);
-	$("#extendedGraphTitle").text(config.title + " - " + config.data[idx].title);
+	loadExtendedGraph(rawTargets[idx], config.title, config.data[idx].title);
+	$(".rickshaw_legend").css("height", $(window).height() - 220);
+}
+
+function showHistogram(idx) {
+	$(".lightbox-content").css("width", $(window).width() - 200);
+	$(".lightbox-content").css("height", $(window).height() - 200);
+	$('#hitogramLightbox').lightbox({
+		resizeToFit: false
+	});
+	loadHistogram(rawTargets[idx], config.title,  config.data[idx].title);
 }
 
 function togglePinnedParametersToolbar() {
-	if ($("#parametersToolbarPin i").hasClass("icon-lock")) {
-		$("#parametersToolbarPin").html("<i class='icon-unlock'/>");
+	if ($("#parametersToolbarPin i").hasClass("fa-lock")) {
+		$("#parametersToolbarPin").html("<i class='fa fa-lg fa-unlock'/>");
 		$("#parameters-toolbar").css("position", "fixed");
 		$("#parameters-toolbar").css("width", "100%");
 		$("#parameters-toolbar").css("opacity", ".85");
 	} else {
-		$("#parametersToolbarPin").html("<i class='icon-lock'/>");
+		$("#parametersToolbarPin").html("<i class='fa fa-lg fa-lock'/>");
 		$("#parameters-toolbar").css("position", "relative");
 		$("#parameters-toolbar").css("opacity", "1");
 	}
