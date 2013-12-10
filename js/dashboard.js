@@ -210,6 +210,9 @@ function renderParamToolbar() {
 				dynamicParams[paramGroupName] = paramGroup;
 				loadParameterDependencies(paramGroupName, paramGroup.query);
 				renderDynamicParamGroup(paramGroupName, paramGroup);
+			} else if (paramGroup.type && paramGroup.type == "extDynamic") {
+				dynamicParams[paramGroupName] = paramGroup;
+				renderExtDynamicParamGroup(paramGroupName, paramGroup);
 			} else {
 				renderValueParamGroup(paramGroupName, paramGroup);
 			}
@@ -315,6 +318,33 @@ function generateDynamicQuery(paramGroupName) {
 	}
 	return query;
 }
+
+function renderExtDynamicParamGroup(paramGroupName, paramGroup) {
+	$.getJSON(paramGroup["uri"], function(data){
+		keyname = paramGroup["key"]
+		unpackedData = data[keyname[0]]
+		for (var i=1;i<keyname.length;i++){
+			unpackedData = unpackedData[keyname[i]]
+		}
+		parameters = new Object();
+		if (paramGroup.showAll){
+			parameters["All"] = new Object();
+			parameters["All"][paramGroupName] = new Object();
+			parameters["All"][paramGroupName] = (paramGroup.showAllValue) ? applyParameters(paramGroup.showAllValue) : "*";
+		}
+
+		$.each(unpackedData, function(k,v){
+			servers = "{"+v.join(",")+"}"
+			parameters[k] = {}
+			parameters[k][paramGroupName] = servers
+		})
+		console.log(parameters)
+		config.parameters[paramGroupName] = parameters;
+		renderValueParamGroup(paramGroupName, parameters)
+		updateGraphs()
+	})
+}
+
 
 function renderDynamicParamGroup(paramGroupName, paramGroup) {
 	var url = getGraphiteServer() + "/metrics/find?format=completer&query=";
