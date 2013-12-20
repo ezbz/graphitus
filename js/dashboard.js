@@ -316,8 +316,7 @@ function getDependenciesFromPath(path) {
 	return dependencies;
 }
 
-function generateDynamicQuery(paramGroupName) {
-	var query = dynamicParams[paramGroupName].query;
+function generateDynamicQuery(query) {
 	var dependencies = getDependenciesFromPath(query);
 	for (idx in dependencies) {
 		var dependsOn = dependencies[idx];
@@ -338,7 +337,7 @@ function getMetricsQueryUrl() {
 }
 
 function renderDynamicParamGroup(paramGroupName, paramGroup) {
-	var query = generateDynamicQuery(paramGroupName);
+	var query = generateDynamicQuery(dynamicParams[paramGroupName].query);
 	if (!endsWith(query, ".*")) {
 		query = query + ".*";
 	}
