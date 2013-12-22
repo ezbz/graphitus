@@ -364,7 +364,7 @@ function endsWith(str, suffix) {
 function getParamValueFromPath(paramGroup, metric) {
 	var result = "";
 
-	if (paramGroup.index) {
+	if (paramGroup.index != undefined) {
 		var pathParts = metric.path.split(".");
 		result = pathParts[paramGroup.index];
 	} else {
