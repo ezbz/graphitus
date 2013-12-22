@@ -230,7 +230,7 @@ function generatePermalink() {
 	if (timeBack != "") {
 		href = href + "&timeBack=" + timeBack;
 	} else if (start != "" && end != "") {
-		href = href + "&start=" + start + "&end=" + end;
+		href = href + "&from=" + start + "&until=" + end;
 	}
 
 	if (config.parameters) {
