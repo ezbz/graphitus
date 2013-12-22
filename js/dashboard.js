@@ -177,7 +177,9 @@ function buildUrl(idx, graph, chartTitle, width, height, graphiteOperation) {
 	}
 	var userUrlParams = getUserUrlParams(idx);
 
-	return getGraphiteServer() + "/" + graphiteOperation + "/?" + targetUri + range + legend + params + userUrlParams + size;
+	var noBrowserCaching = "&" + (new Date()).getTime();
+
+	return getGraphiteServer() + "/" + graphiteOperation + "/?" + targetUri + range + legend + params + userUrlParams + size + noBrowserCaching;
 }
 
 function getGraphiteServer(){
