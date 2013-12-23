@@ -2,6 +2,9 @@
     "graphiteUrl": "sample.png?",
     "dashboardListUrl": "sample-index.json",
     "dashboardUrlTemplate": "${dashboardId}.json",
+    "eventsUrl": "events.json",
+    "eventsDateFormat": "HH:mm:ss DD/MM/YYYY",
+    "eventsTimezone": "US/Eastern",
     "minimumRefresh": 60,
     "timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
 }

@@ -25,6 +25,8 @@
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-lightbox/0.5/bootstrap-lightbox.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.4.0/moment.min.js"></script>
+<script src="js/moment-timezone.min.js"></script>
+<script src="js/moment-timezone-data.js"></script>
 
 <script type="text/javascript" src="js/jquery-ui-timepicker-addon.min.js"></script>
 <script type="text/javascript" src="js/jquery.waitforimages.min.js"></script>
@@ -48,7 +50,7 @@ $(document).ready(function() {
 			<h5 class="pull-left" style="margin: 0px;">
                 <%=applyParameters(config.data[idx].title)%>
                 <% if(config.data[idx].description){ %>
-                    <a href="#" rel="tooltip" data-toggle="tooltip" title="<%=config.data[idx].description%>"><i class="fa fa-question-circle"/></a>
+                    <a href="#" rel="tooltip" data-toggle="tooltip" title="<%=applyParameters(config.data[idx].description)%>"><i class="fa fa-question-circle"/></a>
                 <% } %>
             </h5>
             <div class="pull-right">

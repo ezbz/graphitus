@@ -289,7 +289,9 @@ function updateDependantParameters(paramGroupName) {
 function loadParameterDependencies(paramGroupName, path) {
 	var dependencies = getDependenciesFromPath(path);
 	for (idx in dependencies) {
-		parameterDependencies[dependencies[idx]] = new Array();
+		if(!parameterDependencies[dependencies[idx]]){
+			parameterDependencies[dependencies[idx]] = new Array();
+		} 
 		parameterDependencies[dependencies[idx]].push(paramGroupName);
 	}
 }

@@ -22,7 +22,7 @@ $(document).ready(function() {
     <li><a href="dashboard.html?id=<%= path %>"><%= name %></a></li>
 <% }else{ %>
     <% var isRoot = (depth === 0); %>
-    <% if(isRoot){ %><div class="well well-small box"><% }; %>
+    <% if(isRoot){ %><div class="box"><% }; %>
     <li class="nav-header"><% if(isRoot){ %><h5><% }; %><%=name%><% if(isRoot){ %></h5><% }; %></li>
     <ul class="nav nav-list">
     <% for (node in dashboardsRoot) { %>

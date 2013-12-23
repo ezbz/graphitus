@@ -54,12 +54,13 @@ function loadExtendedEvents(annotator){
 		success: function(json) {
 			showExtendedGrapProgresshMessge("Processing events");
 			$.each(json, function(i, event) {
-				var start = moment(event.start, "HH:mm:ss DD/MM/YYYY");
-				var end = moment(event.end, "HH:mm:ss DD/MM/YYYY");
-				//console.log(event.message+":"+ moment(event.timestamp, "HH:mm:ss DD/MM/YYYY").toString());
+				var eventOffset = (calculateEventOffset()*60);
+				var displayZone = calculateEventOffset()*-1;
+				var start = moment(event.start, graphitusConfig.eventsDateFormat);
+				var end = moment(event.end, graphitusConfig.eventsDateFormat);
 				var message = "<span label='timeline-label'>" + event.message + "</span>";
-				var annotationContent = "["+start.format("HH:mm") +((end) ? "-" + end.format("HH:mm") : "") + "] - "+ message;
-				annotator.add(start.add('hours', 3).unix(), annotationContent, (end) ?  end.add('hours', 3).unix() : null);
+				var annotationContent = "["+start.zone(displayZone).format("HH:mm") +((end) ? "-" + end.zone(displayZone).format("HH:mm") : "") + "] - "+ message;
+				annotator.add(start.unix()+eventOffset, annotationContent, (end) ?  end.unix()+eventOffset: null);
 			});
 			extendedChart.update();
 			showExtendedGrapProgresshMessge("");
@@ -70,8 +71,12 @@ function loadExtendedEvents(annotator){
 	});
 }
 
-function calculateTimeZoneOffset(){
-	return 14400; 
+function calculateUtcOffset(){
+	return moment().tz($('#tz').val()).zone(); 
+}
+
+function calculateEventOffset(){
+	return (calculateUtcOffset()*-1)+(moment().tz(graphitusConfig.eventsTimezone).zone() - (moment().zone())); 
 }
 
 function renderExtendedGraph(target, data){
@@ -191,7 +196,7 @@ function graphiteToRickshawModel(datapoints){
 	var ret = _.map(datapoints, function(point) {
 		lastX = point[0] !== null ? point[0] : lastX
 		return {
-		  'x': point[1]-calculateTimeZoneOffset(),
+		  'x': point[1]-calculateUtcOffset()*60,
 		  'y':  point[0] 
 		};
 	});
