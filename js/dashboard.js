@@ -499,9 +499,9 @@ function mergeUrlParamsWithConfig(config) {
 	if (queryParam('timeBack') != null) {
 		config.timeBack = queryParam('timeBack');
 	}
-	if (queryParam('start') != null && queryParam('end') != null) {
-		config.from = queryParam('start');
-		config.until = queryParam('end');
+	if (queryParam('from') != null && queryParam('until') != null) {
+		config.from = queryParam('from');
+		config.until = queryParam('until');
 		config.hoursBack = null;
 		config.timeBack = null;
 	}
