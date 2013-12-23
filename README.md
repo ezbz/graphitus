@@ -23,7 +23,7 @@ Below is an example of global configuration (a file named ```config.json```) usi
     		"eventsUrl": "events.json",
     		"eventsDateFormat": "HH:mm:ss DD/MM/YYYY",
     		"eventsTimezone": "US/Eastern",
-            	"timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
+    		"timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
     	}
 
 Below is an example of global configuration (a file named ```config.json```) using couch db:
@@ -35,7 +35,7 @@ Below is an example of global configuration (a file named ```config.json```) usi
     		"eventsUrl": "events.json",
     		"eventsDateFormat": "HH:mm:ss DD/MM/YYYY",
     		"eventsTimezone": "US/Eastern",
-        	t"timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
+    		"timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
     	}
 
 
