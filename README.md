@@ -20,7 +20,10 @@ Below is an example of global configuration (a file named ```config.json```) usi
     		"graphiteUrl": "http://graphite.mysite.com",
     		"dashboardListUrl": "dashboard-index.json",
     		"dashboardUrlTemplate": "${dashboardId}.json",
-            "timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
+    		"eventsUrl": "events.json",
+    		"eventsDateFormat": "HH:mm:ss DD/MM/YYYY",
+    		"eventsTimezone": "US/Eastern",
+            	"timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
     	}
 
 Below is an example of global configuration (a file named ```config.json```) using couch db:
@@ -29,7 +32,10 @@ Below is an example of global configuration (a file named ```config.json```) usi
     		"graphiteUrl": "http://graphite.mysite.com",
     		"dashboardListUrl": "http://couch.mysite.com:5984/graphitus-dashboards/_all_docs", <-- must return a JSON with a "rows" element containing an array of rows with dashboard id ("id" attribute)
     		"dashboardUrlTemplate": "http://couch.mysite.com:5984/graphitus-dashboards/${dashboardId}",
-            "timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
+    		"eventsUrl": "events.json",
+    		"eventsDateFormat": "HH:mm:ss DD/MM/YYYY",
+    		"eventsTimezone": "US/Eastern",
+        	t"timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
     	}
 
 
@@ -189,6 +195,11 @@ Consider the following configuration for the ```parameters``` section of the con
 You can then use a target like ```services.prod.${service}.${host}_${datacenter}.someAttribute```. When graphitus loads it will generate select boxes based on the actual values returned from the graphite metric API based on the provided queries. Note that the queries themselves can be parameterized, creating a series of select boxes depending on each other in-order.
 
 Graphitus will also consider generating the list of values from a partial path, the index and regex determine which portion and substring (regex) of the resulting path will be used to generate the values for selection. The ```showAll``` property is used to determine if graphitus will prepend a default All (translated to ```*``` in the graphite query) option to the selection. The ```showAllValue``` parameter can be added to override the default ```*``` selection for complex name filtering schemes (you can have token in this value to express dependencies on other parameters).
+
+
+* Timezone support
+
+Graphitus supports timezones via configuration ```config.json``` has a ```timezones``` attributes which accepts an array. These are timezones supported by the [Graphite URL API Timezone parameter](https://graphite.readthedocs.org/en/latest/render_api.html#tz). Timezones are supported using the [moment-timezone](http://momentjs.com/timezone/) library. In order to correctly define timezones use the [moment-timezone data builder](http://momentjs.com/timezone/data/) to customize your own ```js/moment-timezone-data.js``` file. Note that moment zone names are different from graphite names, once you generate the ```js/moment-timezone-data.js``` file edit it and change timezone names to correspond to the supported graphite names.
 
 * More info and examples
 
