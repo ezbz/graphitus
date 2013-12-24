@@ -269,9 +269,10 @@
 <td>The timezone for the rendered graphite images (see <a href="http://en.wikipedia.org/wiki/List_of_tz_database_time_zones">Timezone list</a>). Note: timezone resolution is in the following order url, json configuraiton file, cookie, default.</td>
 </tr>
 </tbody>
-</table><ul>
-<li>Dynamic Parameters</li>
-</ul><p>Dynamic parameters allow you to define metric selection and filtering based on dynamic graphite metric API queries. Structuring your graphite metrics tree properly can be useful to create such dashboaards.</p>
+</table><h2>
+<a name="dynamic-parameters" class="anchor" href="#dynamic-parameters"><span class="octicon octicon-link"></span></a>Dynamic Parameters</h2>
+
+<p>Dynamic parameters allow you to define metric selection and filtering based on dynamic graphite metric API queries. Structuring your graphite metrics tree properly can be useful to create such dashboaards.</p>
 
 <p>Consider the following configuration for the <code>parameters</code> section of the configuration</p>
 
@@ -302,9 +303,10 @@
 
 <p>Graphitus will also consider generating the list of values from a partial path, the index and regex determine which portion and substring (regex) of the resulting path will be used to generate the values for selection. The <code>showAll</code> property is used to determine if graphitus will prepend a default All (translated to <code>*</code> in the graphite query) option to the selection. The <code>showAllValue</code> parameter can be added to override the default <code>*</code> selection for complex name filtering schemes (you can have token in this value to express dependencies on other parameters).</p>
 
-<ul>
-<li>Naming and grouping techniques</li>
-</ul><p>Graphitus path tokenization works well when you structure youd graphite metrics according to a well defined scheme. Consider the following path for graphite metrics: <code>services.prod.myService.dc1.host1.myMetric.value</code> which can be tokenized as <code>services.${environment}.${service}.${datacenter}.${host}.${metric}.value</code></p>
+<h2>
+<a name="naming-and-grouping-techniques" class="anchor" href="#naming-and-grouping-techniques"><span class="octicon octicon-link"></span></a>Naming and grouping techniques</h2>
+
+<p>Graphitus path tokenization works well when you structure youd graphite metrics according to a well defined scheme. Consider the following path for graphite metrics: <code>services.prod.myService.dc1.host1.myMetric.value</code> which can be tokenized as <code>services.${environment}.${service}.${datacenter}.${host}.${metric}.value</code></p>
 
 <p>This well-structured hierarchy provides powerful grouping capabilities, for example using the above path structure you can create a generic grouping scheme where you can group values by different aspects. This is achieved using the <code>groupByNode</code> or <code>aliasByNode</code> graphite functions. Here is the graphitus target definition:</p>
 
@@ -367,13 +369,13 @@
 <span class="p">}</span>
 </pre></div>
 
-<ul>
-<li>Timezone support</li>
-</ul><p>Graphitus supports timezones via configuration <code>config.json</code> has a <code>timezones</code> attribute which accepts an array. These are timezones supported by the <a href="https://graphite.readthedocs.org/en/latest/render_api.html#tz">Graphite URL API Timezone parameter</a>. Timezones are supported using the <a href="http://momentjs.com/timezone/">moment-timezone</a> library. In order to correctly define timezones use the <a href="http://momentjs.com/timezone/data/">moment-timezone data builder</a> to customize your own <code>js/moment-timezone-data.js</code> file. Note that moment zone names are different from graphite names, once you generate the <code>js/moment-timezone-data.js</code> file edit it and change timezone names to correspond to the supported graphite names.</p>
+<h2>
+<a name="timezone-support" class="anchor" href="#timezone-support"><span class="octicon octicon-link"></span></a>Timezone support</h2>
 
-<ul>
-<li>
-<p>More info and examples</p>
+<p>Graphitus supports timezones via configuration <code>config.json</code> has a <code>timezones</code> attribute which accepts an array. These are timezones supported by the <a href="https://graphite.readthedocs.org/en/latest/render_api.html#tz">Graphite URL API Timezone parameter</a>. Timezones are supported using the <a href="http://momentjs.com/timezone/">moment-timezone</a> library. In order to correctly define timezones use the <a href="http://momentjs.com/timezone/data/">moment-timezone data builder</a> to customize your own <code>js/moment-timezone-data.js</code> file. Note that moment zone names are different from graphite names, once you generate the <code>js/moment-timezone-data.js</code> file edit it and change timezone names to correspond to the supported graphite names.</p>
+
+<h2>
+<a name="additional-information" class="anchor" href="#additional-information"><span class="octicon octicon-link"></span></a>Additional Information</h2>
 
 <ul>
 <li><a href="http://techo-ecco.com/blog/monitoring-apache-hadoop-cassandra-and-zookeeper-using-graphite-and-jmxtrans">Blog post</a></li>
@@ -385,8 +387,6 @@
 <li><a href="https://gist.github.com/erezmazor/5020008#file-hadoop-tasktracker">Hadoop TaskTracker Dashboard</a></li>
 <li><a href="https://gist.github.com/erezmazor/5020008#file-hadoop-datanode">Hadoop DataNode Dashboard</a></li>
 <li><a href="https://gist.github.com/erezmazor/5020016#file-zookeeper-servers">Zookeeper Dashbaord</a></li>
-</ul>
-</li>
 </ul>
       </section>
 
