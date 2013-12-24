@@ -58,84 +58,85 @@
 
 <p>Below is an example of global configuration (a file named <code>config.json</code>) using static local JSON files (the dashboards ids are the file names with a <code>.json</code> extension):</p>
 
-<pre><code>    {
-        "graphiteUrl": "http://graphite.mysite.com",
-        "dashboardListUrl": "dashboard-index.json",
-        "dashboardUrlTemplate": "${dashboardId}.json",
-        "eventsUrl": "events.json",
-        "eventsDateFormat": "HH:mm:ss DD/MM/YYYY",
-        "eventsTimezone": "US/Eastern",
-        "timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
-    }
-</code></pre>
+<div class="highlight highlight-javascript"><pre><span class="p">{</span>
+    <span class="s2">"graphiteUrl"</span><span class="o">:</span> <span class="s2">"http://graphite.mysite.com"</span><span class="p">,</span>
+    <span class="s2">"dashboardListUrl"</span><span class="o">:</span> <span class="s2">"dashboard-index.json"</span><span class="p">,</span>
+    <span class="s2">"dashboardUrlTemplate"</span><span class="o">:</span> <span class="s2">"${dashboardId}.json"</span><span class="p">,</span>
+    <span class="s2">"eventsUrl"</span><span class="o">:</span> <span class="s2">"events.json"</span><span class="p">,</span>
+    <span class="s2">"eventsDateFormat"</span><span class="o">:</span> <span class="s2">"HH:mm:ss DD/MM/YYYY"</span><span class="p">,</span>
+    <span class="s2">"eventsTimezone"</span><span class="o">:</span> <span class="s2">"US/Eastern"</span><span class="p">,</span>
+    <span class="s2">"timezones"</span><span class="o">:</span> <span class="p">[</span><span class="s2">"US/Eastern"</span><span class="p">,</span> <span class="s2">"US/Central"</span><span class="p">,</span> <span class="s2">"US/Pacific"</span><span class="p">,</span> <span class="s2">"Europe/London"</span><span class="p">,</span> <span class="s2">"Israel"</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
 
 <p>Below is an example of global configuration (a file named <code>config.json</code>) using couch db:</p>
 
-<pre><code>    {
-        "graphiteUrl": "http://graphite.mysite.com",
-        "dashboardListUrl": "http://couch.mysite.com:5984/graphitus-dashboards/_all_docs", &lt;-- must return a JSON with a "rows" element containing an array of rows with dashboard id ("id" attribute)
-        "dashboardUrlTemplate": "http://couch.mysite.com:5984/graphitus-dashboards/${dashboardId}",
-        "eventsUrl": "events.json",
-        "eventsDateFormat": "HH:mm:ss DD/MM/YYYY",
-        "eventsTimezone": "US/Eastern",
-        "timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
-    }
-</code></pre>
+<div class="highlight highlight-javascript"><pre><span class="p">{</span>
+    <span class="s2">"graphiteUrl"</span><span class="o">:</span> <span class="s2">"http://graphite.mysite.com"</span><span class="p">,</span>
+    <span class="s2">"dashboardListUrl"</span><span class="o">:</span> <span class="s2">"http://couch.mysite.com:5984/graphitus-dashboards/_all_docs"</span><span class="p">,</span> <span class="c1">// must return a JSON with a "rows" element containing an array of rows with dashboard id ("id" attribute)</span>
+    <span class="s2">"dashboardUrlTemplate"</span><span class="o">:</span> <span class="s2">"http://couch.mysite.com:5984/graphitus-dashboards/${dashboardId}"</span><span class="p">,</span>
+    <span class="s2">"eventsUrl"</span><span class="o">:</span> <span class="s2">"events.json"</span><span class="p">,</span>
+    <span class="s2">"eventsDateFormat"</span><span class="o">:</span> <span class="s2">"HH:mm:ss DD/MM/YYYY"</span><span class="p">,</span>
+    <span class="s2">"eventsTimezone"</span><span class="o">:</span> <span class="s2">"US/Eastern"</span><span class="p">,</span>
+    <span class="s2">"timezones"</span><span class="o">:</span> <span class="p">[</span><span class="s2">"US/Eastern"</span><span class="p">,</span> <span class="s2">"US/Central"</span><span class="p">,</span> <span class="s2">"US/Pacific"</span><span class="p">,</span> <span class="s2">"Europe/London"</span><span class="p">,</span> <span class="s2">"Israel"</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
 
 <h2>
 <a name="dashboard-configuration" class="anchor" href="#dashboard-configuration"><span class="octicon octicon-link"></span></a>Dashboard Configuration</h2>
 
 <p>Below is an example dashboard configuration:</p>
 
-<pre><code>    {
-        "title": "MySQL Production Cluster", &lt;-- give a title to page   
-        "columns": 2, &lt;-- the number of charts in a row side by side, mostly 2 or 4
-        "user": "erezmazor", &lt;-- owner   
-        "timeBack": 12h, &lt;-- time range back from current time (can be expressed in minutes/hours/days/weeks e.g., 30m/12h/1d/2w)    
-        "from": "", &lt;-- start date for the date range, prefer timeBack as any date you choose will become stale  
-        "until": "", &lt;-- end date for the date range, prefer timeBack as any date you choose will become stale   
-        "width": 700, &lt;-- width of each chart image, should correlate with # columns defined
-        "height": 450,&lt;-- height of each chart image
-        "legend": true, &lt;-- show the legend in chart
-        "refresh": true, &lt;-- auto refresh
-        "refreshIntervalSeconds": 90, &lt;-- auto refresh interval in seconds
-        "averageSeries": false, &lt;-- for targets that aggregate a lot of metrics prefer setting this to true as it will average many lines into one
-        "defaultLineWidth": 2, &lt;-- line width for chart lines
-        "tz" : "US/Eastern", &lt;-- timezone for the rendered graph
-        "data": [ &lt;-- charts list
-            {
-                "title": "Slow Queries", &lt;-- a title for the chart image
-                "target": "groupByNode(machines.${dc}dc1.mysql*.Slow_queries,2,\"nonNegativeDerivative\")", &lt;-- the graphite target/function which defines the chart content
-                "params": "areaMode=stacked&amp;lineMode=staircase&amp;colorList=blue,red,green" &lt;-- specify additional parameters for this target
-            },{
-                "title": "Seconds Behind Master",
-                "target": "groupByNode(machines.${dc}dc1.mysql*.Seconds_Behind_Master,2,\"averageSeries\")"
-            },{
-                "title": "Queries Per Second",
-                "target": [ &lt;-- you can specify mutliple targets for a chart as a JSON array
-                    "derivative(machines.${dc}dc1.mysql*.Qps1)",
-                    "derivative(machines.${dc}dc1.mysql*.Qps2)"
-                ],
-                "description" : "The number of queries per second executed by the server" &lt;-- show a description tooltip next to the title
-            }
-            ],
-            "parameters": { &lt;-- parameters to tokens expressed in targets with ${paramName} format  
-                "datacetner" : { &lt;-- label for a select box in the UI
-                "All": {     &lt;-- display name for a select box in the UI
-                    "dc": "*" &lt;-- the token name (dc) as specified in the target name and the actual token value (*)            
-                },
-                "New York": {        
-                    "dc": "ny" 
-                },
-                "LA": {
-                    "dc": "la"
-                },
-                "Chicago": {
-                    "dc": "chi"
-                }
-            }
-        }
-</code></pre>
+<div class="highlight highlight-javascript"><pre><span class="p">{</span>
+    <span class="s2">"title"</span><span class="o">:</span> <span class="s2">"MySQL Production Cluster"</span><span class="p">,</span> <span class="c1">// give a title to page   </span>
+    <span class="s2">"columns"</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span> <span class="c1">// the number of charts in a row side by side, mostly 2 or 4</span>
+    <span class="s2">"user"</span><span class="o">:</span> <span class="s2">"erezmazor"</span><span class="p">,</span> <span class="c1">// owner   </span>
+    <span class="s2">"timeBack"</span><span class="o">:</span> <span class="mi">12</span><span class="nx">h</span><span class="p">,</span> <span class="c1">// time range back from current time (can be expressed in minutes/hours/days/weeks e.g., 30m/12h/1d/2w)    </span>
+    <span class="s2">"from"</span><span class="o">:</span> <span class="s2">""</span><span class="p">,</span> <span class="c1">// start date for the date range, prefer timeBack as any date you choose will become stale  </span>
+    <span class="s2">"until"</span><span class="o">:</span> <span class="s2">""</span><span class="p">,</span> <span class="c1">// end date for the date range, prefer timeBack as any date you choose will become stale   </span>
+    <span class="s2">"width"</span><span class="o">:</span> <span class="mi">700</span><span class="p">,</span> <span class="c1">// width of each chart image, should correlate with # columns defined</span>
+    <span class="s2">"height"</span><span class="o">:</span> <span class="mi">450</span><span class="p">,</span> <span class="c1">// height of each chart image</span>
+    <span class="s2">"legend"</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">// show the legend in chart</span>
+    <span class="s2">"refresh"</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">// auto refresh</span>
+    <span class="s2">"refreshIntervalSeconds"</span><span class="o">:</span> <span class="mi">90</span><span class="p">,</span> <span class="c1">// auto refresh interval in seconds</span>
+    <span class="s2">"averageSeries"</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">// for targets that aggregate a lot of metrics prefer setting this to true as it will average many lines into one</span>
+    <span class="s2">"defaultLineWidth"</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span> <span class="c1">// line width for chart lines</span>
+    <span class="s2">"tz"</span><span class="o">:</span> <span class="s2">"US/Eastern"</span><span class="p">,</span> <span class="c1">// timezone for the rendered graph</span>
+    <span class="s2">"data"</span><span class="o">:</span> <span class="p">[</span> <span class="c1">// charts list</span>
+        <span class="p">{</span>
+            <span class="s2">"title"</span><span class="o">:</span> <span class="s2">"Slow Queries"</span><span class="p">,</span> <span class="c1">// a title for the chart image</span>
+            <span class="s2">"target"</span><span class="o">:</span> <span class="s2">"groupByNode(machines.${dc}dc1.mysql*.Slow_queries,2,\"nonNegativeDerivative\")"</span><span class="p">,</span> <span class="c1">// the graphite target/function which defines the chart content</span>
+            <span class="s2">"params"</span><span class="o">:</span> <span class="s2">"areaMode=stacked&amp;lineMode=staircase&amp;colorList=blue,red,green"</span> <span class="c1">// specify additional parameters for this target</span>
+        <span class="p">},</span> <span class="p">{</span>
+            <span class="s2">"title"</span><span class="o">:</span> <span class="s2">"Seconds Behind Master"</span><span class="p">,</span>
+            <span class="s2">"target"</span><span class="o">:</span> <span class="s2">"groupByNode(machines.${dc}dc1.mysql*.Seconds_Behind_Master,2,\"averageSeries\")"</span>
+        <span class="p">},</span> <span class="p">{</span>
+            <span class="s2">"title"</span><span class="o">:</span> <span class="s2">"Queries Per Second"</span><span class="p">,</span>
+            <span class="s2">"target"</span><span class="o">:</span> <span class="p">[</span> <span class="c1">// you can specify mutliple targets for a chart as a JSON array</span>
+                <span class="s2">"derivative(machines.${dc}dc1.mysql*.Qps1)"</span><span class="p">,</span>
+                <span class="s2">"derivative(machines.${dc}dc1.mysql*.Qps2)"</span>
+            <span class="p">],</span>
+            <span class="s2">"description"</span><span class="o">:</span> <span class="s2">"The number of queries per second executed by the server"</span> <span class="c1">// show a description tooltip next to the title</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s2">"parameters"</span><span class="o">:</span> <span class="p">{</span> <span class="c1">// parameters to tokens expressed in targets with ${paramName} format  </span>
+        <span class="s2">"datacetner"</span><span class="o">:</span> <span class="p">{</span> <span class="c1">// label for a select box in the UI</span>
+            <span class="s2">"All"</span><span class="o">:</span> <span class="p">{</span> <span class="c1">// display name for a select box in the UI</span>
+                <span class="s2">"dc"</span><span class="o">:</span> <span class="s2">"*"</span> <span class="c1">// the token name (dc) as specified in the target name and the actual token value (*)            </span>
+            <span class="p">},</span>
+            <span class="s2">"New York"</span><span class="o">:</span> <span class="p">{</span>
+                <span class="s2">"dc"</span><span class="o">:</span> <span class="s2">"ny"</span>
+            <span class="p">},</span>
+            <span class="s2">"LA"</span><span class="o">:</span> <span class="p">{</span>
+                <span class="s2">"dc"</span><span class="o">:</span> <span class="s2">"la"</span>
+            <span class="p">},</span>
+            <span class="s2">"Chicago"</span><span class="o">:</span> <span class="p">{</span>
+                <span class="s2">"dc"</span><span class="o">:</span> <span class="s2">"chi"</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
 
 <ul>
 <li>Below is a screenshot of a sample dashboard:</li>
@@ -167,31 +168,29 @@
 <li>Clicking on a the <code>graphlot</code> button (<img src="https://raw.github.com/erezmazor/graphitus/master/doc/graphlot.png" alt="Graphlot">) will redirect you to the graph's <code>Graphlot</code> page in your graphite server.</li>
 </ul><p>supplying an <code>eventsUrl</code> attribute in config.json will allow you to draw an events overlay on the rickshaw graph, events must be in the following JSON format:</p>
 
-<pre><code>[
-    {
-        "message": "this is an event message",
-        "start": "15:31:35 28/03/2013",
-        "end": "15:33:47 28/03/2013"
-    },
-    {
-        "message": "this is an event message",
-        "start": "15:31:35 28/03/2013",
-        "end": "15:33:47 28/03/2013"
-    }
-]
-</code></pre>
+<div class="highlight highlight-javascript"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">"message"</span><span class="o">:</span> <span class="s2">"this is an event message"</span><span class="p">,</span>
+        <span class="s2">"start"</span><span class="o">:</span> <span class="s2">"15:31:35 28/03/2013"</span><span class="p">,</span>
+        <span class="s2">"end"</span><span class="o">:</span> <span class="s2">"15:33:47 28/03/2013"</span>
+    <span class="p">},</span>
+<span class="p">{</span>
+        <span class="s2">"message"</span><span class="o">:</span> <span class="s2">"this is an event message"</span><span class="p">,</span>
+        <span class="s2">"start"</span><span class="o">:</span> <span class="s2">"15:31:35 28/03/2013"</span><span class="p">,</span>
+        <span class="s2">"end"</span><span class="o">:</span> <span class="s2">"15:33:47 28/03/2013"</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
 
 <ul>
 <li>Override configuration with URL parameters</li>
 </ul><p>You can specify configuration properties in the dashboard URL to override default settings:</p>
 
-<pre><code>    dashboard.html?id=grp1.dash1&amp;defaultLineWidth=25&amp;timeBack=20m&amp;width=350&amp;height=400&amp;columns=4&amp;legend=false
-</code></pre>
+<p><code>dashboard.html?id=grp1.dash1&amp;defaultLineWidth=25&amp;timeBack=20m&amp;width=350&amp;height=400&amp;columns=4&amp;legend=false</code></p>
 
 <p>You can also specify parameter values in the URL:</p>
 
-<pre><code>    dashboard.html?id=grp1.dash1&amp;datacenter=LA
-</code></pre>
+<p><code>dashboard.html?id=grp1.dash1&amp;datacenter=LA</code></p>
 
 <h2>
 <a name="configuration-attributes" class="anchor" href="#configuration-attributes"><span class="octicon octicon-link"></span></a>Configuration attributes</h2>
@@ -276,40 +275,108 @@
 
 <p>Consider the following configuration for the <code>parameters</code> section of the configuration</p>
 
-<pre><code>    "service": {
-        "type": "dynamic",
-        "query": "services.prod.*",
-        "index": 2,
-        "showAll": false
-    }, 
-     "host": {
-        "type": "dynamic",
-        "query": "services.prod.${service}.*",
-        "index": 3,
-        "regex": "(.*)_",
-        "showAll": true
-    }, 
-     "datacenter": {
-        "type": "dynamic",
-        "query": "services.prod.${service}.${host}_*",
-        "index": 3,
-        "regex": "_(.*)",
-        "showAll": true,
-        "showAllValue": "host-10000*"
-    }
-</code></pre>
+<div class="highlight highlight-javascript"><pre><span class="s2">"service"</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">"type"</span><span class="o">:</span> <span class="s2">"dynamic"</span><span class="p">,</span>
+    <span class="s2">"query"</span><span class="o">:</span> <span class="s2">"services.prod.*"</span><span class="p">,</span>
+    <span class="s2">"index"</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s2">"showAll"</span><span class="o">:</span> <span class="kc">false</span>
+<span class="p">},</span> 
+ <span class="s2">"host"</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">"type"</span><span class="o">:</span> <span class="s2">"dynamic"</span><span class="p">,</span>
+    <span class="s2">"query"</span><span class="o">:</span> <span class="s2">"services.prod.${service}.*"</span><span class="p">,</span>
+    <span class="s2">"index"</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s2">"regex"</span><span class="o">:</span> <span class="s2">"(.*)_"</span><span class="p">,</span>
+    <span class="s2">"showAll"</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">},</span> 
+ <span class="s2">"datacenter"</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">"type"</span><span class="o">:</span> <span class="s2">"dynamic"</span><span class="p">,</span>
+    <span class="s2">"query"</span><span class="o">:</span> <span class="s2">"services.prod.${service}.${host}_*"</span><span class="p">,</span>
+    <span class="s2">"index"</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s2">"regex"</span><span class="o">:</span> <span class="s2">"_(.*)"</span><span class="p">,</span>
+    <span class="s2">"showAll"</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="s2">"showAllValue"</span><span class="o">:</span> <span class="s2">"host-10000*"</span>
+<span class="p">}</span>
+</pre></div>
 
 <p>You can then use a target like <code>services.prod.${service}.${host}_${datacenter}.someAttribute</code>. When graphitus loads it will generate select boxes based on the actual values returned from the graphite metric API based on the provided queries. Note that the queries themselves can be parameterized, creating a series of select boxes depending on each other in-order.</p>
 
 <p>Graphitus will also consider generating the list of values from a partial path, the index and regex determine which portion and substring (regex) of the resulting path will be used to generate the values for selection. The <code>showAll</code> property is used to determine if graphitus will prepend a default All (translated to <code>*</code> in the graphite query) option to the selection. The <code>showAllValue</code> parameter can be added to override the default <code>*</code> selection for complex name filtering schemes (you can have token in this value to express dependencies on other parameters).</p>
 
 <ul>
-<li>Timezone support</li>
-</ul><p>Graphitus supports timezones via configuration <code>config.json</code> has a <code>timezones</code> attributes which accepts an array. These are timezones supported by the <a href="https://graphite.readthedocs.org/en/latest/render_api.html#tz">Graphite URL API Timezone parameter</a>. Timezones are supported using the <a href="http://momentjs.com/timezone/">moment-timezone</a> library. In order to correctly define timezones use the <a href="http://momentjs.com/timezone/data/">moment-timezone data builder</a> to customize your own <code>js/moment-timezone-data.js</code> file. Note that moment zone names are different from graphite names, once you generate the <code>js/moment-timezone-data.js</code> file edit it and change timezone names to correspond to the supported graphite names.</p>
+<li>Naming and grouping techniques</li>
+</ul><p>Graphitus path tokenization works well when you structure youd graphite metrics according to a well defined scheme. Consider the following path for graphite metrics: <code>services.prod.myService.dc1.host1.myMetric.value</code> which can be tokenized as <code>services.${environment}.${service}.${datacenter}.${host}.${metric}.value</code></p>
+
+<p>This well-structured hierarchy provides powerful grouping capabilities, for example using the above path structure you can create a generic grouping scheme where you can group values by different aspects. This is achieved using the <code>groupByNode</code> or <code>aliasByNode</code> graphite functions. Here is the graphitus target definition:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="s2">"data"</span><span class="o">:</span> <span class="p">[{</span>
+    <span class="s2">"target"</span><span class="o">:</span> <span class="s2">"groupByNode(services.${environment}.${service}.${datacenter}.${host}.${metric}.value,${group},\"averageSeries\")"</span><span class="p">,</span>
+    <span class="s2">"title"</span><span class="o">:</span> <span class="s2">"Metric A Value"</span>
+<span class="p">}]</span>
+</pre></div>
+
+<p>And the corresponding <code>parameters</code> section:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="s2">"parameters"</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">"environment"</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">"type"</span><span class="o">:</span> <span class="s2">"dynamic"</span><span class="p">,</span>
+        <span class="s2">"query"</span><span class="o">:</span> <span class="s2">"services.*"</span><span class="p">,</span>
+        <span class="s2">"index"</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">"showAll"</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">},</span>
+    <span class="s2">"service"</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">"type"</span><span class="o">:</span> <span class="s2">"dynamic"</span><span class="p">,</span>
+        <span class="s2">"query"</span><span class="o">:</span> <span class="s2">"services.${environment}.*"</span><span class="p">,</span>
+        <span class="s2">"index"</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">"showAll"</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">},</span>
+    <span class="s2">"datacenter"</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">"type"</span><span class="o">:</span> <span class="s2">"dynamic"</span><span class="p">,</span>
+        <span class="s2">"query"</span><span class="o">:</span> <span class="s2">"services.${environment}.${service}.*"</span><span class="p">,</span>
+        <span class="s2">"index"</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="s2">"showAll"</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">},</span>
+    <span class="s2">"host"</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">"type"</span><span class="o">:</span> <span class="s2">"dynamic"</span><span class="p">,</span>
+        <span class="s2">"query"</span><span class="o">:</span> <span class="s2">"services.${environment}.${service}.${datacenter}.*"</span><span class="p">,</span>
+        <span class="s2">"index"</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="s2">"showAll"</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">},</span>
+    <span class="s2">"metric"</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">"type"</span><span class="o">:</span> <span class="s2">"dynamic"</span><span class="p">,</span>
+        <span class="s2">"query"</span><span class="o">:</span> <span class="s2">"services.${environment}.${service}.${datacenter}.${host}.*"</span><span class="p">,</span>
+        <span class="s2">"index"</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="s2">"showAll"</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">},</span>
+    <span class="s2">"group"</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">"environment"</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">"group"</span><span class="o">:</span> <span class="mi">1</span>
+        <span class="p">},</span>
+        <span class="s2">"service"</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">"group"</span><span class="o">:</span> <span class="mi">2</span>
+        <span class="p">},</span>
+        <span class="s2">"datacenter"</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">"group"</span><span class="o">:</span> <span class="mi">3</span>
+        <span class="p">},</span>
+        <span class="s2">"host"</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">"group"</span><span class="o">:</span> <span class="mi">4</span>
+        <span class="p">},</span>
+        <span class="s2">"metric"</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">"group"</span><span class="o">:</span> <span class="mi">5</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
 
 <ul>
-<li><p>More info and examples</p></li>
-<li><p><a href="http://techo-ecco.com/blog/monitoring-apache-hadoop-cassandra-and-zookeeper-using-graphite-and-jmxtrans">Blog post</a></p></li>
+<li>Timezone support</li>
+</ul><p>Graphitus supports timezones via configuration <code>config.json</code> has a <code>timezones</code> attribute which accepts an array. These are timezones supported by the <a href="https://graphite.readthedocs.org/en/latest/render_api.html#tz">Graphite URL API Timezone parameter</a>. Timezones are supported using the <a href="http://momentjs.com/timezone/">moment-timezone</a> library. In order to correctly define timezones use the <a href="http://momentjs.com/timezone/data/">moment-timezone data builder</a> to customize your own <code>js/moment-timezone-data.js</code> file. Note that moment zone names are different from graphite names, once you generate the <code>js/moment-timezone-data.js</code> file edit it and change timezone names to correspond to the supported graphite names.</p>
+
+<ul>
+<li>
+<p>More info and examples</p>
+
+<ul>
+<li><a href="http://techo-ecco.com/blog/monitoring-apache-hadoop-cassandra-and-zookeeper-using-graphite-and-jmxtrans">Blog post</a></li>
 <li><a href="https://gist.github.com/erezmazor/5019989#file-cassandra-servers">Cassandra Servers Dashboard</a></li>
 <li><a href="https://gist.github.com/erezmazor/5019989#file-cassandra-servers-internals">Cassandra Server Internals Dashboard</a></li>
 <li><a href="https://gist.github.com/erezmazor/5019989#file-cassandra-column-families">Cassandra Per-Column Family Dashboard</a></li>
@@ -318,6 +385,8 @@
 <li><a href="https://gist.github.com/erezmazor/5020008#file-hadoop-tasktracker">Hadoop TaskTracker Dashboard</a></li>
 <li><a href="https://gist.github.com/erezmazor/5020008#file-hadoop-datanode">Hadoop DataNode Dashboard</a></li>
 <li><a href="https://gist.github.com/erezmazor/5020016#file-zookeeper-servers">Zookeeper Dashbaord</a></li>
+</ul>
+</li>
 </ul>
       </section>
 
