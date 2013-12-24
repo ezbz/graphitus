@@ -1,0 +1,338 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Graphitus by erezmazor</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/erezmazor/graphitus">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/erezmazor/graphitus/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/erezmazor/graphitus/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Graphitus</h1>
+          <p>A simple graphite based dashboard system</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/erezmazor">erezmazor</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a name="introduction" class="anchor" href="#introduction"><span class="octicon octicon-link"></span></a>Introduction</h1>
+
+<p>A simple, client-side, JSON-based <a href="http://graphite.wikidot.com/">Graphite</a> logical-dashboard UI built with <a href="http://twitter.github.com/bootstrap/">bootstrap</a> and <a href="http://underscorejs.org/">underscore.js</a></p>
+
+<h1>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h1>
+
+<p>Graphitus is pure client side, all you have to do to run it is put it under a web-server that can serve HTTP requests.</p>
+
+<h1>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h1>
+
+<p>Graphitus dashboards are defined using JSON notation. These configuration snippets can be stored in a document database like <a href="http://couchdb.apache.org/">couchdb</a> or <a href="http://www.mongodb.org/">mongo</a> and can also be files on the server.</p>
+
+<h2>
+<a name="graphitus-configuration" class="anchor" href="#graphitus-configuration"><span class="octicon octicon-link"></span></a>Graphitus Configuration</h2>
+
+<p>Below is an example of global configuration (a file named <code>config.json</code>) using static local JSON files (the dashboards ids are the file names with a <code>.json</code> extension):</p>
+
+<pre><code>    {
+        "graphiteUrl": "http://graphite.mysite.com",
+        "dashboardListUrl": "dashboard-index.json",
+        "dashboardUrlTemplate": "${dashboardId}.json",
+        "eventsUrl": "events.json",
+        "eventsDateFormat": "HH:mm:ss DD/MM/YYYY",
+        "eventsTimezone": "US/Eastern",
+        "timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
+    }
+</code></pre>
+
+<p>Below is an example of global configuration (a file named <code>config.json</code>) using couch db:</p>
+
+<pre><code>    {
+        "graphiteUrl": "http://graphite.mysite.com",
+        "dashboardListUrl": "http://couch.mysite.com:5984/graphitus-dashboards/_all_docs", &lt;-- must return a JSON with a "rows" element containing an array of rows with dashboard id ("id" attribute)
+        "dashboardUrlTemplate": "http://couch.mysite.com:5984/graphitus-dashboards/${dashboardId}",
+        "eventsUrl": "events.json",
+        "eventsDateFormat": "HH:mm:ss DD/MM/YYYY",
+        "eventsTimezone": "US/Eastern",
+        "timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
+    }
+</code></pre>
+
+<h2>
+<a name="dashboard-configuration" class="anchor" href="#dashboard-configuration"><span class="octicon octicon-link"></span></a>Dashboard Configuration</h2>
+
+<p>Below is an example dashboard configuration:</p>
+
+<pre><code>    {
+        "title": "MySQL Production Cluster", &lt;-- give a title to page   
+        "columns": 2, &lt;-- the number of charts in a row side by side, mostly 2 or 4
+        "user": "erezmazor", &lt;-- owner   
+        "timeBack": 12h, &lt;-- time range back from current time (can be expressed in minutes/hours/days/weeks e.g., 30m/12h/1d/2w)    
+        "from": "", &lt;-- start date for the date range, prefer timeBack as any date you choose will become stale  
+        "until": "", &lt;-- end date for the date range, prefer timeBack as any date you choose will become stale   
+        "width": 700, &lt;-- width of each chart image, should correlate with # columns defined
+        "height": 450,&lt;-- height of each chart image
+        "legend": true, &lt;-- show the legend in chart
+        "refresh": true, &lt;-- auto refresh
+        "refreshIntervalSeconds": 90, &lt;-- auto refresh interval in seconds
+        "averageSeries": false, &lt;-- for targets that aggregate a lot of metrics prefer setting this to true as it will average many lines into one
+        "defaultLineWidth": 2, &lt;-- line width for chart lines
+        "tz" : "US/Eastern", &lt;-- timezone for the rendered graph
+        "data": [ &lt;-- charts list
+            {
+                "title": "Slow Queries", &lt;-- a title for the chart image
+                "target": "groupByNode(machines.${dc}dc1.mysql*.Slow_queries,2,\"nonNegativeDerivative\")", &lt;-- the graphite target/function which defines the chart content
+                "params": "areaMode=stacked&amp;lineMode=staircase&amp;colorList=blue,red,green" &lt;-- specify additional parameters for this target
+            },{
+                "title": "Seconds Behind Master",
+                "target": "groupByNode(machines.${dc}dc1.mysql*.Seconds_Behind_Master,2,\"averageSeries\")"
+            },{
+                "title": "Queries Per Second",
+                "target": [ &lt;-- you can specify mutliple targets for a chart as a JSON array
+                    "derivative(machines.${dc}dc1.mysql*.Qps1)",
+                    "derivative(machines.${dc}dc1.mysql*.Qps2)"
+                ],
+                "description" : "The number of queries per second executed by the server" &lt;-- show a description tooltip next to the title
+            }
+            ],
+            "parameters": { &lt;-- parameters to tokens expressed in targets with ${paramName} format  
+                "datacetner" : { &lt;-- label for a select box in the UI
+                "All": {     &lt;-- display name for a select box in the UI
+                    "dc": "*" &lt;-- the token name (dc) as specified in the target name and the actual token value (*)            
+                },
+                "New York": {        
+                    "dc": "ny" 
+                },
+                "LA": {
+                    "dc": "la"
+                },
+                "Chicago": {
+                    "dc": "chi"
+                }
+            }
+        }
+</code></pre>
+
+<ul>
+<li>Below is a screenshot of a sample dashboard:</li>
+</ul><p><img src="https://raw.github.com/erezmazor/graphitus/master/doc/screenshot.png" alt="Screenshot"></p>
+
+<ul>
+<li>Clicking on a graph image will generate a nice <a href="http://code.shutterstock.com/rickshaw/">Rickshaw</a>-based graph with hover-values and a toggle-legend</li>
+</ul><p><img src="https://raw.github.com/erezmazor/graphitus/master/doc/extended.png" alt="Extended"></p>
+
+<ul>
+<li>Clicking on a the <code>histogram</code> button (<img src="https://raw.github.com/erezmazor/graphitus/master/doc/histogram.png" alt="Histogram">) will generate a <a href="https://github.com/mbostock/d3/wiki/Histogram-Layout">D3 Histogram</a>
+</li>
+</ul><p><img src="https://raw.github.com/erezmazor/graphitus/master/doc/histogram-lightbox.png" alt="Histogram"></p>
+
+<ul>
+<li>Clicking on a the <code>source</code> button (<img src="https://raw.github.com/erezmazor/graphitus/master/doc/source.png" alt="Source">) will show the target source and allow you to edit it in place</li>
+</ul><p><img src="https://raw.github.com/erezmazor/graphitus/master/doc/source-editor.png" alt="Source Editor"></p>
+
+<ul>
+<li>Clicking on a the <code>functions</code> button (<img src="https://raw.github.com/erezmazor/graphitus/master/doc/functions.png" alt="Functions">) will show some options for manipulating the graph using the <a href="http://graphite.readthedocs.org/en/1.0/url-api.html">Graphite URL API</a>
+</li>
+</ul><p><img src="https://raw.github.com/erezmazor/graphitus/master/doc/functions-drop.png" alt="Function Options"></p>
+
+<ul>
+<li>Clicking on a the <code>images</code> button (<img src="https://raw.github.com/erezmazor/graphitus/master/doc/images.png" alt="Images">) will show a drop down with permalinks to the image in small, medium and large sizes (useful for sending links or copying images into email)</li>
+</ul><p><img src="https://raw.github.com/erezmazor/graphitus/master/doc/images-drop.png" alt="Images"></p>
+
+<ul>
+<li>Clicking on a the <code>graphlot</code> button (<img src="https://raw.github.com/erezmazor/graphitus/master/doc/graphlot.png" alt="Graphlot">) will redirect you to the graph's <code>Graphlot</code> page in your graphite server.</li>
+</ul><p>supplying an <code>eventsUrl</code> attribute in config.json will allow you to draw an events overlay on the rickshaw graph, events must be in the following JSON format:</p>
+
+<pre><code>[
+    {
+        "message": "this is an event message",
+        "start": "15:31:35 28/03/2013",
+        "end": "15:33:47 28/03/2013"
+    },
+    {
+        "message": "this is an event message",
+        "start": "15:31:35 28/03/2013",
+        "end": "15:33:47 28/03/2013"
+    }
+]
+</code></pre>
+
+<ul>
+<li>Override configuration with URL parameters</li>
+</ul><p>You can specify configuration properties in the dashboard URL to override default settings:</p>
+
+<pre><code>    dashboard.html?id=grp1.dash1&amp;defaultLineWidth=25&amp;timeBack=20m&amp;width=350&amp;height=400&amp;columns=4&amp;legend=false
+</code></pre>
+
+<p>You can also specify parameter values in the URL:</p>
+
+<pre><code>    dashboard.html?id=grp1.dash1&amp;datacenter=LA
+</code></pre>
+
+<h2>
+<a name="configuration-attributes" class="anchor" href="#configuration-attributes"><span class="octicon octicon-link"></span></a>Configuration attributes</h2>
+
+<table>
+<thead><tr>
+<th>Parameter</th>
+<th>Required?</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>title</td>
+<td>Yes</td>
+<td>The title of the dashboard chart</td>
+</tr>
+<tr>
+<td>columns</td>
+<td>Yes</td>
+<td>The number of images in a row</td>
+</tr>
+<tr>
+<td>user</td>
+<td>No</td>
+<td>Owner</td>
+</tr>
+<tr>
+<td>timeBack</td>
+<td>No</td>
+<td>Specify timeframe back from current time to display (specify this or <code>from</code> and <code>until</code>), shorthand format e.g., <code>15m</code>, <code>24h</code>, <code>7d</code>, <code>1w</code>
+</td>
+</tr>
+<tr>
+<td>from</td>
+<td>No</td>
+<td>From date/time in <code>yyyy-MM-dd HH:MM</code> (specify this and <code>until</code> or <code>timeBack</code>)</td>
+</tr>
+<tr>
+<td>until</td>
+<td>No</td>
+<td>To date/time in <code>yyyy-MM-dd HH:MM</code> (specify this and <code>from</code> or <code>timeBack</code>)</td>
+</tr>
+<tr>
+<td>width</td>
+<td>Yes</td>
+<td>Width of the chart from graphite (see <code>columns</code>)</td>
+</tr>
+<tr>
+<td>height</td>
+<td>Yes</td>
+<td>Height of the chart from graphite</td>
+</tr>
+<tr>
+<td>legend</td>
+<td>No</td>
+<td>Show/Hide the legend in the chart (omitting leaves it up to graphite)</td>
+</tr>
+<tr>
+<td>refresh</td>
+<td>No</td>
+<td>Auto-refresh the charts (see <code>refreshIntervalSeconds</code>)</td>
+</tr>
+<tr>
+<td>refreshIntervalSeconds</td>
+<td>No</td>
+<td>When <code>refresh</code> is <code>true</code> this will determine the refresh interval</td>
+</tr>
+<tr>
+<td>defaultLineWidth</td>
+<td>No</td>
+<td>The line width for the generated chart</td>
+</tr>
+<tr>
+<td>tz</td>
+<td>No</td>
+<td>The timezone for the rendered graphite images (see <a href="http://en.wikipedia.org/wiki/List_of_tz_database_time_zones">Timezone list</a>). Note: timezone resolution is in the following order url, json configuraiton file, cookie, default.</td>
+</tr>
+</tbody>
+</table><ul>
+<li>Dynamic Parameters</li>
+</ul><p>Dynamic parameters allow you to define metric selection and filtering based on dynamic graphite metric API queries. Structuring your graphite metrics tree properly can be useful to create such dashboaards.</p>
+
+<p>Consider the following configuration for the <code>parameters</code> section of the configuration</p>
+
+<pre><code>    "service": {
+        "type": "dynamic",
+        "query": "services.prod.*",
+        "index": 2,
+        "showAll": false
+    }, 
+     "host": {
+        "type": "dynamic",
+        "query": "services.prod.${service}.*",
+        "index": 3,
+        "regex": "(.*)_",
+        "showAll": true
+    }, 
+     "datacenter": {
+        "type": "dynamic",
+        "query": "services.prod.${service}.${host}_*",
+        "index": 3,
+        "regex": "_(.*)",
+        "showAll": true,
+        "showAllValue": "host-10000*"
+    }
+</code></pre>
+
+<p>You can then use a target like <code>services.prod.${service}.${host}_${datacenter}.someAttribute</code>. When graphitus loads it will generate select boxes based on the actual values returned from the graphite metric API based on the provided queries. Note that the queries themselves can be parameterized, creating a series of select boxes depending on each other in-order.</p>
+
+<p>Graphitus will also consider generating the list of values from a partial path, the index and regex determine which portion and substring (regex) of the resulting path will be used to generate the values for selection. The <code>showAll</code> property is used to determine if graphitus will prepend a default All (translated to <code>*</code> in the graphite query) option to the selection. The <code>showAllValue</code> parameter can be added to override the default <code>*</code> selection for complex name filtering schemes (you can have token in this value to express dependencies on other parameters).</p>
+
+<ul>
+<li>Timezone support</li>
+</ul><p>Graphitus supports timezones via configuration <code>config.json</code> has a <code>timezones</code> attributes which accepts an array. These are timezones supported by the <a href="https://graphite.readthedocs.org/en/latest/render_api.html#tz">Graphite URL API Timezone parameter</a>. Timezones are supported using the <a href="http://momentjs.com/timezone/">moment-timezone</a> library. In order to correctly define timezones use the <a href="http://momentjs.com/timezone/data/">moment-timezone data builder</a> to customize your own <code>js/moment-timezone-data.js</code> file. Note that moment zone names are different from graphite names, once you generate the <code>js/moment-timezone-data.js</code> file edit it and change timezone names to correspond to the supported graphite names.</p>
+
+<ul>
+<li><p>More info and examples</p></li>
+<li><p><a href="http://techo-ecco.com/blog/monitoring-apache-hadoop-cassandra-and-zookeeper-using-graphite-and-jmxtrans">Blog post</a></p></li>
+<li><a href="https://gist.github.com/erezmazor/5019989#file-cassandra-servers">Cassandra Servers Dashboard</a></li>
+<li><a href="https://gist.github.com/erezmazor/5019989#file-cassandra-servers-internals">Cassandra Server Internals Dashboard</a></li>
+<li><a href="https://gist.github.com/erezmazor/5019989#file-cassandra-column-families">Cassandra Per-Column Family Dashboard</a></li>
+<li><a href="https://gist.github.com/erezmazor/5020008#file-hadoop-namenode">Hadoop NameNode Dashboard</a></li>
+<li><a href="https://gist.github.com/erezmazor/5020008#file-hadoop-jobtracker">Hadoop Jobtracker Dashboard</a></li>
+<li><a href="https://gist.github.com/erezmazor/5020008#file-hadoop-tasktracker">Hadoop TaskTracker Dashboard</a></li>
+<li><a href="https://gist.github.com/erezmazor/5020008#file-hadoop-datanode">Hadoop DataNode Dashboard</a></li>
+<li><a href="https://gist.github.com/erezmazor/5020016#file-zookeeper-servers">Zookeeper Dashbaord</a></li>
+</ul>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-36660869-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
