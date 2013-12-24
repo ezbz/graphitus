@@ -1,3 +1,5 @@
+[Graphitus Homepage](http://ezbz.github.io/graphitus)
+
 Introduction
 ============
 A simple, client-side, JSON-based [Graphite](http://graphite.wikidot.com/) logical-dashboard UI built with [bootstrap](http://twitter.github.com/bootstrap/) and [underscore.js](http://underscorejs.org/)
@@ -171,7 +173,8 @@ refreshIntervalSeconds  | No              | When ```refresh``` is ```true``` thi
 defaultLineWidth        | No              | The line width for the generated chart
 tz                      | No              | The timezone for the rendered graphite images (see [Timezone list](http://en.wikipedia.org/wiki/List_of_tz_database_time_zones)). Note: timezone resolution is in the following order url, json configuraiton file, cookie, default.
 
-* Dynamic Parameters
+Dynamic Parameters
+------------------
 
 Dynamic parameters allow you to define metric selection and filtering based on dynamic graphite metric API queries. Structuring your graphite metrics tree properly can be useful to create such dashboaards.
 
@@ -205,7 +208,8 @@ You can then use a target like ```services.prod.${service}.${host}_${datacenter}
 
 Graphitus will also consider generating the list of values from a partial path, the index and regex determine which portion and substring (regex) of the resulting path will be used to generate the values for selection. The ```showAll``` property is used to determine if graphitus will prepend a default All (translated to ```*``` in the graphite query) option to the selection. The ```showAllValue``` parameter can be added to override the default ```*``` selection for complex name filtering schemes (you can have token in this value to express dependencies on other parameters).
 
-* Naming and grouping techniques
+Naming and grouping techniques
+------------------------------
 
 Graphitus path tokenization works well when you structure youd graphite metrics according to a well defined scheme. Consider the following path for graphite metrics: ```services.prod.myService.dc1.host1.myMetric.value``` which can be tokenized as ```services.${environment}.${service}.${datacenter}.${host}.${metric}.value```
 
@@ -272,19 +276,21 @@ And the corresponding ```parameters``` section:
 }
 ```
 
-* Timezone support
+Timezone support
+------------------
 
 Graphitus supports timezones via configuration ```config.json``` has a ```timezones``` attribute which accepts an array. These are timezones supported by the [Graphite URL API Timezone parameter](https://graphite.readthedocs.org/en/latest/render_api.html#tz). Timezones are supported using the [moment-timezone](http://momentjs.com/timezone/) library. In order to correctly define timezones use the [moment-timezone data builder](http://momentjs.com/timezone/data/) to customize your own ```js/moment-timezone-data.js``` file. Note that moment zone names are different from graphite names, once you generate the ```js/moment-timezone-data.js``` file edit it and change timezone names to correspond to the supported graphite names.
 
-* More info and examples
+Additional Information
+----------------------
 
   * [Blog post](http://techo-ecco.com/blog/monitoring-apache-hadoop-cassandra-and-zookeeper-using-graphite-and-jmxtrans)
-  * [Cassandra Servers Dashboard](https://gist.github.com/erezmazor/5019989#file-cassandra-servers)
-  * [Cassandra Server Internals Dashboard](https://gist.github.com/erezmazor/5019989#file-cassandra-servers-internals)
-  * [Cassandra Per-Column Family Dashboard](https://gist.github.com/erezmazor/5019989#file-cassandra-column-families)
-  * [Hadoop NameNode Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-namenode)
-  * [Hadoop Jobtracker Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-jobtracker)
-  * [Hadoop TaskTracker Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-tasktracker)
-  * [Hadoop DataNode Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-datanode)
-  * [Zookeeper Dashbaord](https://gist.github.com/erezmazor/5020016#file-zookeeper-servers)
+  * [Cassandra Servers Dashboard](https://gist.github.com/ezbz/5019989#file-cassandra-servers)
+  * [Cassandra Server Internals Dashboard](https://gist.github.com/ezbz/5019989#file-cassandra-servers-internals)
+  * [Cassandra Per-Column Family Dashboard](https://gist.github.com/ezbz/5019989#file-cassandra-column-families)
+  * [Hadoop NameNode Dashboard](https://gist.github.com/ezbz/5020008#file-hadoop-namenode)
+  * [Hadoop Jobtracker Dashboard](https://gist.github.com/ezbz/5020008#file-hadoop-jobtracker)
+  * [Hadoop TaskTracker Dashboard](https://gist.github.com/ezbz/5020008#file-hadoop-tasktracker)
+  * [Hadoop DataNode Dashboard](https://gist.github.com/ezbz/5020008#file-hadoop-datanode)
+  * [Zookeeper Dashbaord](https://gist.github.com/ezbz/5020016#file-zookeeper-servers)
 
