@@ -1,3 +1,5 @@
+[Graphitus Homepage](http://ezbz.github.io/graphitus)
+
 Introduction
 ============
 A simple, client-side, JSON-based [Graphite](http://graphite.wikidot.com/) logical-dashboard UI built with [bootstrap](http://twitter.github.com/bootstrap/) and [underscore.js](http://underscorejs.org/)
