@@ -175,7 +175,10 @@ function buildUrl(idx, graph, chartTitle, width, height, graphiteOperation) {
 			targetUri = targetUri + "&target=drawAsInfinite(" + config.events[i] + ")";
 		}
 	}
-	var userUrlParams = getUserUrlParams(idx);
+	var urlParams = getUserUrlParams(idx);
+	if(config.defaultParameters){
+		urlParams = urlParams + "&" + config.defaultParameters;
+	}
 
 	return getGraphiteServer() + "/" + graphiteOperation + "/?" + targetUri + range + legend + params + userUrlParams + size;
 }
