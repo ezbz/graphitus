@@ -196,6 +196,69 @@ You can then use a target like ```services.prod.${service}.${host}_${datacenter}
 
 Graphitus will also consider generating the list of values from a partial path, the index and regex determine which portion and substring (regex) of the resulting path will be used to generate the values for selection. The ```showAll``` property is used to determine if graphitus will prepend a default All (translated to ```*``` in the graphite query) option to the selection. The ```showAllValue``` parameter can be added to override the default ```*``` selection for complex name filtering schemes (you can have token in this value to express dependencies on other parameters).
 
+* Naming and grouping techniques
+
+Graphitus path tokenization works well when you structure youd graphite metrics according to a well defined scheme. Consider the following path for graphite metrics: ```services.prod.myService.dc1.host1.myMetric.value``` which can be tokenized as ```services.${environment}.${service}.${datacenter}.${host}.${metric}.value```
+
+This well-structured hierarchy provides powerful grouping capabilities, for example using the above path structure you can create a generic grouping scheme where you can group values by different aspects. This is achieved using the ```groupByNode``` or ```aliasByNode``` graphite functions. Here is the graphitus target definition:
+
+
+        "data": [{
+                "target": "groupByNode(services.${environment}.${service}.${datacenter}.${host}.${metric}.value,${group},\"averageSeries\")",
+                "title": "Metric A Value"
+        }]
+
+And the corresponding ```parameters``` section:
+
+	"parameters": {
+	    "environment": {
+	        "type": "dynamic",
+	        "query": "services.*",
+	        "index": 1,
+	        "showAll": true
+	    },
+	    "service": {
+	        "type": "dynamic",
+	        "query": "services.${environment}.*",
+	        "index": 2,
+	        "showAll": true
+	    },
+	    "datacenter": {
+	        "type": "dynamic",
+	        "query": "services.${environment}.${service}.*",
+	        "index": 3,
+	        "showAll": true
+	    },
+	    "host": {
+	        "type": "dynamic",
+	        "query": "services.${environment}.${service}.${datacenter}.*",
+	        "index": 4,
+	        "showAll": true
+	    },
+	    "metric": {
+	        "type": "dynamic",
+	        "query": "services.${environment}.${service}.${datacenter}.${host}.*",
+	        "index": 5,
+	        "showAll": true
+	    },
+	    "group": {
+	        "environment": {
+	            "group": 1
+	        },
+	        "service": {
+	            "group": 2
+	        },
+	        "datacenter": {
+	            "group": 3
+	        },
+	        "host": {
+	            "group": 4
+	        },
+	        "metric": {
+	            "group": 5
+	        }
+	    }
+	}
 
 * Timezone support
 
