@@ -16,82 +16,87 @@ Graphitus Configuration
 
 Below is an example of global configuration (a file named ```config.json```) using static local JSON files (the dashboards ids are the file names with a ```.json``` extension):
 
-    	{
-    		"graphiteUrl": "http://graphite.mysite.com",
-    		"dashboardListUrl": "dashboard-index.json",
-    		"dashboardUrlTemplate": "${dashboardId}.json",
-    		"eventsUrl": "events.json",
-    		"eventsDateFormat": "HH:mm:ss DD/MM/YYYY",
-    		"eventsTimezone": "US/Eastern",
-    		"timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
-    	}
+```javascript
+{
+    "graphiteUrl": "http://graphite.mysite.com",
+    "dashboardListUrl": "dashboard-index.json",
+    "dashboardUrlTemplate": "${dashboardId}.json",
+    "eventsUrl": "events.json",
+    "eventsDateFormat": "HH:mm:ss DD/MM/YYYY",
+    "eventsTimezone": "US/Eastern",
+    "timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
+}
+```
 
 Below is an example of global configuration (a file named ```config.json```) using couch db:
 
-    	{
-    		"graphiteUrl": "http://graphite.mysite.com",
-    		"dashboardListUrl": "http://couch.mysite.com:5984/graphitus-dashboards/_all_docs", <-- must return a JSON with a "rows" element containing an array of rows with dashboard id ("id" attribute)
-    		"dashboardUrlTemplate": "http://couch.mysite.com:5984/graphitus-dashboards/${dashboardId}",
-    		"eventsUrl": "events.json",
-    		"eventsDateFormat": "HH:mm:ss DD/MM/YYYY",
-    		"eventsTimezone": "US/Eastern",
-    		"timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
-    	}
-
+```javascript
+{
+    "graphiteUrl": "http://graphite.mysite.com",
+    "dashboardListUrl": "http://couch.mysite.com:5984/graphitus-dashboards/_all_docs", // must return a JSON with a "rows" element containing an array of rows with dashboard id ("id" attribute)
+    "dashboardUrlTemplate": "http://couch.mysite.com:5984/graphitus-dashboards/${dashboardId}",
+    "eventsUrl": "events.json",
+    "eventsDateFormat": "HH:mm:ss DD/MM/YYYY",
+    "eventsTimezone": "US/Eastern",
+    "timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
+}
+```
 
 Dashboard Configuration
 -----------------------
 
 Below is an example dashboard configuration:
-
-    	{
-    		"title": "MySQL Production Cluster", <-- give a title to page	
-    		"columns": 2, <-- the number of charts in a row side by side, mostly 2 or 4
-    		"user": "erezmazor", <-- owner	 
-    		"timeBack": 12h, <-- time range back from current time (can be expressed in minutes/hours/days/weeks e.g., 30m/12h/1d/2w)	 
-    		"from": "", <-- start date for the date range, prefer timeBack as any date you choose will become stale	 
-    		"until": "", <-- end date for the date range, prefer timeBack as any date you choose will become stale	 
-    		"width": 700, <-- width of each chart image, should correlate with # columns defined
-    		"height": 450,<-- height of each chart image
-    		"legend": true, <-- show the legend in chart
-    		"refresh": true, <-- auto refresh
-    		"refreshIntervalSeconds": 90, <-- auto refresh interval in seconds
-    		"averageSeries": false, <-- for targets that aggregate a lot of metrics prefer setting this to true as it will average many lines into one
-    		"defaultLineWidth": 2, <-- line width for chart lines
-            "tz" : "US/Eastern", <-- timezone for the rendered graph
-    		"data": [ <-- charts list
-    			{
-    				"title": "Slow Queries", <-- a title for the chart image
-    				"target": "groupByNode(machines.${dc}dc1.mysql*.Slow_queries,2,\"nonNegativeDerivative\")", <-- the graphite target/function which defines the chart content
-                    "params": "areaMode=stacked&lineMode=staircase&colorList=blue,red,green" <-- specify additional parameters for this target
-    			},{
-    				"title": "Seconds Behind Master",
-    				"target": "groupByNode(machines.${dc}dc1.mysql*.Seconds_Behind_Master,2,\"averageSeries\")"
-    			},{
-    				"title": "Queries Per Second",
-    				"target": [ <-- you can specify mutliple targets for a chart as a JSON array
-                        "derivative(machines.${dc}dc1.mysql*.Qps1)",
-                        "derivative(machines.${dc}dc1.mysql*.Qps2)"
-                    ],
-                    "description" : "The number of queries per second executed by the server" <-- show a description tooltip next to the title
-    			}
-    			],
-    			"parameters": { <-- parameters to tokens expressed in targets with ${paramName} format	
-    				"datacetner" : { <-- label for a select box in the UI
-    				"All": {	 <-- display name for a select box in the UI
-    					"dc": "*" <-- the token name (dc) as specified in the target name and the actual token value (*)			
-    				},
-    				"New York": {		 
-    					"dc": "ny" 
-    				},
-    				"LA": {
-    					"dc": "la"
-    				},
-    				"Chicago": {
-    					"dc": "chi"
-    				}
-    			}
-    		}
+```javascript
+{
+    "title": "MySQL Production Cluster", // give a title to page   
+    "columns": 2, // the number of charts in a row side by side, mostly 2 or 4
+    "user": "erezmazor", // owner   
+    "timeBack": 12h, // time range back from current time (can be expressed in minutes/hours/days/weeks e.g., 30m/12h/1d/2w)    
+    "from": "", // start date for the date range, prefer timeBack as any date you choose will become stale  
+    "until": "", // end date for the date range, prefer timeBack as any date you choose will become stale   
+    "width": 700, // width of each chart image, should correlate with # columns defined
+    "height": 450, // height of each chart image
+    "legend": true, // show the legend in chart
+    "refresh": true, // auto refresh
+    "refreshIntervalSeconds": 90, // auto refresh interval in seconds
+    "averageSeries": false, // for targets that aggregate a lot of metrics prefer setting this to true as it will average many lines into one
+    "defaultLineWidth": 2, // line width for chart lines
+    "tz": "US/Eastern", // timezone for the rendered graph
+    "data": [ // charts list
+        {
+            "title": "Slow Queries", // a title for the chart image
+            "target": "groupByNode(machines.${dc}dc1.mysql*.Slow_queries,2,\"nonNegativeDerivative\")", // the graphite target/function which defines the chart content
+            "params": "areaMode=stacked&lineMode=staircase&colorList=blue,red,green" // specify additional parameters for this target
+        }, {
+            "title": "Seconds Behind Master",
+            "target": "groupByNode(machines.${dc}dc1.mysql*.Seconds_Behind_Master,2,\"averageSeries\")"
+        }, {
+            "title": "Queries Per Second",
+            "target": [ // you can specify mutliple targets for a chart as a JSON array
+                "derivative(machines.${dc}dc1.mysql*.Qps1)",
+                "derivative(machines.${dc}dc1.mysql*.Qps2)"
+            ],
+            "description": "The number of queries per second executed by the server" // show a description tooltip next to the title
+        }
+    ],
+    "parameters": { // parameters to tokens expressed in targets with ${paramName} format  
+        "datacetner": { // label for a select box in the UI
+            "All": { // display name for a select box in the UI
+                "dc": "*" // the token name (dc) as specified in the target name and the actual token value (*)            
+            },
+            "New York": {
+                "dc": "ny"
+            },
+            "LA": {
+                "dc": "la"
+            },
+            "Chicago": {
+                "dc": "chi"
+            }
+        }
+    }
+}
+```
 
 * Below is a screenshot of a sample dashboard:
 
@@ -122,29 +127,31 @@ Below is an example dashboard configuration:
 
 supplying an ```eventsUrl``` attribute in config.json will allow you to draw an events overlay on the rickshaw graph, events must be in the following JSON format:
 
-    [
-		{
-    		"message": "this is an event message",
-			"start": "15:31:35 28/03/2013",
-			"end": "15:33:47 28/03/2013"
-		},
-        {
-    		"message": "this is an event message",
-			"start": "15:31:35 28/03/2013",
-			"end": "15:33:47 28/03/2013"
-		}
-	]
-
+```javascript
+[
+	{
+    	"message": "this is an event message",
+		"start": "15:31:35 28/03/2013",
+		"end": "15:33:47 28/03/2013"
+	},
+{
+    	"message": "this is an event message",
+		"start": "15:31:35 28/03/2013",
+		"end": "15:33:47 28/03/2013"
+	}
+]
+```
 * Override configuration with URL parameters
 
 You can specify configuration properties in the dashboard URL to override default settings:
 
-        dashboard.html?id=grp1.dash1&defaultLineWidth=25&timeBack=20m&width=350&height=400&columns=4&legend=false
+`dashboard.html?id=grp1.dash1&defaultLineWidth=25&timeBack=20m&width=350&height=400&columns=4&legend=false`
         
 You can also specify parameter values in the URL:
 
-        dashboard.html?id=grp1.dash1&datacenter=LA
-        
+`dashboard.html?id=grp1.dash1&datacenter=LA`
+
+
 Configuration attributes
 ------------------------
 
@@ -170,46 +177,114 @@ Dynamic parameters allow you to define metric selection and filtering based on d
 
 Consider the following configuration for the ```parameters``` section of the configuration
 
-        "service": {
-            "type": "dynamic",
-            "query": "services.prod.*",
-            "index": 2,
-            "showAll": false
-        }, 
-         "host": {
-            "type": "dynamic",
-            "query": "services.prod.${service}.*",
-            "index": 3,
-            "regex": "(.*)_",
-            "showAll": true
-        }, 
-         "datacenter": {
-            "type": "dynamic",
-            "query": "services.prod.${service}.${host}_*",
-            "index": 3,
-            "regex": "_(.*)",
-            "showAll": true,
-            "showAllValue": "host-10000*"
-        }
-        
+```javascript
+"service": {
+    "type": "dynamic",
+    "query": "services.prod.*",
+    "index": 2,
+    "showAll": false
+}, 
+ "host": {
+    "type": "dynamic",
+    "query": "services.prod.${service}.*",
+    "index": 3,
+    "regex": "(.*)_",
+    "showAll": true
+}, 
+ "datacenter": {
+    "type": "dynamic",
+    "query": "services.prod.${service}.${host}_*",
+    "index": 3,
+    "regex": "_(.*)",
+    "showAll": true,
+    "showAllValue": "host-10000*"
+}
+```
+
 You can then use a target like ```services.prod.${service}.${host}_${datacenter}.someAttribute```. When graphitus loads it will generate select boxes based on the actual values returned from the graphite metric API based on the provided queries. Note that the queries themselves can be parameterized, creating a series of select boxes depending on each other in-order.
 
 Graphitus will also consider generating the list of values from a partial path, the index and regex determine which portion and substring (regex) of the resulting path will be used to generate the values for selection. The ```showAll``` property is used to determine if graphitus will prepend a default All (translated to ```*``` in the graphite query) option to the selection. The ```showAllValue``` parameter can be added to override the default ```*``` selection for complex name filtering schemes (you can have token in this value to express dependencies on other parameters).
 
+* Naming and grouping techniques
+
+Graphitus path tokenization works well when you structure youd graphite metrics according to a well defined scheme. Consider the following path for graphite metrics: ```services.prod.myService.dc1.host1.myMetric.value``` which can be tokenized as ```services.${environment}.${service}.${datacenter}.${host}.${metric}.value```
+
+This well-structured hierarchy provides powerful grouping capabilities, for example using the above path structure you can create a generic grouping scheme where you can group values by different aspects. This is achieved using the ```groupByNode``` or ```aliasByNode``` graphite functions. Here is the graphitus target definition:
+
+```javascript
+"data": [{
+	"target": "groupByNode(services.${environment}.${service}.${datacenter}.${host}.${metric}.value,${group},\"averageSeries\")",
+	"title": "Metric A Value"
+}]
+```
+
+And the corresponding ```parameters``` section:
+
+```javascript
+"parameters": {
+    "environment": {
+        "type": "dynamic",
+        "query": "services.*",
+        "index": 1,
+        "showAll": true
+    },
+    "service": {
+        "type": "dynamic",
+        "query": "services.${environment}.*",
+        "index": 2,
+        "showAll": true
+    },
+    "datacenter": {
+        "type": "dynamic",
+        "query": "services.${environment}.${service}.*",
+        "index": 3,
+        "showAll": true
+    },
+    "host": {
+        "type": "dynamic",
+        "query": "services.${environment}.${service}.${datacenter}.*",
+        "index": 4,
+        "showAll": true
+    },
+    "metric": {
+        "type": "dynamic",
+        "query": "services.${environment}.${service}.${datacenter}.${host}.*",
+        "index": 5,
+        "showAll": true
+    },
+    "group": {
+        "environment": {
+            "group": 1
+        },
+        "service": {
+            "group": 2
+        },
+        "datacenter": {
+            "group": 3
+        },
+        "host": {
+            "group": 4
+        },
+        "metric": {
+            "group": 5
+        }
+    }
+}
+```
 
 * Timezone support
 
-Graphitus supports timezones via configuration ```config.json``` has a ```timezones``` attributes which accepts an array. These are timezones supported by the [Graphite URL API Timezone parameter](https://graphite.readthedocs.org/en/latest/render_api.html#tz). Timezones are supported using the [moment-timezone](http://momentjs.com/timezone/) library. In order to correctly define timezones use the [moment-timezone data builder](http://momentjs.com/timezone/data/) to customize your own ```js/moment-timezone-data.js``` file. Note that moment zone names are different from graphite names, once you generate the ```js/moment-timezone-data.js``` file edit it and change timezone names to correspond to the supported graphite names.
+Graphitus supports timezones via configuration ```config.json``` has a ```timezones``` attribute which accepts an array. These are timezones supported by the [Graphite URL API Timezone parameter](https://graphite.readthedocs.org/en/latest/render_api.html#tz). Timezones are supported using the [moment-timezone](http://momentjs.com/timezone/) library. In order to correctly define timezones use the [moment-timezone data builder](http://momentjs.com/timezone/data/) to customize your own ```js/moment-timezone-data.js``` file. Note that moment zone names are different from graphite names, once you generate the ```js/moment-timezone-data.js``` file edit it and change timezone names to correspond to the supported graphite names.
 
 * More info and examples
 
-- [Blog post](http://techo-ecco.com/blog/monitoring-apache-hadoop-cassandra-and-zookeeper-using-graphite-and-jmxtrans)
-- [Cassandra Servers Dashboard](https://gist.github.com/erezmazor/5019989#file-cassandra-servers)
-- [Cassandra Server Internals Dashboard](https://gist.github.com/erezmazor/5019989#file-cassandra-servers-internals)
-- [Cassandra Per-Column Family Dashboard](https://gist.github.com/erezmazor/5019989#file-cassandra-column-families)
-- [Hadoop NameNode Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-namenode)
-- [Hadoop Jobtracker Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-jobtracker)
-- [Hadoop TaskTracker Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-tasktracker)
-- [Hadoop DataNode Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-datanode)
-- [Zookeeper Dashbaord](https://gist.github.com/erezmazor/5020016#file-zookeeper-servers)
+  * [Blog post](http://techo-ecco.com/blog/monitoring-apache-hadoop-cassandra-and-zookeeper-using-graphite-and-jmxtrans)
+  * [Cassandra Servers Dashboard](https://gist.github.com/erezmazor/5019989#file-cassandra-servers)
+  * [Cassandra Server Internals Dashboard](https://gist.github.com/erezmazor/5019989#file-cassandra-servers-internals)
+  * [Cassandra Per-Column Family Dashboard](https://gist.github.com/erezmazor/5019989#file-cassandra-column-families)
+  * [Hadoop NameNode Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-namenode)
+  * [Hadoop Jobtracker Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-jobtracker)
+  * [Hadoop TaskTracker Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-tasktracker)
+  * [Hadoop DataNode Dashboard](https://gist.github.com/erezmazor/5020008#file-hadoop-datanode)
+  * [Zookeeper Dashbaord](https://gist.github.com/erezmazor/5020016#file-zookeeper-servers)
 
