@@ -117,7 +117,7 @@ Below is an example dashboard configuration:
 
 ![Source Editor](https://raw.github.com/erezmazor/graphitus/master/doc/source-editor.png)
 
-* Clicking on a the ```functions``` button (![Functions](https://raw.github.com/erezmazor/graphitus/master/doc/functions.png)) will show some options for manipulating the graph using the [Graphite URL API](http://graphite.readthedocs.org/en/1.0/url-api.html)
+* Clicking on a the ```functions``` button (![Functions](https://raw.github.com/erezmazor/graphitus/master/doc/functions.png)) will show some options for manipulating the graph using the [Graphite URL API](https://graphite.readthedocs.org/en/latest/render_api.html)
 
 ![Function Options](https://raw.github.com/erezmazor/graphitus/master/doc/functions-drop.png)
 
@@ -172,6 +172,7 @@ legend                  | No              | Show/Hide the legend in the chart (o
 refresh                 | No              | Auto-refresh the charts (see ```refreshIntervalSeconds```)
 refreshIntervalSeconds  | No              | When ```refresh``` is ```true``` this will determine the refresh interval
 defaultLineWidth        | No              | The line width for the generated chart
+defaultParameters       | No              | Default [url parameters](https://graphite.readthedocs.org/en/latest/render_api.html) to be applied to all targets
 tz                      | No              | The timezone for the rendered graphite images (see [Timezone list](http://en.wikipedia.org/wiki/List_of_tz_database_time_zones)). Note: timezone resolution is in the following order url, json configuraiton file, cookie, default.
 
 Dynamic Parameters
