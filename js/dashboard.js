@@ -132,7 +132,10 @@ function updateGraph(idx) {
 }
 
 function buildUrl(idx, graph, chartTitle, width, height, graphiteOperation) {
-	var params = "&lineWidth=" + config.defaultLineWidth + "&title=" + encodeURIComponent(chartTitle) + "&tz=" + $("#tz").val();
+	var params = "&lineWidth=" + config.defaultLineWidth + "&title=" + encodeURIComponent(chartTitle) + "&tz=" + $("#tz").val();		
+	if(config.defaultParameters){
+		params = params + "&" + config.defaultParameters;
+	}
 	if($('#graphParams' + idx).val()){
 		params += "&" + $('#graphParams' + idx).val();
 	}
@@ -175,12 +178,9 @@ function buildUrl(idx, graph, chartTitle, width, height, graphiteOperation) {
 			targetUri = targetUri + "&target=drawAsInfinite(" + config.events[i] + ")";
 		}
 	}
-	var urlParams = getUserUrlParams(idx);
-	if(config.defaultParameters){
-		urlParams = urlParams + "&" + config.defaultParameters;
-	}
+	var userParams = getUserUrlParams(idx);
 
-	return getGraphiteServer() + "/" + graphiteOperation + "/?" + targetUri + range + legend + params + userUrlParams + size;
+	return getGraphiteServer() + "/" + graphiteOperation + "/?" + targetUri + range + legend + params + userParams + size;
 }
 
 function getGraphiteServer(){
@@ -534,6 +534,9 @@ function mergeUrlParamsWithConfig(config) {
 	}
 	if (queryParam('defaultLineWidth') != null) {
 		config.defaultLineWidth = queryParam('defaultLineWidth');
+	}
+	if (queryParam('defaultParameters') != null) {
+		config.defaultParameters = queryParam('defaultParameters');
 	}
 }
 
