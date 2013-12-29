@@ -72,7 +72,11 @@ function loadExtendedEvents(annotator){
 }
 
 function calculateUtcOffset(){
-	return moment().tz($('#tz').val()).zone(); 
+	try{
+		return moment().tz($('#tz').val()).zone(); 
+	} catch(e) {
+		return 0;
+	}
 }
 
 function calculateEventOffset(){
