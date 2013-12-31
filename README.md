@@ -109,6 +109,26 @@ Below is an example dashboard configuration:
 
 ![Extended](https://raw.github.com/erezmazor/graphitus/master/doc/extended.png)
 
+** Events on rickshaw graph
+
+supplying an ```eventsUrl``` attribute in config.json will allow you to draw an events overlay on the rickshaw graph, events must be in the following JSON format:
+
+```javascript
+[
+	{
+    	"message": "this is an event message",
+		"start": "15:31:35 28/03/2013",
+		"end": "15:33:47 28/03/2013"
+	},
+{
+    	"message": "this is an event message",
+		"start": "15:31:35 28/03/2013",
+		"end": "15:33:47 28/03/2013"
+	}
+]
+```
+The date/time format and timezone can be customized by providing a ```eventsDateFormat``` and ```eventsTimezone``` properties in the  ```config.json``` configuration file.
+
 * Clicking on a the ```histogram``` button (![Histogram](https://raw.github.com/erezmazor/graphitus/master/doc/histogram.png)) will generate a [D3 Histogram](https://github.com/mbostock/d3/wiki/Histogram-Layout)
 
 ![Histogram](https://raw.github.com/erezmazor/graphitus/master/doc/histogram-lightbox.png)
@@ -127,23 +147,6 @@ Below is an example dashboard configuration:
 
 * Clicking on a the ```graphlot``` button (![Graphlot](https://raw.github.com/erezmazor/graphitus/master/doc/graphlot.png)) will redirect you to the graph's ```Graphlot``` page in your graphite server.
 
-
-supplying an ```eventsUrl``` attribute in config.json will allow you to draw an events overlay on the rickshaw graph, events must be in the following JSON format:
-
-```javascript
-[
-	{
-    	"message": "this is an event message",
-		"start": "15:31:35 28/03/2013",
-		"end": "15:33:47 28/03/2013"
-	},
-{
-    	"message": "this is an event message",
-		"start": "15:31:35 28/03/2013",
-		"end": "15:33:47 28/03/2013"
-	}
-]
-```
 * Override configuration with URL parameters
 
 You can specify configuration properties in the dashboard URL to override default settings:
