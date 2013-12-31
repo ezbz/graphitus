@@ -75,12 +75,18 @@ function calculateUtcOffset(){
 	try{
 		return moment().tz($('#tz').val()).zone(); 
 	} catch(e) {
+		console.log("Error parsing timezone "+$('#tz').val()+", make sure timezone exists in moment-timezone-data.js.")
 		return 0;
 	}
 }
 
 function calculateEventOffset(){
-	return (calculateUtcOffset()*-1)+(moment().tz(graphitusConfig.eventsTimezone).zone() - (moment().zone())); 
+	try{
+		return (calculateUtcOffset()*-1)+(moment().tz(graphitusConfig.eventsTimezone).zone() - (moment().zone())); 
+	} catch(e) {
+		console.log("Error parsing timezone "+graphitusConfig.eventsTimezone+", make sure timezone exists in moment-timezone-data.js.")
+		return 0;
+	}
 }
 
 function renderExtendedGraph(target, data){
