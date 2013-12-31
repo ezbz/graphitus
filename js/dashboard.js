@@ -78,7 +78,7 @@ function loadDashboard() {
 			config = data;
 
 			//backward compatibility
-			if (!config.timeBack) {
+			if (!config.timeBack && config.hoursBack)  {
 				config.timeBack = config.hoursBack + 'h';
 			}
 			// end
