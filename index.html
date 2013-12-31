@@ -147,6 +147,26 @@
 <li>Clicking on a graph image will generate a nice <a href="http://code.shutterstock.com/rickshaw/">Rickshaw</a>-based graph with hover-values and a toggle-legend</li>
 </ul><p><img src="https://raw.github.com/erezmazor/graphitus/master/doc/extended.png" alt="Extended"></p>
 
+<p>** Events on rickshaw graph</p>
+
+<p>supplying an <code>eventsUrl</code> attribute in config.json will allow you to draw an events overlay on the rickshaw graph, events must be in the following JSON format:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">"message"</span><span class="o">:</span> <span class="s2">"this is an event message"</span><span class="p">,</span>
+        <span class="s2">"start"</span><span class="o">:</span> <span class="s2">"15:31:35 28/03/2013"</span><span class="p">,</span>
+        <span class="s2">"end"</span><span class="o">:</span> <span class="s2">"15:33:47 28/03/2013"</span>
+    <span class="p">},</span>
+<span class="p">{</span>
+        <span class="s2">"message"</span><span class="o">:</span> <span class="s2">"this is an event message"</span><span class="p">,</span>
+        <span class="s2">"start"</span><span class="o">:</span> <span class="s2">"15:31:35 28/03/2013"</span><span class="p">,</span>
+        <span class="s2">"end"</span><span class="o">:</span> <span class="s2">"15:33:47 28/03/2013"</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+
+<p>The date/time format and timezone can be customized by providing a <code>eventsDateFormat</code> and <code>eventsTimezone</code> properties in the  <code>config.json</code> configuration file.</p>
+
 <ul>
 <li>Clicking on a the <code>histogram</code> button (<img src="https://raw.github.com/erezmazor/graphitus/master/doc/histogram.png" alt="Histogram">) will generate a <a href="https://github.com/mbostock/d3/wiki/Histogram-Layout">D3 Histogram</a>
 </li>
@@ -166,25 +186,8 @@
 </ul><p><img src="https://raw.github.com/erezmazor/graphitus/master/doc/images-drop.png" alt="Images"></p>
 
 <ul>
-<li>Clicking on a the <code>graphlot</code> button (<img src="https://raw.github.com/erezmazor/graphitus/master/doc/graphlot.png" alt="Graphlot">) will redirect you to the graph's <code>Graphlot</code> page in your graphite server.</li>
-</ul><p>supplying an <code>eventsUrl</code> attribute in config.json will allow you to draw an events overlay on the rickshaw graph, events must be in the following JSON format:</p>
-
-<div class="highlight highlight-javascript"><pre><span class="p">[</span>
-    <span class="p">{</span>
-        <span class="s2">"message"</span><span class="o">:</span> <span class="s2">"this is an event message"</span><span class="p">,</span>
-        <span class="s2">"start"</span><span class="o">:</span> <span class="s2">"15:31:35 28/03/2013"</span><span class="p">,</span>
-        <span class="s2">"end"</span><span class="o">:</span> <span class="s2">"15:33:47 28/03/2013"</span>
-    <span class="p">},</span>
-<span class="p">{</span>
-        <span class="s2">"message"</span><span class="o">:</span> <span class="s2">"this is an event message"</span><span class="p">,</span>
-        <span class="s2">"start"</span><span class="o">:</span> <span class="s2">"15:31:35 28/03/2013"</span><span class="p">,</span>
-        <span class="s2">"end"</span><span class="o">:</span> <span class="s2">"15:33:47 28/03/2013"</span>
-    <span class="p">}</span>
-<span class="p">]</span>
-</pre></div>
-
-<ul>
-<li>Override configuration with URL parameters</li>
+<li><p>Clicking on a the <code>graphlot</code> button (<img src="https://raw.github.com/erezmazor/graphitus/master/doc/graphlot.png" alt="Graphlot">) will redirect you to the graph's <code>Graphlot</code> page in your graphite server.</p></li>
+<li><p>Override configuration with URL parameters</p></li>
 </ul><p>You can specify configuration properties in the dashboard URL to override default settings:</p>
 
 <p><code>dashboard.html?id=grp1.dash1&amp;defaultLineWidth=25&amp;timeBack=20m&amp;width=350&amp;height=400&amp;columns=4&amp;legend=false</code></p>
