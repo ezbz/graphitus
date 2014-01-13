@@ -318,7 +318,7 @@ function generateDynamicQuery(paramGroupName) {
 		}
 		query = applyParameter(query, dependsOn, dependValue);
 	}
-	return query;
+	return encodeURIComponent(query);
 }
 
 function renderDynamicParamGroup(paramGroupName, paramGroup) {
