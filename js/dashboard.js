@@ -344,6 +344,7 @@ function renderDynamicParamGroup(paramGroupName, paramGroup) {
 				parameters[paramValue] = new Array();
 				parameters[paramValue][paramGroupName] = new Array();
 				parameters[paramValue][paramGroupName] = paramValue;
+				parameters.sort();
 			});
 			config.parameters[paramGroupName] = parameters;
 			renderValueParamGroup(paramGroupName, parameters);
