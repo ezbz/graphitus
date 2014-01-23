@@ -624,6 +624,9 @@ function initializeSearch() {
 function generateDynamicGraphs ( )
 {
 	if ( config.dataTemplates == undefined ) return;
+
+	var fixed_graphs = config.data.length;
+
 	for (var i = 0; i < config.dataTemplates.length; i++)
 	{
 		var tmpl = config.dataTemplates[i];
@@ -642,6 +645,7 @@ function generateDynamicGraphs ( )
 
 					if ( jQuery.inArray(paramValue, parameters) == -1 )
 					{
+						parameters.push(paramValue);
 						var g = new Object();
 
 						if ( (typeof tmpl.target) === 'string' )
@@ -659,9 +663,22 @@ function generateDynamicGraphs ( )
 						g.title = applyParameter(tmpl.title, "explode", paramValue);
 						g.dynamic = true;
 						g.params = tmpl.params;
-						config.data.push(g);
-						console.log("pushed: " + g.target);
-						parameters.push(paramValue);
+
+						var was_added = false;
+
+						$.each(config.data, function(index, d ) {
+							if ( index < fixed_graphs ) return true;
+
+							if ( d.title > g.title )
+							{
+								config.data.splice(index, 0, g);
+								was_added = true;
+								return false;
+							}
+						});
+
+						if ( was_added == false )
+							config.data.push(g);
 					}
 	 			});
 	 		},
