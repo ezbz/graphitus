@@ -1,0 +1,68 @@
+{
+  "span": <%=span%> ,
+  "editable": true,
+  "type": "graphite",
+  "loadingEditor": false,
+  "x-axis": true,
+  "y-axis": true,
+  "scale": 1,
+  "y_format": "none",
+  "y2_format": "none",
+  "grid": {
+    "max": null,
+    "min": null
+  },
+  "annotate": {
+    "enable": false,
+    "query": "*",
+    "size": 20,
+    "field": "_type",
+    "sort": [
+      "_score",
+      "desc"
+    ]
+  },
+  "auto_int": true,
+  "resolution": 100,
+  "interval": "10m",
+  "intervals": [
+    "auto",
+    "1s",
+    "1m",
+    "5m",
+    "10m",
+    "30m",
+    "1h",
+    "3h",
+    "12h",
+    "1d",
+    "1w",
+    "1y"
+  ],
+  "lines": true,
+  "fill": 1,
+  "linewidth": 1,
+  "points": false,
+  "pointradius": 5,
+  "bars": false,
+  "stack": false,
+  "spyable": true,
+  "zoomlinks": false,
+  "options": false,
+  "legend": false,
+  "interactive": true,
+  "legend_counts": true,
+  "timezone": "browser",
+  "percentage": false,
+  "zerofill": true,
+  "nullPointMode": "connected",
+  "steppedLine": false,
+  "tooltip": {
+    "value_type": "cumulative",
+    "query_as_alias": true
+  },
+  "targets": <%= targets %> ,
+  "aliasColors": {},
+  "aliasYAxis": {},
+  "title": "<%=title%>"
+}

@@ -26,6 +26,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-lightbox/0.5/bootstrap-lightbox.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.4.0/moment.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.0.3/moment-timezone.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/slidesjs/3.0/jquery.slides.min.js"></script>
 <script src="js/moment-timezone-data.js"></script>
 
 <script type="text/javascript" src="js/jquery-ui-timepicker-addon.min.js"></script>
@@ -35,6 +36,8 @@
 <script type="text/javascript" src="js/extensions.js"></script>
 <script type="text/javascript" src="js/extended-graph.js"></script>
 <script type="text/javascript" src="js/histogram.js"></script>
+<script type="text/javascript" src="js/slideshow.js"></script>
+<script type="text/javascript" src="js/grafana.js"></script>
 
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
@@ -47,8 +50,8 @@ $(document).ready(function() {
     <% for(col=0; col<config.columns; col++) { %>
 		<% if( (idx % config.columns) == col) { %>
         <div id="item<%=idx%>" class="well span<%=12/config.columns%>" style="width:<%=config.width%>px">
-			<h5 id="title<%=idx%>" class="pull-left" style="margin: 0px;">
-                <%=applyParameters(config.data[idx].title)%>
+			<h5 class="pull-left" style="margin: 0px;">
+                <span id="title<%=idx%>"></span>
                 <% if(config.data[idx].description){ %>
                     <a href="#" rel="tooltip" data-toggle="tooltip" title="<%=applyParameters(config.data[idx].description)%>"><i class="fa fa-question-circle"/></a>
                 <% } %>
@@ -132,6 +135,9 @@ $(document).ready(function() {
         </li>
         <li class="navbar-text"><div><i class="fa fa-lg fa-link"></i> <a href="#" title="permalink" id="permalink">permalink </a></div></li>
         <li class="divider-vertical"></li>
+        <li class="navbar-text"><div><i class="fa fa-lg fa-play active-hover" id="playSlideshow" title="start slideshow" onclick="startSlideshow();"></i><i class="fa fa-lg fa-stop hide active-hover" id="stopSlideshow" title="stop slideshow" onclick="stopSlideshow();"></i></div></li>
+        </li>
+        <li class="divider-vertical"></li>
         <li class="hidden-zoom2">
             <form class="navbar-search form-inline pull-right">
                 <input id="search" type="text" style="margin-top: 0px;" class="search-query input-small" placeholder="Search" />
@@ -189,6 +195,11 @@ $(document).ready(function() {
                             <% } %>
                         </select>
                     </div>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="navbar-text"><center><li class="navbar-text"><button class="btn btn-small btn-primary" onclick="generateGrafanaConfig(); return false;"><i class="fa fa-sign-out active-hover"></i> Export to Grafana</button></center>
+                    </li>
+                    <li class="navbar-text"><center><li class="navbar-text"><button class="btn btn-small btn-warning" onclick="downloadGrafanaConfig(); return false;"><i class="fa fa-download active-hover"></i> Download Grafana Config</button></center>
                     </li>
             </ul>  
         </li>
@@ -384,6 +395,16 @@ $(document).ready(function() {
                     <div id="histogram"></div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div id="slideShow">
+        <center><h5 id="slideTitle"></h5></center>
+        <center>
+            <div id="slideProgress" class="progress progress-striped active hide" style="width: 200px;margin: 10px">
+                <div class="bar" style="width: 100%;"><i class="fa fa-refresh fa-spin"></i> Loading slideshow... </div>
+            </div>
+        </center>
+        <div id="slidesContainer">
         </div>
     </div>
 </body>

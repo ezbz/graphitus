@@ -2,9 +2,12 @@
     "graphiteUrl": "sample.png?",
     "dashboardListUrl": "sample-index.json",
     "dashboardUrlTemplate": "${dashboardId}.json",
-    "eventsUrl": "events.json",
+    "eventsUrl": "events.json?start=<%=start%>&end=<%=end%>",
     "eventsDateFormat": "HH:mm:ss DD/MM/YYYY",
     "eventsTimezone": "US/Eastern",
     "minimumRefresh": 60,
+    "metricsQueryUrl": "http://my.graphite.com/metrics/find?format=completer&query=",
+    "grafanaElasticSearch": "http://my.elasticsearch.com:9200/grafana-dash/dashboard/",
+    "grafanaUrl" : "http://my.grafana.com/index.html#/dashboard/elasticsearch/",
     "timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
 }

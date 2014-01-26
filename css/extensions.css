@@ -1,6 +1,7 @@
 div, span, p, td {
 	font-family: Arial, sans-serif;
 }
+
 #content {
 	width: 1200px;
 }
@@ -84,7 +85,6 @@ div, span, p, td {
 	padding: 0;
 }
 h1 {
-	font-family: Franklin Gothic Medium, UnDotum, Helvetica, Arial;
 	font-weight: normal;
 	font-size: 20px;
 }
