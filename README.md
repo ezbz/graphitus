@@ -23,9 +23,13 @@ Below is an example of global configuration (a file named ```config.json```) usi
     "graphiteUrl": "http://graphite.mysite.com",
     "dashboardListUrl": "dashboard-index.json",
     "dashboardUrlTemplate": "${dashboardId}.json",
-    "eventsUrl": "events.json",
+    "eventsUrl": "events.json?start=<%=start%>&end=<%=end%>",
     "eventsDateFormat": "HH:mm:ss DD/MM/YYYY",
     "eventsTimezone": "US/Eastern",
+    "minimumRefresh": 60,
+    "metricsQueryUrl": "http://my.graphite.com/metrics/find?format=completer&query=",
+    "grafanaElasticSearch": "http://my.elasticsearch.com:9200/grafana-dash/dashboard/",
+    "grafanaUrl" : "http://my.grafana.com/index.html#/dashboard/elasticsearch/",
     "timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
 }
 ```
@@ -37,10 +41,14 @@ Below is an example of global configuration (a file named ```config.json```) usi
     "graphiteUrl": "http://graphite.mysite.com",
     "dashboardListUrl": "http://couch.mysite.com:5984/graphitus-dashboards/_all_docs", // must return a JSON with a "rows" element containing an array of rows with dashboard id ("id" attribute)
     "dashboardUrlTemplate": "http://couch.mysite.com:5984/graphitus-dashboards/${dashboardId}",
-    "eventsUrl": "events.json",
-    "eventsDateFormat": "HH:mm:ss DD/MM/YYYY",
+    "eventsUrl": "events.json?start=<%=start%>&end=<%=end%>", // events for rickshaw graph, start/end timeframe will be passed 
+    "eventsDateFormat": "HH:mm:ss DD/MM/YYYY", // the event date-time format
     "eventsTimezone": "US/Eastern",
-    "timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"]
+    "minimumRefresh": 60, // minimum refresh overrides anything defined in the dashboards
+    "metricsQueryUrl": "http://my.graphite.com/metrics/find?format=completer&query=", // metrics finder url, overriding this allows proxying/caching the graphite metrics finder
+    "grafanaElasticSearch": "http://my.elasticsearch.com:9200/grafana-dash/dashboard/", // optional grafana elasticsearch url for grafana export integration
+    "grafanaUrl" : "http://my.grafana.com/index.html#/dashboard/elasticsearch/", // optional grafana home url for grafana export integration
+    "timezones": ["US/Eastern", "US/Central", "US/Pacific", "Europe/London", "Israel"] // a list of timezone for graphite
 }
 ```
 
@@ -111,7 +119,7 @@ Below is an example dashboard configuration:
 
 ** Events on rickshaw graph
 
-supplying an ```eventsUrl``` attribute in config.json will allow you to draw an events overlay on the rickshaw graph, events must be in the following JSON format:
+supplying an ```eventsUrl``` attribute in config.json will allow you to draw an events overlay on the rickshaw graph. The selected timeframe will be passed in to the ```eventsUrl``` in the format ```eventsUrl?start=YYYY-MM-DD HH:mm:ss&end=YYYY-MM-DD HH:mm:ss```. events must be in the following JSON format:
 
 ```javascript
 [
@@ -285,6 +293,17 @@ Timezone support
 ------------------
 
 Graphitus supports timezones via configuration ```config.json``` has a ```timezones``` attribute which accepts an array. These are timezones supported by the [Graphite URL API Timezone parameter](https://graphite.readthedocs.org/en/latest/render_api.html#tz). Timezones are supported using the [moment-timezone](http://momentjs.com/timezone/) library. In order to correctly define timezones use the [moment-timezone data builder](http://momentjs.com/timezone/data/) to customize your own ```js/moment-timezone-data.js``` file. Note that moment zone names are different from graphite names, once you generate the ```js/moment-timezone-data.js``` file edit it and change timezone names to correspond to the supported graphite names.
+
+
+Slideshow
+------------------
+
+A slideshow of all graphs in the dashboard can be triggered via the UI button or by appending ```&slideshow=true``` at the end of the dashboard URL.
+
+Grafana Integration
+-------------------
+
+[Grafana](https://github.com/torkelo/grafana) is another dashboard based system. Some beta functionality for exporting Graphitus dashboards to Grafana exists via the Options menu. Not all features migrate transparently and this is currently experimental. See ```config.json``` for relevant configuration.
 
 Additional Information
 ----------------------
