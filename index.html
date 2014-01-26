@@ -62,9 +62,13 @@
     <span class="s2">"graphiteUrl"</span><span class="o">:</span> <span class="s2">"http://graphite.mysite.com"</span><span class="p">,</span>
     <span class="s2">"dashboardListUrl"</span><span class="o">:</span> <span class="s2">"dashboard-index.json"</span><span class="p">,</span>
     <span class="s2">"dashboardUrlTemplate"</span><span class="o">:</span> <span class="s2">"${dashboardId}.json"</span><span class="p">,</span>
-    <span class="s2">"eventsUrl"</span><span class="o">:</span> <span class="s2">"events.json"</span><span class="p">,</span>
+    <span class="s2">"eventsUrl"</span><span class="o">:</span> <span class="s2">"events.json?start=&lt;%=start%&gt;&amp;end=&lt;%=end%&gt;"</span><span class="p">,</span>
     <span class="s2">"eventsDateFormat"</span><span class="o">:</span> <span class="s2">"HH:mm:ss DD/MM/YYYY"</span><span class="p">,</span>
     <span class="s2">"eventsTimezone"</span><span class="o">:</span> <span class="s2">"US/Eastern"</span><span class="p">,</span>
+    <span class="s2">"minimumRefresh"</span><span class="o">:</span> <span class="mi">60</span><span class="p">,</span>
+    <span class="s2">"metricsQueryUrl"</span><span class="o">:</span> <span class="s2">"http://my.graphite.com/metrics/find?format=completer&amp;query="</span><span class="p">,</span>
+    <span class="s2">"grafanaElasticSearch"</span><span class="o">:</span> <span class="s2">"http://my.elasticsearch.com:9200/grafana-dash/dashboard/"</span><span class="p">,</span>
+    <span class="s2">"grafanaUrl"</span> <span class="o">:</span> <span class="s2">"http://my.grafana.com/index.html#/dashboard/elasticsearch/"</span><span class="p">,</span>
     <span class="s2">"timezones"</span><span class="o">:</span> <span class="p">[</span><span class="s2">"US/Eastern"</span><span class="p">,</span> <span class="s2">"US/Central"</span><span class="p">,</span> <span class="s2">"US/Pacific"</span><span class="p">,</span> <span class="s2">"Europe/London"</span><span class="p">,</span> <span class="s2">"Israel"</span><span class="p">]</span>
 <span class="p">}</span>
 </pre></div>
@@ -75,10 +79,14 @@
     <span class="s2">"graphiteUrl"</span><span class="o">:</span> <span class="s2">"http://graphite.mysite.com"</span><span class="p">,</span>
     <span class="s2">"dashboardListUrl"</span><span class="o">:</span> <span class="s2">"http://couch.mysite.com:5984/graphitus-dashboards/_all_docs"</span><span class="p">,</span> <span class="c1">// must return a JSON with a "rows" element containing an array of rows with dashboard id ("id" attribute)</span>
     <span class="s2">"dashboardUrlTemplate"</span><span class="o">:</span> <span class="s2">"http://couch.mysite.com:5984/graphitus-dashboards/${dashboardId}"</span><span class="p">,</span>
-    <span class="s2">"eventsUrl"</span><span class="o">:</span> <span class="s2">"events.json"</span><span class="p">,</span>
-    <span class="s2">"eventsDateFormat"</span><span class="o">:</span> <span class="s2">"HH:mm:ss DD/MM/YYYY"</span><span class="p">,</span>
+    <span class="s2">"eventsUrl"</span><span class="o">:</span> <span class="s2">"events.json?start=&lt;%=start%&gt;&amp;end=&lt;%=end%&gt;"</span><span class="p">,</span> <span class="c1">// events for rickshaw graph, start/end timeframe will be passed </span>
+    <span class="s2">"eventsDateFormat"</span><span class="o">:</span> <span class="s2">"HH:mm:ss DD/MM/YYYY"</span><span class="p">,</span> <span class="c1">// the event date-time format</span>
     <span class="s2">"eventsTimezone"</span><span class="o">:</span> <span class="s2">"US/Eastern"</span><span class="p">,</span>
-    <span class="s2">"timezones"</span><span class="o">:</span> <span class="p">[</span><span class="s2">"US/Eastern"</span><span class="p">,</span> <span class="s2">"US/Central"</span><span class="p">,</span> <span class="s2">"US/Pacific"</span><span class="p">,</span> <span class="s2">"Europe/London"</span><span class="p">,</span> <span class="s2">"Israel"</span><span class="p">]</span>
+    <span class="s2">"minimumRefresh"</span><span class="o">:</span> <span class="mi">60</span><span class="p">,</span> <span class="c1">// minimum refresh overrides anything defined in the dashboards</span>
+    <span class="s2">"metricsQueryUrl"</span><span class="o">:</span> <span class="s2">"http://my.graphite.com/metrics/find?format=completer&amp;query="</span><span class="p">,</span> <span class="c1">// metrics finder url, overriding this allows proxying/caching the graphite metrics finder</span>
+    <span class="s2">"grafanaElasticSearch"</span><span class="o">:</span> <span class="s2">"http://my.elasticsearch.com:9200/grafana-dash/dashboard/"</span><span class="p">,</span> <span class="c1">// optional grafana elasticsearch url for grafana export integration</span>
+    <span class="s2">"grafanaUrl"</span> <span class="o">:</span> <span class="s2">"http://my.grafana.com/index.html#/dashboard/elasticsearch/"</span><span class="p">,</span> <span class="c1">// optional grafana home url for grafana export integration</span>
+    <span class="s2">"timezones"</span><span class="o">:</span> <span class="p">[</span><span class="s2">"US/Eastern"</span><span class="p">,</span> <span class="s2">"US/Central"</span><span class="p">,</span> <span class="s2">"US/Pacific"</span><span class="p">,</span> <span class="s2">"Europe/London"</span><span class="p">,</span> <span class="s2">"Israel"</span><span class="p">]</span> <span class="c1">// a list of timezone for graphite</span>
 <span class="p">}</span>
 </pre></div>
 
@@ -149,7 +157,7 @@
 
 <p>** Events on rickshaw graph</p>
 
-<p>supplying an <code>eventsUrl</code> attribute in config.json will allow you to draw an events overlay on the rickshaw graph, events must be in the following JSON format:</p>
+<p>supplying an <code>eventsUrl</code> attribute in config.json will allow you to draw an events overlay on the rickshaw graph. The selected timeframe will be passed in to the <code>eventsUrl</code> in the format <code>eventsUrl?start=YYYY-MM-DD HH:mm:ss&amp;end=YYYY-MM-DD HH:mm:ss</code>. events must be in the following JSON format:</p>
 
 <div class="highlight highlight-javascript"><pre><span class="p">[</span>
     <span class="p">{</span>
@@ -382,6 +390,16 @@
 <a name="timezone-support" class="anchor" href="#timezone-support"><span class="octicon octicon-link"></span></a>Timezone support</h2>
 
 <p>Graphitus supports timezones via configuration <code>config.json</code> has a <code>timezones</code> attribute which accepts an array. These are timezones supported by the <a href="https://graphite.readthedocs.org/en/latest/render_api.html#tz">Graphite URL API Timezone parameter</a>. Timezones are supported using the <a href="http://momentjs.com/timezone/">moment-timezone</a> library. In order to correctly define timezones use the <a href="http://momentjs.com/timezone/data/">moment-timezone data builder</a> to customize your own <code>js/moment-timezone-data.js</code> file. Note that moment zone names are different from graphite names, once you generate the <code>js/moment-timezone-data.js</code> file edit it and change timezone names to correspond to the supported graphite names.</p>
+
+<h2>
+<a name="slideshow" class="anchor" href="#slideshow"><span class="octicon octicon-link"></span></a>Slideshow</h2>
+
+<p>A slideshow of all graphs in the dashboard can be triggered via the UI button or by appending <code>&amp;slideshow=true</code> at the end of the dashboard URL.</p>
+
+<h2>
+<a name="grafana-integration" class="anchor" href="#grafana-integration"><span class="octicon octicon-link"></span></a>Grafana Integration</h2>
+
+<p><a href="https://github.com/torkelo/grafana">Grafana</a> is another dashboard based system. Some beta functionality for exporting Graphitus dashboards to Grafana exists via the Options menu. Not all features migrate transparently and this is currently experimental. See <code>config.json</code> for relevant configuration.</p>
 
 <h2>
 <a name="additional-information" class="anchor" href="#additional-information"><span class="octicon octicon-link"></span></a>Additional Information</h2>
