@@ -190,6 +190,19 @@ You can then use a target like ```services.prod.${service}.${host}_${datacenter}
 
 Graphitus will also consider generating the list of values from a partial path, the index and regex determine which portion and substring (regex) of the resulting path will be used to generate the values for selection. The ```showAll``` property is used to determine if graphitus will prepend a default All (translated to ```*``` in the graphite query) option to the selection. The ```showAllValue``` parameter can be added to override the default ```*``` selection for complex name filtering schemes (you can have token in this value to express dependencies on other parameters).
 
+* External dynamic parameters
+
+External dynamic parameters allow metric selection and filtering based on a REST API query.
+
+It is configured like dynamic parameters, with the addition of the ```uri``` option to set your REST endpoint, which should output a JSON hash. The ```key``` option is an array that defines the hash key that contains the required data. 
+
+        "environment": {
+            "type":     "extDynamic",
+            "uri":      "http://dashboard/environments",
+            "key":      [ "result", "environments" ],
+            "showAll":  true
+        }
+
 * More info and examples
 
 - [Blog post](http://techo-ecco.com/blog/monitoring-apache-hadoop-cassandra-and-zookeeper-using-graphite-and-jmxtrans)
