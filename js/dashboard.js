@@ -338,7 +338,6 @@ function renderExtDynamicParamGroup(paramGroupName, paramGroup) {
 			parameters[k] = {}
 			parameters[k][paramGroupName] = servers
 		})
-		console.log(parameters)
 		config.parameters[paramGroupName] = parameters;
 		renderValueParamGroup(paramGroupName, parameters)
 		updateGraphs()
