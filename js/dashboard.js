@@ -260,7 +260,7 @@ function renderValueParamGroup(paramGroupName, paramGroup) {
 	$("#" + paramGroupName).append(_.template(tmplParamSelItem, {
 		group: paramGroupName,
 		params: paramGroup,
-		selected: getDefaultValue(paramGroupName)
+		selected: getDefaultValue(paramGroupName, paramGroup)
 	}));
 	$("#" + paramGroupName).select2({
 		placeholder: "Select a " + paramGroupName,
@@ -273,13 +273,15 @@ function renderValueParamGroup(paramGroupName, paramGroup) {
 	});
 }
 
-function getDefaultValue(paramGroupName) {
+function getDefaultValue(paramGroupName, paramGroup) {
 	if (queryParam(paramGroupName)) {
 		return queryParam(paramGroupName);
 	} else if (dynamicParams[paramGroupName] && dynamicParams[paramGroupName].defaultValue) {
 		return dynamicParams[paramGroupName].defaultValue;
+	} else if (paramGroup && paramGroup.defaultValue) {
+		return paramGroup.defaultValue
 	} else {
-		return "";
+	    return ""
 	}
 }
 
