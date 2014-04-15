@@ -654,10 +654,13 @@ function generateDynamicGraphs ( )
 						}
 						else
 						{
-							for ( t in tmpl.target )
+							tmpl.target.forEach(function(t)
 							{
+								if (typeof g.target === 'undefined') {
+									g.target=new Array();
+								}
 								g.target.push(applyParameter(t, "explode", paramValue));
-							}
+							});
 						}
 
 						g.title = applyParameter(tmpl.title, "explode", paramValue);
