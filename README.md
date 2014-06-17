@@ -91,7 +91,7 @@ Below is an example dashboard configuration:
         }
     ],
     "parameters": { // parameters to tokens expressed in targets with ${paramName} format  
-        "datacetner": { // label for a select box in the UI
+        "datacenter": { // label for a select box in the UI
             "All": { // display name for a select box in the UI
                 "dc": "*" // the token name (dc) as specified in the target name and the actual token value (*)            
             },
