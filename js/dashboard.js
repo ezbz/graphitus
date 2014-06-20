@@ -28,6 +28,9 @@ function renderView() {
 	loadTimezone();
 	initializeSearch();
 	console.log("rendered toolbar");
+
+	generateDynamicGraphs();
+
 	$("#dashboards-view").append(_.template(tmplDashboardViewMarkup, {
 		config: config
 	}));
@@ -269,6 +272,24 @@ function renderValueParamGroup(paramGroupName, paramGroup) {
 	$("#" + paramGroupName).off("change");
 	$("#" + paramGroupName).on("change", function(e) {
 		updateDependantParameters(paramGroupName);
+		var hasDynamicGraphs = false;
+		config.data = jQuery.grep(config.data, function (n, i) { hasDynamicGraphs = n.dynamic || hasDynamicGraphs;
+		                                                         return n.dynamic != true; });
+		generateDynamicGraphs();
+
+		if ( hasDynamicGraphs == true )
+		{
+			var tmplDashboardViewMarkup = $('#tmpl-dashboards-view').html();
+			// This method leaks memory, using alternative way with document
+			// node
+			/*$("#dashboards-view").html(_.template(tmplDashboardViewMarkup, {
+				config: config
+				}));*/
+			document.getElementById('dashboards-view').innerHTML = _.template(tmplDashboardViewMarkup, {
+				config: config
+				});
+		}
+		initializeGraphParams();
 		updateGraphs();
 	});
 }
@@ -316,8 +337,7 @@ function getDependenciesFromPath(path) {
 	return dependencies;
 }
 
-function generateDynamicQuery(paramGroupName) {
-	var query = dynamicParams[paramGroupName].query;
+function generateDynamicQuery(query) {
 	var dependencies = getDependenciesFromPath(query);
 	for (idx in dependencies) {
 		var dependsOn = dependencies[idx];
@@ -338,7 +358,7 @@ function getMetricsQueryUrl() {
 }
 
 function renderDynamicParamGroup(paramGroupName, paramGroup) {
-	var query = generateDynamicQuery(paramGroupName);
+	var query = generateDynamicQuery(dynamicParams[paramGroupName].query);
 	if (!endsWith(query, ".*")) {
 		query = query + ".*";
 	}
@@ -599,6 +619,84 @@ function initializeSearch() {
 			document.location.href = "dashboard.html?id=" + selection;
 		}
 	});
+}
+
+function generateDynamicGraphs ( )
+{
+	if ( config.dataTemplates == undefined ) return;
+
+	var fixed_graphs = config.data.length;
+
+	for (var i = 0; i < config.dataTemplates.length; i++)
+	{
+		var tmpl = config.dataTemplates[i];
+		var url = getGraphiteServer() + "/metrics/find?format=completer&query=";
+		var query = generateDynamicQuery(tmpl.query);
+		var queryUrl = url + query;
+		var parameters = new Array();
+
+		$.ajax({
+			type: 'GET',
+			url: queryUrl,
+			dataType: 'json',
+			success: function(data) {
+				$.each(data.metrics, function(index, metric) {
+					var paramValue = getParamValueFromPath(tmpl, metric);
+
+					if ( jQuery.inArray(paramValue, parameters) == -1 )
+					{
+						parameters.push(paramValue);
+						var g = new Object();
+
+						if ( (typeof tmpl.target) === 'string' )
+						{
+							g.target = applyParameter(tmpl.target, "explode", paramValue);
+						}
+						else
+						{
+							tmpl.target.forEach(function(t)
+							{
+								if (typeof g.target === 'undefined') {
+									g.target=new Array();
+								}
+								g.target.push(applyParameter(t, "explode", paramValue));
+							});
+						}
+
+						g.title = applyParameter(tmpl.title, "explode", paramValue);
+						g.dynamic = true;
+						g.params = tmpl.params;
+
+						var was_added = false;
+
+						$.each(config.data, function(index, d ) {
+							if ( index < fixed_graphs ) return true;
+
+							if ( d.title > g.title )
+							{
+								config.data.splice(index, 0, g);
+								was_added = true;
+								return false;
+							}
+						});
+
+						if ( was_added == false )
+							config.data.push(g);
+					}
+	 			});
+	 		},
+	 		error: function(xhr, ajaxOptions, thrownError) {
+	 			console.log("error [" + xhr + "]");
+	 			var tmplError = $('#tmpl-warning-parameters').html();
+	 			$('#message').html(_.template(tmplError, {
+	 				message: "Could not load graphite parameters from url [" + queryUrl + "]: " + JSON.stringify(xhr.statusText) + "<br/>"
+	 			}));
+	 			$('#message').show();
+	 			$("#loader").hide();
+	 		},
+	 		async: false
+	 	});
+	}
 }
 
 function initializeGraphParams() {

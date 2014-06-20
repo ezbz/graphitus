@@ -289,6 +289,51 @@ And the corresponding ```parameters``` section:
 }
 ```
 
+Dynamically Defined Graphs
+--------------------------
+
+Dynamically defined Graphs are very similar to dynamic parameters. Instead of getting a select menu to pick among several options, all options used and for each one a graph is generated:
+
+
+```javascript
+{      
+    "title":" Stats",
+        "width" : 500,
+        "defaultLineWidth":1,
+        "timeBack":"6h",
+        "height" : 300,
+        "columns" : 2, 
+        "refresh" : true, 
+        "dataTemplates" : [ 
+        {      
+            "title":"Nginx ${continent}-${explode} Requests/sec", 
+            "target" : "aliasByNode(${continent}-${explode}.nginx.nginx_*,0,3)", 
+            "query" : "${continent}-*.nginx.nginx_*", 
+            "regex" : "-(.*)", 
+            "index" : 0, 
+            "params" : "yMin=0&hideLegend=false"
+        }      
+    ],     
+        "data":[ 
+        { 
+            "title":"${continent} Nginx Total Requests/sec", 
+            "target" : "groupByNode(${continent}-*.nginx.nginx_*,3,\"sumSeries\")", 
+            "params" : "yMin=0&hideLegend=false" 
+        }, 
+        ],     
+        "parameters": { 
+            "continent": { 
+                "EU" : {"continent" : "eu" }, 
+                "US" : {"continent" : "us" }, 
+                "AP" : {"continent" : "ap" } 
+            } 
+        }                        
+}              
+```
+
+In the example above, for each server number one graph will be generated (and also a statically defined "global" graph). For each generated graph the `${explode}` variable will be replaced with the matched regex at the given index.
+The available options are basically the same as for dynamic parameters.
+
 Timezone support
 ------------------
 
@@ -317,4 +362,3 @@ Additional Information
   * [Hadoop TaskTracker Dashboard](https://gist.github.com/ezbz/5020008#file-hadoop-tasktracker)
   * [Hadoop DataNode Dashboard](https://gist.github.com/ezbz/5020008#file-hadoop-datanode)
   * [Zookeeper Dashbaord](https://gist.github.com/ezbz/5020016#file-zookeeper-servers)
-
