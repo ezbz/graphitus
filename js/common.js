@@ -84,18 +84,20 @@ function loadDashboards() {
 }
 
 function loadGraphitusConfig(callback) {
-	$.ajax({
-		type: "get",
-		url: "config/config.json",
-		dataType: 'json',
-		success: function(json) {
-			graphitusConfig = json;
-			console.log("Loaded configuration: " + JSON.stringify(graphitusConfig));
-			callback();
-		},
-		error: function(xhr, ajaxOptions, thrownError) {
-			console.log(thrownError);
-		}
+	["config.json", "config/config.json"].forEach(function(configPath) {
+		$.ajax({
+			type: "get",
+			url: configPath,
+			dataType: 'json',
+			success: function(json) {
+				graphitusConfig = json;
+				console.log("Loaded configuration: " + JSON.stringify(graphitusConfig));
+				callback();
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				console.log(thrownError);
+			}
+		});
 	});
 }
 
