@@ -166,6 +166,21 @@ $(document).ready(function() {
                     </li>
                     <li>
                     <label class="checkbox" style="margin: 10px">
+                        <input type="checkbox" id="n50percentile" name="n50percentile" <% if(config.n50percentile) { %>checked="checked"<% } %> onchange="updateGraphs()" />50 percentile
+                    </label>
+                    </li>
+                    <li>
+                    <label class="checkbox" style="margin: 10px">
+                        <input type="checkbox" id="n95percentile" name="n95percentile" <% if(config.n95percentile) { %>checked="checked"<% } %> onchange="updateGraphs()" />95 percentile
+                    </label>
+                    </li>
+                    <li>
+                    <label class="checkbox" style="margin: 10px">
+                        <input type="checkbox" id="n99percentile" name="n99percentile" <% if(config.n99percentile) { %>checked="checked"<% } %> onchange="updateGraphs()" />99 percentile
+                    </label>
+                    </li>
+                    <li>
+                    <label class="checkbox" style="margin: 10px">
                         <input type="checkbox" id="sum" name="sum" <% if(config.sumSeries) { %>checked="checked"<% } %> onchange="updateGraphs()" />Sum Series
                     </label>
                     </li>
@@ -250,14 +265,14 @@ $(document).ready(function() {
 </script>
 </head>
 <body lang="en">
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <form  id="toolbar" class="navbar-form form-inline pull-left">
         </form>
       </div>
     </div>
-    <div style="margin-top: 48px;"></div>
-    <div id="parameters-toolbar" class="navbar navbar-inverse" style="z-index: 999;">
+    <div style="margin-top: 40px;"></div>
+    <div id="parameters-toolbar" class="navbar" style="z-index: 999;">
       <div class="navbar-inner">
         <form class="navbar-form form-inline">
             <span class="pull-left" style="width: 95%">
