@@ -86,7 +86,7 @@ function loadDashboards() {
 function loadGraphitusConfig(callback) {
 	$.ajax({
 		type: "get",
-		url: "config.json",
+		url: "config/config.json",
 		dataType: 'json',
 		success: function(json) {
 			graphitusConfig = json;
