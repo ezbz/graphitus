@@ -149,6 +149,7 @@ function buildUrl(idx, graph, chartTitle, width, height, graphiteOperation) {
 	if (config.defaultColorList) {
 		params += "&colorList=" + config.defaultColorList;
 	}
+	params += "&bgcolor=white&fgcolor=202020&majorGridLineColor=darkgrey";
 	var range = "";
 	var timeBack = $('#timeBack').val();
 	var start = $('#start').val();
@@ -161,16 +162,32 @@ function buildUrl(idx, graph, chartTitle, width, height, graphiteOperation) {
 		range = "&from=" + startParts[1] + "_" + startParts[0] + "&until=" + endParts[1] + "_" + endParts[0];
 	}
 
-	var legend = "&hideLegend=" + !($("#legend").prop('checked'));
+	var legend = "";
+	if (!($("#legend").prop('checked'))) {
+		// force disable legend
+		legend = "&hideLegend=true";
+	}
 	var size = "&width=" + width + "&height=" + height;
 
 	targetUri = "";
 	var targets = (typeof graph.target == 'string') ? new Array(graph.target) : graph.target;
+	var explodedTargets = new Array();
 	for (i = 0; i < targets.length; i++) {
-		var effectiveTarget = encodeURIComponent(calculateEffectiveTarget(targets[i]));
-
+		var effectiveTarget = calculateEffectiveTarget(targets[i]);
+		var effectiveTargets = (typeof effectiveTarget == 'string') ? new Array(effectiveTarget) : effectiveTarget;
+		explodedTargets.push.apply(explodedTargets, effectiveTargets)
+	}
+	targets = explodedTargets
+	for (i = 0; i < targets.length; i++) {
+		var effectiveTarget = encodeURIComponent(targets[i]);
 		if ($("#average").prop('checked')) {
 			targetUri = targetUri + "target=averageSeries(" + effectiveTarget + ")";
+		} else if ($("#n50percentile").prop('checked')) {
+			targetUri = targetUri + "target=percentileOfSeries(" + effectiveTarget + ", 50)";
+		} else if ($("#n95percentile").prop('checked')) {
+			targetUri = targetUri + "target=percentileOfSeries(" + effectiveTarget + ", 95)";
+		} else if ($("#n99percentile").prop('checked')) {
+			targetUri = targetUri + "target=percentileOfSeries(" + effectiveTarget + ", 99)";
 		} else if ($("#sum").prop('checked')) {
 			targetUri = targetUri + "target=sumSeries(" + effectiveTarget + ")";
 		} else {
@@ -178,7 +195,7 @@ function buildUrl(idx, graph, chartTitle, width, height, graphiteOperation) {
 		}
 		if (i < targets.length - 1) {
 			targetUri = targetUri + "&";
-		}
+			}
 	}
 	if ($("#events").prop('checked') && config.events) {
 		for (i = 0; i < config.events.length; i++) {
@@ -405,18 +422,26 @@ function applyRegexToName(paramGroup, metric) {
 	return result;
 }
 
-function applyParameters(target) {
+function applyParameters(target, shouldExtrapolate) {
 	if (config.parameters) {
 		$.each(config.parameters, function(paramGroupName, paramGroup) {
-
+			var paramValues = new Array();
+			for (var paramKey in paramGroup) {
+				for (var key in paramGroup[paramKey]) {
+					var value = paramGroup[paramKey][key];
+					if (["*", "**"].indexOf(value) < 0) {
+						paramValues.push(value)
+					}
+				}
+			}
 			for (tokenKey in paramGroup[paramGroupName]) {
 				var tokenValue = paramGroup[paramGroupName][tokenKey];
-				target = applyParameter(target, tokenKey, tokenValue);
+				target = applyParameter(target, tokenKey, tokenValue, shouldExtrapolate, paramValues);
 			}
 			var selectedParamText = $('#' + paramGroupName + " option:selected").text();
 			for (tokenKey in paramGroup[selectedParamText]) {
 				var tokenValue = paramGroup[selectedParamText][tokenKey];
-				target = applyParameter(target, tokenKey, tokenValue);
+				target = applyParameter(target, tokenKey, tokenValue, shouldExtrapolate, paramValues);
 			}
 		});
 	}
@@ -430,7 +455,21 @@ function multiReplace(str, match, repl) {
 	return str;
 }
 
-function applyParameter(originalString, paramName, paramValue) {
+function applyParameter(originalString, paramName, paramValue, shouldExtrapolate, otherValues) {
+	if (originalString instanceof Array) {
+		var result = new Array();
+		originalString.forEach(function(orig) {
+			result.push(applyParameter(orig, paramName, paramValue, shouldExtrapolate, otherValues))
+		});
+		return result;
+	}
+	if (paramValue == "**" && shouldExtrapolate) {
+		var targets = new Array();
+		otherValues.forEach(function(otherValue) {
+			targets.push(multiReplace(originalString, "${" + paramName + "}", otherValue));
+		});
+		return targets;
+	}
 	return multiReplace(originalString, "${" + paramName + "}", paramValue);
 }
 
@@ -560,6 +599,9 @@ function mergeUrlParamsWithConfig(config) {
 }
 
 function getGraphSource(graph) {
+	if (typeof graph.originalTarget == 'undefined') {
+		graph.originalTarget = graph.target
+	}
 	var result = new Array();
 	if ((typeof graph.target) === 'string') {
 		result.push(calculateEffectiveTarget(graph.target));
