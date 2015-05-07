@@ -220,7 +220,7 @@ function getUserUrlParams(idx) {
 }
 
 function calculateEffectiveTarget(target) {
-	return applyParameters(target);
+	return applyParameters(target, true);
 }
 
 function renderParamToolbar() {
