@@ -2,12 +2,6 @@
     "rows": [
         {
             "id": "prod.MySQL"
-        },
-        {
-            "id": "group1.subgroup1.dashboard1"
-        },
-        {
-            "id": "group1.dashboard2"
         }
     ]
 }
