@@ -59,7 +59,7 @@ $(document).ready(function() {
             <div class="pull-right">
             <div class="pull-left btn-group">
                 <a class="btn btn-small btn-success dropdown-toggle hspacer" data-toggle="dropdown" href="#" title="Functions..."><i class="fa fa-lg fa-cogs"></i><span class="fa fa-lg fa-caret-down"></span></a>
-                <ul class="dropdown-menu">      
+                <ul class="dropdown-menu">
                     <li>
                         <input id="yMin<%=idx%>" type="text" class="input-mini hspacer" placeholder="yMin">
                         <label class="pull-right hspacer">
@@ -71,9 +71,9 @@ $(document).ready(function() {
                     </li>
                     <li>
                         <input id="otherUrlParamName<%=idx%>" type="text" class="input-mini hspacer" placeholder="name">
-                        
+
                         <input id="otherUrlParamValue<%=idx%>" type="text" class="input-mini hspacer" placeholder="value">
-                    </li>                    
+                    </li>
                     <li>
                          <label>
                             <button class="btn btn-small btn-primary pull-right hspacer" onclick="updateGraph(<%=idx%>);">Update</button>
@@ -83,7 +83,7 @@ $(document).ready(function() {
             </div>
             <div class="pull-left btn-group">
                 <a class="btn btn-small btn-warning dropdown-toggle hspacer" data-toggle="dropdown" href="#" title="Images..."><i class="fa fa-lg fa-picture-o"></i><span class="fa fa-lg fa-caret-down"></span></a>
-                <ul class="dropdown-menu">      
+                <ul class="dropdown-menu">
                     <li class="navbar-text"><a id="lLink<%=idx%>" href="#" target="_blank"><i class="fa fa-lg fa-picture-o"></i> large</a></li>
                     <li class="navbar-text"><a id="mLink<%=idx%>" href="#" target="_blank"><i class="fa fa-lg fa-picture-o"></i> medium</a></li>
                     <li class="navbar-text"><a id="sLink<%=idx%>" href="#" target="_blank"><i class="fa fa-lg fa-picture-o"></i> small</a></li>
@@ -95,8 +95,8 @@ $(document).ready(function() {
                 <a href="#" class="btn btn-small pull-right hspacer" onclick="showHistogram(<%=idx%>); return false;" title="Histogram"><i class="fa fa-lg fa-bar-chart-o"></i></a>
             </div>
             </div>
-            <br/>            
-            <a href="#" onclick="showExtendedGraph(<%=idx%>); return false;"><img id="img<%=idx%>" class="img-rounded" width="<%=config.width%>" height="<%=config.height%>"/></a>
+            <br/>
+            <a href="#" onclick1="showExtendedGraph(<%=idx%>); return false;"><img id="img<%=idx%>" class="img-rounded" width="<%=config.width%>" height="<%=config.height%>"/></a>
             <br/>
             <div id="sourceContainer<%=idx%>"class="hide">
                 <div><textarea id="source<%=idx%>" style="width:<%=config.width-10%>px" class="source" placeholder="Target Source"></textarea></div>
@@ -122,16 +122,16 @@ $(document).ready(function() {
             <% } %>
         </ul>
     </li>
-<% } %> 
+<% } %>
 </script>
 <script type="text/template" id="tmpl-toolbar">
     <a class="brand hidden-zoom1" href="index.html">&nbsp; graphitus</a>
     <ul class="nav">
-        <li class="dropdown hidden-zoom3"> 
+        <li class="dropdown hidden-zoom3">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= title %><b class="fa fa-lg fa-caret-down"></b></a>
             <ul id="dashboards" class="dropdown-menu">
                 <%= dashboardsMenu %>
-            </ul>  
+            </ul>
         </li>
         <li class="navbar-text"><div><i class="fa fa-lg fa-link"></i> <a href="#" title="permalink" id="permalink">permalink </a></div></li>
         <li class="divider-vertical"></li>
@@ -185,7 +185,7 @@ $(document).ready(function() {
                     </label>
                     </li>
                     <li class="divider"></li>
-                    <li> 
+                    <li>
                     <label class="checkbox" style="margin: 10px">
                         <input type="checkbox" id="legend" name="legend" <% if(config.legend && config.legend!=="false") {%> checked="checked" <% } %> onchange="updateGraphs()" /> Show Legend
                     </label>
@@ -216,7 +216,7 @@ $(document).ready(function() {
                     </li>
                     <li class="navbar-text"><center><li class="navbar-text"><button class="btn btn-small btn-warning" onclick="downloadGrafanaConfig(); return false;"><i class="fa fa-download active-hover"></i> Download Grafana Config</button></center>
                     </li>
-            </ul>  
+            </ul>
         </li>
         <li class="divider-vertical"></li>
         <li>
@@ -234,7 +234,7 @@ $(document).ready(function() {
 <script type="text/template" id="tmpl-parameter-sel">
     <li class="navbar-text">
         <div style="margin-top:5px; margin-right: 10px;line-height: 30px">
-            <%= group %> <i class="fa fa-lg fa-chevron-right"></i> 
+            <%= group %> <i class="fa fa-lg fa-chevron-right"></i>
             <select id="<%= group %>" name="<%= group %>"></select>
         </div>
     </li>
@@ -252,7 +252,7 @@ $(document).ready(function() {
   <button type="button" class="close" data-dismiss="alert">×</button>
   <h4>Warning!</h4>
   Could not load dashboard <%= dashboardId %>, check the dashboard index and configuration file.<br/>
-  Go back to <a href="index.html">Graphitus Homepage</a> 
+  Go back to <a href="index.html">Graphitus Homepage</a>
 </div>
 </script>
 <script type="text/template" id="tmpl-warning-parameters">
@@ -260,7 +260,7 @@ $(document).ready(function() {
   <button type="button" class="close" data-dismiss="alert">×</button>
   <h4>Warning!</h4>
   <%= message %>
-  Go back to <a href="index.html">Graphitus Homepage</a> 
+  Go back to <a href="index.html">Graphitus Homepage</a>
 </div>
 </script>
 </head>
@@ -280,17 +280,17 @@ $(document).ready(function() {
             </span>
             <span class="pull-right" style="margin-top: 3px"><a href='#' class="btn btn-mini btn-inverse" id="parametersToolbarPin" onclick="togglePinnedParametersToolbar();"><i class="fa fa-lg fa-lock"></i></a></span>
         </form>
-      </div>    
+      </div>
     </div>
     <div id="message" class="hide"></div>
     <center>
         <div id="loader" class="progress progress-striped active" style="width: 30%;">
           <div id="progressBar" class="bar" style="width: 100%;">Loading Dashboard...</div>
         </div>
-    </center>          
+    </center>
     <div id="dashboards-view" class="container" style="width: 100%">
     </div>
-    
+
 	<div id="extendedGraph" class="lightbox hide fade" tabindex="-1" role="dialog" aria-hidden="true">
 	    <div class='lightbox-header'>
 	        <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>

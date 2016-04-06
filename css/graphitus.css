@@ -2,6 +2,9 @@ body {
     font-family: Arial, sans-serif;
 }
 
+.well {
+  padding-top: 1px;
+}
 .lnk {
 	font-size: 0.6em;
 	padding: 3px 3px;

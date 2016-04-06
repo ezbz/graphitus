@@ -128,12 +128,13 @@ function updateGraphs() {
 
 function updateGraph(idx) {
 	var graph = config.data[idx];
-	$('#title' + idx).html(applyParameters(graph.title));
+	$('#title' + idx).html(applyParameters(""));
 	$('#sLink' + idx).attr('href', buildUrl(idx, graph, graph.title, config.width / 2, config.height / 2, "render"));
 	$('#mLink' + idx).attr('href', buildUrl(idx, graph, graph.title, config.width, config.height, "render"));
 	$('#lLink' + idx).attr('href', buildUrl(idx, graph, graph.title, config.width * 2, config.height * 2, "render"));
 	$('#gLink' + idx).attr('href', buildUrl(idx, graph, graph.title, 0, 0, "graphlot"));
-	$('#img' + idx).attr('src', buildUrl(idx, graph, "", config.width, config.height, "render"));
+	$('#img' + idx).attr('src', buildUrl(idx, graph, graph.title, config.width, config.height, "render"));
+	$('#img' + idx).parent().attr('href', buildUrl(idx, graph, graph.title, config.width, config.height, "render")+"&width=1000&height=600");
 	rawTargets[idx] = buildUrl(idx, graph, graph.title, config.width, config.height, "render");
 	$('#source' + idx).val(getGraphSource(graph));
 }
@@ -163,7 +164,9 @@ function buildUrl(idx, graph, chartTitle, width, height, graphiteOperation) {
 	}
 
 	var legend = "";
-	if (!($("#legend").prop('checked'))) {
+	if (($("#legend").prop('checked'))) {
+		legend = "&hideLegend=false";
+	} else {
 		// force disable legend
 		legend = "&hideLegend=true";
 	}

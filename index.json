@@ -1,7 +1,5 @@
 {
-    "rows": [
-        {
-            "id": "prod.MySQL"
-        }
-    ]
+  "rows": [{
+    "id": "prod.MySQL"
+  }]
 }
